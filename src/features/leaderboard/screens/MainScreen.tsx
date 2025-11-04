@@ -5,8 +5,9 @@
  */
 
 import React, { useCallback } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Alert } from 'react-native';
 import { useTranslation } from 'react-i18next';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import type { MainScreenProps } from '../../../types/navigation';
 import { colors, typography } from '../../../theme';
 import { TopRankersSection } from '../components/TopRankersSection';
@@ -14,6 +15,7 @@ import { RecentDonationsSection } from '../components/RecentDonationsSection';
 import { useDonationPayment } from '../../donation/hooks/useDonationPayment';
 import { PaymentLoadingDialog } from '../../donation/components/PaymentLoadingDialog';
 import { PaymentErrorDialog } from '../../donation/components/PaymentErrorDialog';
+import { STORAGE_KEYS } from '../../../constants/storage';
 
 const MainScreen: React.FC<MainScreenProps> = ({ navigation }) => {
   const { t } = useTranslation();
@@ -42,11 +44,56 @@ const MainScreen: React.FC<MainScreenProps> = ({ navigation }) => {
     await handleDonation();
   }, [clearError, handleDonation]);
 
+  /**
+   * 개발용: AsyncStorage 초기화
+   * __DEV__ 플래그로 프로덕션 빌드에서는 자동으로 제거됨
+   */
+  const handleResetStorage = useCallback(async () => {
+    Alert.alert(
+      '🔧 개발용 초기화',
+      '어떤 데이터를 초기화하시겠습니까?',
+      [
+        {
+          text: '온보딩만 초기화',
+          onPress: async () => {
+            await AsyncStorage.removeItem(STORAGE_KEYS.ONBOARDING_COMPLETED);
+            Alert.alert('✅ 완료', '온보딩 플래그가 삭제되었습니다.\n앱을 재시작하세요.');
+          },
+        },
+        {
+          text: '모든 데이터 초기화',
+          onPress: async () => {
+            await AsyncStorage.clear();
+            Alert.alert('✅ 완료', '모든 데이터가 삭제되었습니다.\n앱을 재시작하세요.');
+          },
+          style: 'destructive',
+        },
+        {
+          text: '취소',
+          style: 'cancel',
+        },
+      ]
+    );
+  }, []);
+
   return (
     <View style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>{t('main.header.title')}</Text>
+        <View style={styles.headerTop}>
+          <Text style={styles.headerTitle}>{t('main.header.title')}</Text>
+
+          {/* 개발용 초기화 버튼 - 프로덕션 빌드에서 자동 제거 */}
+          {__DEV__ && (
+            <TouchableOpacity
+              style={styles.devButton}
+              onPress={handleResetStorage}
+              activeOpacity={0.7}
+            >
+              <Text style={styles.devButtonText}>🔧</Text>
+            </TouchableOpacity>
+          )}
+        </View>
       </View>
 
       {/* Content - 스크롤 가능한 리더보드 섹션들 */}
@@ -106,9 +153,27 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 3,
   },
+  headerTop: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
   headerTitle: {
     ...typography.headlineSmall,
     color: colors.primary,
+    flex: 1,
+  },
+  devButton: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: colors.error + '20', // 20% opacity
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginLeft: 12,
+  },
+  devButtonText: {
+    fontSize: 18,
   },
   content: {
     flex: 1,
