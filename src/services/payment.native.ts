@@ -163,13 +163,15 @@ class PaymentService implements IPaymentService {
       if (IAP_TEST_MODE) {
         const mockProduct: ProductPurchase = {
           productId: productIds[0],
-          title: '천원 쓰레기통 기부',
+          // title은 ProductPurchase에 없는 속성이므로 제거
           description: '₩1,000 기부하고 명예의 전당에 이름 올리기',
           price: '₩1,000',
           currency: 'KRW',
           localizedPrice: '₩1,000',
           type: 'inapp',
-        };
+          transactionDate: Date.now(),
+          transactionReceipt: '',
+        } as ProductPurchase;
         console.log('[PaymentService] ⚠️ TEST MODE - Returning mock product:', mockProduct);
         return [mockProduct];
       }
@@ -181,7 +183,12 @@ class PaymentService implements IPaymentService {
       }
 
       console.log('[PaymentService] Products fetched:', products);
-      return products;
+      // Product[] -> ProductPurchase[] 변환
+      return products.map(p => ({
+        ...p,
+        transactionDate: Date.now(),
+        transactionReceipt: '',
+      })) as ProductPurchase[];
     } catch (error) {
       console.error('[PaymentService] Failed to fetch products:', error);
       throw this.createPaymentError(
@@ -243,7 +250,28 @@ class PaymentService implements IPaymentService {
         purchase = mockPurchase;
       } else {
         // 실제 구매 요청
-        purchase = await requestPurchase({ sku: productId });
+        const purchaseResult = await requestPurchase({ sku: productId });
+
+        // requestPurchase는 void | ProductPurchase | ProductPurchase[]를 반환할 수 있음
+        if (!purchaseResult) {
+          throw this.createPaymentError(PAYMENT_ERROR_CODES.PURCHASE_FAILED);
+        }
+
+        // 배열인 경우 첫 번째 요소 사용, 아니면 그대로 사용
+        const purchaseData = Array.isArray(purchaseResult) ? purchaseResult[0] : purchaseResult;
+
+        if (!purchaseData) {
+          throw this.createPaymentError(PAYMENT_ERROR_CODES.PURCHASE_FAILED);
+        }
+
+        // ProductPurchase를 Purchase로 변환
+        purchase = {
+          ...purchaseData,
+          transactionDate: typeof purchaseData.transactionDate === 'number'
+            ? purchaseData.transactionDate
+            : Date.now(),
+          transactionReceipt: purchaseData.transactionReceipt || '',
+        } as Purchase;
 
         if (!purchase) {
           throw this.createPaymentError(PAYMENT_ERROR_CODES.PURCHASE_FAILED);

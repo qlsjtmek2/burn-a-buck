@@ -1,14 +1,13 @@
 /**
- * Payment Service
+ * IAP Service (Native)
  *
- * Google Play In-App Purchase 결제 서비스
- * react-native-iap v14.x 사용
+ * Google Play / App Store In-App Purchase 래퍼
  */
 
 import {
   initConnection,
   endConnection,
-  getProducts,
+  getProducts as fetchProducts,
   requestPurchase,
   finishTransaction,
   purchaseUpdatedListener,
@@ -16,20 +15,13 @@ import {
   type Purchase as IAPPurchase,
   type PurchaseError as IAPPurchaseError,
 } from 'react-native-iap';
-import { Platform } from 'react-native';
 import type {
   Product,
   Purchase,
   PurchaseResult,
-  PurchaseError,
+  PaymentError,
   PurchaseErrorCode,
-  ReceiptValidationResult,
-} from '@/types/payment.types';
-
-// 상품 ID 설정
-export const PRODUCT_IDS = {
-  DONATION_1000: Platform.OS === 'android' ? 'donate_1000won' : 'donate_1000won_ios',
-};
+} from '../../types/payment';
 
 /**
  * IAP 연결 초기화
@@ -94,10 +86,34 @@ export const purchaseProduct = async (productId: string): Promise<PurchaseResult
     // 구매 요청
     const purchase = await requestPurchase({ skus: [productId] });
 
+    // purchase가 void, 배열, 또는 단일 객체일 수 있음 처리
+    if (!purchase) {
+      return {
+        success: false,
+        error: {
+          code: 'E_UNKNOWN',
+          message: 'Purchase returned empty',
+        },
+      };
+    }
+
+    // 배열인 경우 첫 번째 요소 사용
+    const purchaseData = Array.isArray(purchase) ? purchase[0] : purchase;
+
+    if (!purchaseData) {
+      return {
+        success: false,
+        error: {
+          code: 'E_UNKNOWN',
+          message: 'Purchase data is empty',
+        },
+      };
+    }
+
     // 구매 성공
     return {
       success: true,
-      purchase: mapIAPPurchase(purchase),
+      purchase: mapIAPPurchase(purchaseData),
     };
   } catch (err: unknown) {
     console.error('Purchase failed:', err);
@@ -119,8 +135,10 @@ export const finalizePurchase = async (purchase: Purchase): Promise<void> => {
       purchase: {
         productId: purchase.productId,
         transactionId: purchase.transactionId,
+        transactionDate: purchase.transactionDate,
+        transactionReceipt: purchase.transactionReceipt,
         purchaseToken: purchase.purchaseToken,
-      },
+      } as IAPPurchase,
       isConsumable: true, // 소모성 상품 (기부)
     });
 
@@ -132,67 +150,11 @@ export const finalizePurchase = async (purchase: Purchase): Promise<void> => {
 };
 
 /**
- * 영수증 기본 검증 (클라이언트 측)
- *
- * ⚠️ 주의: 실제 서비스에서는 서버에서 Google Play Developer API를 통해 검증해야 합니다.
- * 클라이언트 검증은 기본적인 무결성 체크만 수행합니다.
- */
-export const validateReceiptClient = (purchase: Purchase): ReceiptValidationResult => {
-  try {
-    // Android: purchaseToken 및 signature 확인
-    if (Platform.OS === 'android') {
-      if (!purchase.purchaseToken || !purchase.signatureAndroid) {
-        return {
-          isValid: false,
-          error: 'Missing purchase token or signature',
-        };
-      }
-
-      // 기본 검증 (실제로는 서버에서 서명 검증 필요)
-      return {
-        isValid: true,
-        productId: purchase.productId,
-        purchaseToken: purchase.purchaseToken,
-        purchaseTime: purchase.transactionDate,
-      };
-    }
-
-    // iOS: transactionReceipt 확인
-    if (Platform.OS === 'ios') {
-      if (!purchase.transactionReceipt) {
-        return {
-          isValid: false,
-          error: 'Missing transaction receipt',
-        };
-      }
-
-      return {
-        isValid: true,
-        productId: purchase.productId,
-        purchaseToken: purchase.transactionReceipt,
-        purchaseTime: purchase.transactionDate,
-      };
-    }
-
-    return {
-      isValid: false,
-      error: 'Unsupported platform',
-    };
-  } catch (err) {
-    console.error('Receipt validation failed:', err);
-    return {
-      isValid: false,
-      error: err instanceof Error ? err.message : 'Unknown validation error',
-    };
-  }
-};
-
-/**
  * 구매 업데이트 리스너 등록
  */
 export const setupPurchaseListeners = (
   onPurchaseUpdate: (purchase: Purchase) => void,
-  onPurchaseError: (error: PurchaseError) => void
+  onPurchaseError: (error: PaymentError) => void
 ): (() => void) => {
   // 구매 완료 리스너
   const purchaseUpdateSubscription = purchaseUpdatedListener((purchase: IAPPurchase) => {
@@ -213,36 +175,44 @@ export const setupPurchaseListeners = (
   };
 };
 
+// ============================================================================
+// Helper Functions
+// ============================================================================
+
 /**
  * IAP Purchase를 내부 Purchase 타입으로 변환
  */
 const mapIAPPurchase = (purchase: IAPPurchase): Purchase => ({
   productId: purchase.productId,
   transactionId: purchase.transactionId || '',
-  transactionDate: purchase.transactionDate || Date.now(),
+  transactionDate: typeof purchase.transactionDate === 'number'
+    ? purchase.transactionDate
+    : Date.now(),
   transactionReceipt: purchase.transactionReceipt || '',
   purchaseToken: purchase.purchaseToken || '',
   dataAndroid: purchase.dataAndroid,
   signatureAndroid: purchase.signatureAndroid,
   purchaseStateAndroid: purchase.purchaseStateAndroid,
-  originalTransactionDateIOS: purchase.originalTransactionDateIOS,
+  originalTransactionDateIOS: purchase.originalTransactionDateIOS
+    ? String(purchase.originalTransactionDateIOS)
+    : undefined,
   originalTransactionIdentifierIOS: purchase.originalTransactionIdentifierIOS,
 });
 
 /**
  * IAP PurchaseError를 내부 PurchaseError 타입으로 변환
  */
-const mapPurchaseError = (error: IAPPurchaseError): PurchaseError => {
-  let code: PurchaseErrorCode = 'E_UNKNOWN' as PurchaseErrorCode;
+const mapPurchaseError = (error: IAPPurchaseError): PaymentError => {
+  let code: PurchaseErrorCode | string = 'E_UNKNOWN';
 
   const errorCode = String(error.code);
 
   if (errorCode.includes('E_USER_CANCELLED') || errorCode.includes('USER_CANCELED')) {
-    code = 'E_USER_CANCELLED' as PurchaseErrorCode;
+    code = 'E_USER_CANCELLED';
   } else if (errorCode.includes('E_ALREADY_OWNED') || errorCode.includes('ITEM_ALREADY_OWNED')) {
-    code = 'E_ALREADY_OWNED' as PurchaseErrorCode;
+    code = 'E_ALREADY_OWNED';
   } else if (errorCode.includes('E_NETWORK_ERROR') || errorCode.includes('NETWORK')) {
-    code = 'E_NETWORK_ERROR' as PurchaseErrorCode;
+    code = 'E_NETWORK_ERROR';
   }
 
   return {
@@ -250,16 +220,4 @@ const mapPurchaseError = (error: IAPPurchaseError): PurchaseError => {
     message: error.message || 'Unknown purchase error',
     debugMessage: error.message,
   };
-};
-
-/**
- * 구매 토큰 추출
- * (Supabase에 저장할 고유 식별자)
- */
-export const extractPurchaseToken = (purchase: Purchase): string => {
-  if (Platform.OS === 'android') {
-    return purchase.purchaseToken;
-  }
-  // iOS는 transactionId를 사용
-  return purchase.transactionId;
 };

@@ -133,7 +133,12 @@ class PaymentService implements IPaymentService {
       }
 
       console.log('[PaymentService] Products fetched:', products);
-      return products;
+      // Product[] -> ProductPurchase[] 변환
+      return products.map(p => ({
+        ...p,
+        transactionDate: Date.now(),
+        transactionReceipt: '',
+      })) as ProductPurchase[];
     } catch (error) {
       console.error('[PaymentService] Failed to fetch products:', error);
       throw this.createPaymentError(
@@ -156,11 +161,28 @@ class PaymentService implements IPaymentService {
       console.log('[PaymentService] Requesting purchase:', productId);
 
       // 구매 요청
-      const purchase = await requestPurchase({ sku: productId });
+      const purchaseResult = await requestPurchase({ sku: productId });
 
-      if (!purchase) {
+      // requestPurchase는 void | ProductPurchase | ProductPurchase[]를 반환할 수 있음
+      if (!purchaseResult) {
         throw this.createPaymentError(PAYMENT_ERROR_CODES.PURCHASE_FAILED);
       }
+
+      // 배열인 경우 첫 번째 요소 사용, 아니면 그대로 사용
+      const purchaseData = Array.isArray(purchaseResult) ? purchaseResult[0] : purchaseResult;
+
+      if (!purchaseData) {
+        throw this.createPaymentError(PAYMENT_ERROR_CODES.PURCHASE_FAILED);
+      }
+
+      // ProductPurchase를 Purchase로 변환
+      const purchase: Purchase = {
+        ...purchaseData,
+        transactionDate: typeof purchaseData.transactionDate === 'number'
+          ? purchaseData.transactionDate
+          : Date.now(),
+        transactionReceipt: purchaseData.transactionReceipt || '',
+      } as Purchase;
 
       console.log('[PaymentService] Purchase successful:', purchase);
 
@@ -168,7 +190,7 @@ class PaymentService implements IPaymentService {
       const result = await this.finalizePurchase(purchase, nickname);
 
       // 거래 완료 처리
-      await finishTransaction({ purchase, isConsumable: true });
+      await finishTransaction({ purchase: purchaseData, isConsumable: true });
 
       return result;
     } catch (error: any) {

@@ -5,6 +5,7 @@
     "loading": "Loading...",
     "error": "Error",
     "success": "Success",
+    "ok": "OK",
     "confirm": "Confirm",
     "cancel": "Cancel",
     "close": "Close",
@@ -14,6 +15,12 @@
     "done": "Done",
     "save": "Save",
     "delete": "Delete"
+  },
+  "error": {
+    "general": {
+      "title": "Error",
+      "message": "An error occurred. Please try again."
+    }
   },
   "onboarding": {
     "title": "Burn a Buck",
@@ -128,7 +135,27 @@
       "receiptValidationFailed": "Receipt validation failed.",
       "networkError": "A network error occurred. Please try again.",
       "duplicatePayment": "This payment has already been processed.",
-      "unknownError": "An unknown error occurred."
+      "unknownError": "An unknown error occurred.",
+      "cancelled": {
+        "title": "Payment Cancelled",
+        "message": "The payment has been cancelled."
+      },
+      "network": {
+        "title": "Network Error",
+        "message": "Please check your network connection and try again."
+      },
+      "alreadyOwned": {
+        "title": "Already Purchased",
+        "message": "You have already purchased this item."
+      },
+      "validation": {
+        "title": "Validation Failed",
+        "message": "Receipt validation failed. Please contact customer support."
+      },
+      "unknown": {
+        "title": "Error Occurred",
+        "message": "An unknown error occurred. Please try again."
+      }
     }
   },
   "settings": {
