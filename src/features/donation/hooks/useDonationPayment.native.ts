@@ -53,6 +53,9 @@ export const useDonationPayment = (): UseDonationPaymentReturn => {
 
   /**
    * 결제 시작
+   *
+   * ⚠️ 닉네임은 온보딩에서 입력되므로 항상 존재한다고 가정
+   * 닉네임이 없는 경우는 비정상 상황 (온보딩 완료했는데 닉네임 없음)
    */
   const startPayment = useCallback(
     async (nickname?: string) => {
@@ -60,19 +63,17 @@ export const useDonationPayment = (): UseDonationPaymentReturn => {
         console.log('[useDonationPayment] Starting payment...');
         setError(null);
 
-        // Step 1: 닉네임 확인 (제공되지 않은 경우)
+        // Step 1: 닉네임 확인 (제공되지 않은 경우 AsyncStorage에서 로드)
         let finalNickname = nickname;
 
         if (!finalNickname) {
           finalNickname = await getSavedNickname();
         }
 
-        // Step 2: 닉네임이 없으면 닉네임 입력 화면으로 이동
+        // Step 2: 닉네임이 없으면 에러 (온보딩 완료 후 닉네임은 항상 있어야 함)
         if (!finalNickname) {
-          console.log('[useDonationPayment] No nickname, navigating to nickname screen');
-          navigation.navigate('Nickname', {});
-          setStatus('idle');
-          return;
+          console.error('[useDonationPayment] Nickname not found - onboarding incomplete?');
+          throw new Error('닉네임이 설정되지 않았습니다. 앱을 다시 시작해주세요.');
         }
 
         // Step 3: 결제 시작 (비즈니스 로직은 paymentService에 위임)

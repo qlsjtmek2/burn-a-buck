@@ -17,13 +17,8 @@ export type RootStackParamList = {
   /** 메인 화면 (기부 버튼) */
   Main: undefined;
 
-  /** 닉네임 입력 화면 */
-  Nickname: {
-    /** 기부 정보 (결제 완료 후 전달) */
-    donation?: DonationInfo;
-    /** 첫 기부 여부 */
-    isFirstDonation?: boolean;
-  };
+  /** 닉네임 입력 화면 - 온보딩에 통합되어 사용 안 함 (설정 화면에서 재사용 가능) */
+  // Nickname: undefined;
 
   /** 기부 완료 화면 */
   DonationComplete: {
@@ -46,10 +41,11 @@ export type OnboardingScreenProps = StackScreenProps<
 
 export type MainScreenProps = StackScreenProps<RootStackParamList, 'Main'>;
 
-export type NicknameScreenProps = StackScreenProps<
-  RootStackParamList,
-  'Nickname'
->;
+// Nickname 화면은 온보딩에 통합되어 독립 화면으로 사용 안 함
+// export type NicknameScreenProps = StackScreenProps<
+//   RootStackParamList,
+//   'Nickname'
+// >;
 
 export type DonationCompleteScreenProps = StackScreenProps<
   RootStackParamList,

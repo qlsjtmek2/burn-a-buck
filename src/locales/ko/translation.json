@@ -47,11 +47,15 @@
       "start": "시작하기",
       "skip": "건너뛰기",
       "next": "다음"
+    },
+    "nickname": {
+      "hint": "리더보드에 표시될 이름입니다"
     }
   },
   "main": {
     "header": {
-      "title": "천원 쓰레기통"
+      "title": "천원 쓰레기통",
+      "greeting": "{{nickname}}님 환영합니다"
     },
     "leaderboard": {
       "title": "리더보드",

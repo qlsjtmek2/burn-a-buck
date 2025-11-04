@@ -12,6 +12,7 @@ const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
 interface UseOnboardingOptions {
   slides: OnboardingSlideData[];
+  totalSlides: number;
   onComplete: () => void;
 }
 
@@ -25,18 +26,19 @@ interface UseOnboardingReturn {
 
 export const useOnboarding = ({
   slides,
+  totalSlides,
   onComplete,
 }: UseOnboardingOptions): UseOnboardingReturn => {
   const scrollViewRef = useRef<ScrollView>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  const isLastSlide = currentIndex === slides.length - 1;
+  const isLastSlide = currentIndex === totalSlides - 1;
 
   /**
    * 다음 슬라이드로 이동
    */
   const handleNext = useCallback(() => {
-    if (currentIndex < slides.length - 1) {
+    if (currentIndex < totalSlides - 1) {
       const nextIndex = currentIndex + 1;
       scrollViewRef.current?.scrollTo({
         x: nextIndex * SCREEN_WIDTH,
@@ -46,7 +48,7 @@ export const useOnboarding = ({
     } else {
       onComplete();
     }
-  }, [currentIndex, slides.length, onComplete]);
+  }, [currentIndex, totalSlides, onComplete]);
 
   /**
    * 스크롤 위치 변경 시 현재 인덱스 업데이트
@@ -55,11 +57,11 @@ export const useOnboarding = ({
     (event: NativeSyntheticEvent<NativeScrollEvent>) => {
       const offsetX = event.nativeEvent.contentOffset.x;
       const index = Math.round(offsetX / SCREEN_WIDTH);
-      if (index !== currentIndex && index >= 0 && index < slides.length) {
+      if (index !== currentIndex && index >= 0 && index < totalSlides) {
         setCurrentIndex(index);
       }
     },
-    [currentIndex, slides.length]
+    [currentIndex, totalSlides]
   );
 
   return {

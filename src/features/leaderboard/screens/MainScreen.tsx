@@ -4,7 +4,7 @@
  * 메인 화면 - 기부 버튼 및 리더보드
  */
 
-import React, { useCallback } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Alert } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -16,12 +16,28 @@ import { useDonationPayment } from '../../donation/hooks/useDonationPayment';
 import { PaymentLoadingDialog } from '../../donation/components/PaymentLoadingDialog';
 import { PaymentErrorDialog } from '../../donation/components/PaymentErrorDialog';
 import { STORAGE_KEYS } from '../../../constants/storage';
+import { getNickname } from '../../../utils/nickname';
 
 const MainScreen: React.FC<MainScreenProps> = ({ navigation }) => {
   const { t } = useTranslation();
+  const [nickname, setNickname] = useState<string>('');
 
   // 결제 플로우 관리 hook
   const { status, isLoading, error, startPayment, clearError } = useDonationPayment();
+
+  /**
+   * 닉네임 로드
+   */
+  useEffect(() => {
+    const loadNickname = async () => {
+      const savedNickname = await getNickname();
+      if (savedNickname) {
+        setNickname(savedNickname);
+      }
+    };
+
+    loadNickname();
+  }, []);
 
   /**
    * 기부 버튼 클릭 핸들러
@@ -81,7 +97,17 @@ const MainScreen: React.FC<MainScreenProps> = ({ navigation }) => {
       {/* Header */}
       <View style={styles.header}>
         <View style={styles.headerTop}>
-          <Text style={styles.headerTitle}>{t('main.header.title')}</Text>
+          <View style={styles.headerTitleContainer}>
+            <Text style={styles.headerEmoji}>🗑️</Text>
+            <View style={styles.headerTextContainer}>
+              <Text style={styles.headerTitle}>{t('main.header.title')}</Text>
+              {nickname && (
+                <Text style={styles.headerNickname}>
+                  {t('main.header.greeting', { nickname })}
+                </Text>
+              )}
+            </View>
+          </View>
 
           {/* 개발용 초기화 버튼 - 프로덕션 빌드에서 자동 제거 */}
           {__DEV__ && (
@@ -158,10 +184,26 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
+  headerTitleContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
+  },
+  headerEmoji: {
+    fontSize: 32,
+    marginRight: 12,
+  },
+  headerTextContainer: {
+    flex: 1,
+  },
   headerTitle: {
     ...typography.headlineSmall,
     color: colors.primary,
-    flex: 1,
+  },
+  headerNickname: {
+    ...typography.bodyMedium,
+    color: colors.textSecondary,
+    marginTop: 2,
   },
   devButton: {
     width: 36,

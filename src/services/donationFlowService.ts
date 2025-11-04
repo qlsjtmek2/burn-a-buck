@@ -14,7 +14,7 @@ import {
   PRODUCT_IDS,
 } from './payment/index';
 import { createDonation, getDonationByReceipt } from './donationService';
-import { getUserById, createUser } from './userService';
+import { getUserByNickname, createUser } from './userService';
 import type { Purchase, PurchaseResult, CreateDonationInput } from '../types/payment';
 import type { User } from '../types/database.types';
 
@@ -32,12 +32,10 @@ export interface DonationFlowResult {
 /**
  * 기부 플로우 실행
  *
- * @param userId - 사용자 ID (Supabase Auth)
  * @param nickname - 사용자 닉네임
  * @returns 기부 플로우 결과
  */
 export const executeDonationFlow = async (
-  userId: string,
   nickname: string
 ): Promise<DonationFlowResult> => {
   let purchase: Purchase | undefined;
@@ -82,7 +80,7 @@ export const executeDonationFlow = async (
 
     // Step 4: 사용자 조회 또는 생성
     console.log('[Donation Flow] Getting or creating user...');
-    let user = await getUserById(userId);
+    let user = await getUserByNickname(nickname);
     const isFirstDonation = !user || user.total_donated === 0;
 
     if (!user) {
@@ -98,7 +96,6 @@ export const executeDonationFlow = async (
     // Step 5: 기부 내역 저장 (Supabase)
     console.log('[Donation Flow] Creating donation record...');
     const donationInput = {
-      user_id: user.id,
       nickname: user.nickname || nickname,
       amount: 1000, // ₩1,000 고정
       receipt_token: receiptToken,
@@ -114,7 +111,7 @@ export const executeDonationFlow = async (
     await finalizePurchase(purchase);
 
     // Step 7: 사용자 정보 다시 조회 (트리거로 업데이트된 통계)
-    const updatedUser = await getUserById(userId);
+    const updatedUser = await getUserByNickname(nickname);
 
     console.log('[Donation Flow] Donation flow completed successfully');
 
@@ -144,31 +141,31 @@ export const executeDonationFlow = async (
 };
 
 /**
- * 사용자의 첫 기부 여부 확인
+ * 사용자의 첫 기부 여부 확인 (nickname 기반)
  *
- * @param userId - 사용자 ID
+ * @param nickname - 사용자 닉네임
  * @returns 첫 기부 여부
  */
-export const checkIfFirstDonation = async (userId: string): Promise<boolean> => {
-  const user = await getUserById(userId);
+export const checkIfFirstDonation = async (nickname: string): Promise<boolean> => {
+  const user = await getUserByNickname(nickname);
   return !user || user.total_donated === 0;
 };
 
 /**
- * 기부 완료 후 처리
+ * 기부 완료 후 처리 (nickname 기반)
  * (감사 메시지, 순위 조회 등)
  *
- * @param userId - 사용자 ID
+ * @param nickname - 사용자 닉네임
  * @returns 사용자 정보 및 순위
  */
 export const getPostDonationData = async (
-  userId: string
+  nickname: string
 ): Promise<{
   user: User;
   rank: number | null;
 } | null> => {
   try {
-    const user = await getUserById(userId);
+    const user = await getUserByNickname(nickname);
 
     if (!user) {
       return null;
@@ -176,7 +173,7 @@ export const getPostDonationData = async (
 
     // 순위 조회 (간단하게 leaderboard 뷰에서 조회)
     const { getUserRank } = await import('./userService');
-    const rankData = await getUserRank(userId);
+    const rankData = await getUserRank(nickname);
 
     return {
       user,

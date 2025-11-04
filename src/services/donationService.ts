@@ -42,13 +42,13 @@ export const getDonationByReceipt = async (receiptToken: string): Promise<Donati
 };
 
 /**
- * 사용자의 기부 내역 조회
+ * 사용자의 기부 내역 조회 (nickname 기반)
  */
-export const getUserDonations = async (userId: string): Promise<Donation[]> => {
+export const getUserDonations = async (nickname: string): Promise<Donation[]> => {
   const { data, error } = await supabase
     .from('donations')
     .select('*')
-    .eq('user_id', userId)
+    .eq('nickname', nickname)
     .order('created_at', { ascending: false });
 
   if (error) {
@@ -83,13 +83,13 @@ export const getRecentDonations = async (
 };
 
 /**
- * 사용자의 첫 기부인지 확인
+ * 사용자의 첫 기부인지 확인 (nickname 기반)
  */
-export const isFirstDonation = async (userId: string): Promise<boolean> => {
+export const isFirstDonation = async (nickname: string): Promise<boolean> => {
   const { data, error } = await supabase
     .from('donations')
     .select('id')
-    .eq('user_id', userId)
+    .eq('nickname', nickname)
     .limit(1);
 
   if (error) {

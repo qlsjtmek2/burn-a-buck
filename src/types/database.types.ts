@@ -17,11 +17,11 @@ export interface User {
 
 export interface Donation {
   id: string;
-  user_id: string | null;
   nickname: string;
   amount: number;
   receipt_token: string;
   platform: 'google_play' | 'app_store';
+  transaction_id?: string;
   created_at: string;
 }
 

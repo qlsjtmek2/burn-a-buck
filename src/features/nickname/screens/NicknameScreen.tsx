@@ -2,7 +2,8 @@
  * Nickname Screen
  *
  * 닉네임 입력 화면
- * Phase 10에서 상세 구현 예정
+ * ⚠️ 현재는 온보딩에 통합되어 사용하지 않음
+ * 향후 설정 화면에서 닉네임 변경 기능으로 재사용 가능
  */
 
 import React, { useState } from 'react';
@@ -17,11 +18,12 @@ import {
   Alert,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import type { NicknameScreenProps } from '../../../types/navigation';
+// import type { NicknameScreenProps } from '../../../types/navigation';
 import { saveNickname } from '../../../utils/donationStorage';
 import { colors, typography } from '../../../theme';
 
-const NicknameScreen: React.FC<NicknameScreenProps> = ({
+// 온보딩에 통합되어 현재는 사용하지 않음
+const NicknameScreen: React.FC<any> = ({
   navigation,
   route,
 }) => {

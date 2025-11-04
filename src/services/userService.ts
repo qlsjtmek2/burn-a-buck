@@ -30,6 +30,7 @@ export const getUserByNickname = async (nickname: string): Promise<User | null> 
 
 /**
  * ID로 사용자 조회
+ * @deprecated user_id 제거로 인해 getUserByNickname() 사용 권장
  */
 export const getUserById = async (userId: string): Promise<User | null> => {
   const { data, error } = await supabase.from('users').select('*').eq('id', userId).single();
@@ -58,13 +59,13 @@ export const createUser = async (user: UserInsert): Promise<User> => {
 };
 
 /**
- * 사용자 정보 업데이트
+ * 사용자 정보 업데이트 (nickname 기반)
  */
-export const updateUser = async (userId: string, updates: UserUpdate): Promise<User> => {
+export const updateUser = async (nickname: string, updates: UserUpdate): Promise<User> => {
   const { data, error } = await supabase
     .from('users')
     .update(updates)
-    .eq('id', userId)
+    .eq('nickname', nickname)
     .select()
     .single();
 
@@ -91,22 +92,24 @@ export const checkNicknameAvailable = async (nickname: string): Promise<boolean>
 };
 
 /**
- * 사용자의 현재 순위 조회
+ * 사용자의 현재 순위 조회 (nickname 기반)
  */
 export const getUserRank = async (
-  userId: string
+  nickname: string
 ): Promise<{ rank: number; total_donated: number; nickname: string } | null> => {
-  const { data, error } = await supabase.rpc('get_user_rank', {
-    p_user_id: userId,
-  });
+  // RPC 함수 대신 leaderboard 뷰에서 직접 조회
+  const { data, error } = await supabase
+    .from('leaderboard')
+    .select('rank, total_donated, nickname')
+    .eq('nickname', nickname)
+    .single();
 
   if (error) {
+    if (error.code === 'PGRST116') {
+      return null;
+    }
     throw error;
   }
 
-  if (!data || data.length === 0) {
-    return null;
-  }
-
-  return data[0];
+  return data;
 };

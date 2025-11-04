@@ -47,11 +47,15 @@
       "start": "Get Started",
       "skip": "Skip",
       "next": "Next"
+    },
+    "nickname": {
+      "hint": "This name will be displayed on the leaderboard"
     }
   },
   "main": {
     "header": {
-      "title": "Burn a Buck"
+      "title": "Burn a Buck",
+      "greeting": "Welcome, {{nickname}}"
     },
     "leaderboard": {
       "title": "Leaderboard",

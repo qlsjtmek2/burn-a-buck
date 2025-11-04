@@ -2,15 +2,18 @@
  * Onboarding Screen
  *
  * 앱 최초 실행 시 표시되는 온보딩 화면
- * 2개의 슬라이드로 구성된 인트로 화면
+ * 2개의 슬라이드 + 닉네임 입력으로 구성
  */
 
-import React from 'react';
-import { View, StyleSheet, ScrollView } from 'react-native';
+import React, { useState } from 'react';
+import { View, StyleSheet, ScrollView, Alert } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import type { OnboardingScreenProps } from '../../../types/navigation';
 import { setOnboardingCompleted } from '../../../utils/onboarding';
+import { saveNickname } from '../../../utils/nickname';
 import { colors } from '../../../theme';
 import { OnboardingSlide, type OnboardingSlideData } from '../components/OnboardingSlide';
+import { NicknameInputSlide } from '../components/NicknameInputSlide';
 import { OnboardingPagination } from '../components/OnboardingPagination';
 import { OnboardingActions } from '../components/OnboardingActions';
 import { useOnboarding } from '../hooks/useOnboarding';
@@ -36,20 +39,54 @@ const SLIDES: OnboardingSlideData[] = [
 ];
 
 const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ navigation }) => {
+  const { t } = useTranslation();
+  const [nickname, setNickname] = useState('');
+
+  const totalSlides = SLIDES.length + 1; // 일반 슬라이드 + 닉네임 슬라이드
+
   /**
    * 온보딩 완료 처리 및 메인 화면으로 이동
    */
   const handleComplete = async () => {
+    // 닉네임 유효성 검증
+    const trimmedNickname = nickname.trim();
+    if (trimmedNickname.length < 2) {
+      Alert.alert(
+        t('dialog.error.title'),
+        t('nickname.validation.tooShort')
+      );
+      return;
+    }
+
+    if (trimmedNickname.length > 12) {
+      Alert.alert(
+        t('dialog.error.title'),
+        t('nickname.validation.tooLong')
+      );
+      return;
+    }
+
     try {
+      // 닉네임 저장
+      await saveNickname(trimmedNickname);
+
+      // 온보딩 완료 플래그 저장
       await setOnboardingCompleted();
+
+      // 메인 화면으로 이동
       navigation.replace('Main');
     } catch (error) {
       console.error('[OnboardingScreen] Failed to complete onboarding:', error);
+      Alert.alert(
+        t('dialog.error.title'),
+        t('common.error')
+      );
     }
   };
 
   const { scrollViewRef, currentIndex, isLastSlide, handleNext, handleScroll } = useOnboarding({
     slides: SLIDES,
+    totalSlides,
     onComplete: handleComplete,
   });
 
@@ -66,13 +103,21 @@ const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ navigation }) => {
         style={styles.scrollView}
         bounces={false}
       >
+        {/* 일반 슬라이드 */}
         {SLIDES.map((slide, index) => (
           <OnboardingSlide key={slide.key} slide={slide} index={index} />
         ))}
+
+        {/* 닉네임 입력 슬라이드 */}
+        <NicknameInputSlide
+          index={SLIDES.length}
+          nickname={nickname}
+          onNicknameChange={setNickname}
+        />
       </ScrollView>
 
       {/* 페이지 인디케이터 */}
-      <OnboardingPagination currentIndex={currentIndex} total={SLIDES.length} />
+      <OnboardingPagination currentIndex={currentIndex} total={totalSlides} />
 
       {/* 하단 버튼 영역 */}
       <OnboardingActions

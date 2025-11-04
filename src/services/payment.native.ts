@@ -433,7 +433,7 @@ class PaymentService implements IPaymentService {
   }
 
   /**
-   * Supabase에 기부 저장 (중복 방지 포함)
+   * Supabase에 기부 저장 (중복 방지 포함, nickname 기반)
    */
   private async saveDonationToSupabase(
     receiptInfo: ReceiptInfo,
@@ -457,17 +457,11 @@ class PaymentService implements IPaymentService {
         throw this.createPaymentError(PAYMENT_ERROR_CODES.DUPLICATE_PAYMENT);
       }
 
-      // 2. 현재 사용자 세션 가져오기 (없으면 null)
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
+      // 2. 첫 기부 여부 확인 (nickname 기반)
+      const isFirstDonation = await this.checkFirstDonation(nickname);
 
-      // 3. 첫 기부 여부 확인
-      const isFirstDonation = await this.checkFirstDonation();
-
-      // 4. donations 테이블에 저장
+      // 3. donations 테이블에 저장
       const donationData = {
-        user_id: user?.id || null,
         nickname,
         amount: 1000,
         receipt_token: receiptInfo.token,
@@ -485,12 +479,7 @@ class PaymentService implements IPaymentService {
         throw insertError;
       }
 
-      // 5. users 테이블 업데이트 (있으면 업데이트, 없으면 생성)
-      if (user) {
-        await this.updateUserDonationStats(user.id, nickname, isFirstDonation);
-      }
-
-      // 6. 첫 기부 플래그 업데이트
+      // 4. 첫 기부 플래그 업데이트 (AsyncStorage)
       if (isFirstDonation) {
         await AsyncStorage.setItem(
           STORAGE_KEYS.FIRST_DONATION,
@@ -516,42 +505,23 @@ class PaymentService implements IPaymentService {
   }
 
   /**
-   * 첫 기부 여부 확인 (데이터베이스 기반)
+   * 첫 기부 여부 확인 (nickname 기반)
    *
-   * AsyncStorage 대신 Supabase donations 테이블 확인
-   * Mock IAP 환경에서도 정확한 첫 기부 여부 판단
+   * Supabase donations 테이블을 nickname으로 조회
+   * 로그인 없이도 작동 (익명 사용자 지원)
    *
+   * @param nickname - 사용자 닉네임
    * @returns true: 첫 기부, false: 재기부
    */
-  private async checkFirstDonation(): Promise<boolean> {
+  private async checkFirstDonation(nickname: string): Promise<boolean> {
     try {
-      console.log('[checkFirstDonation] Checking first donation status...');
+      console.log('[checkFirstDonation] Checking first donation for nickname:', nickname);
 
-      // 현재 사용자 세션 가져오기
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-
-      if (!user) {
-        // 로그인하지 않은 경우 AsyncStorage 체크 (fallback)
-        console.log('[checkFirstDonation] No user session - checking AsyncStorage');
-        const firstDonationDate = await AsyncStorage.getItem(
-          STORAGE_KEYS.FIRST_DONATION
-        );
-        const isFirst = !firstDonationDate;
-        console.log('[checkFirstDonation] AsyncStorage result:', {
-          isFirst,
-          firstDonationDate,
-        });
-        return isFirst;
-      }
-
-      // 사용자의 기부 내역 조회
-      console.log('[checkFirstDonation] User session found (user_id:', user.id, ') - checking database');
+      // nickname으로 기부 내역 조회
       const { data: donations, error } = await supabase
         .from('donations')
         .select('id')
-        .eq('user_id', user.id)
+        .eq('nickname', nickname)
         .limit(1);
 
       if (error) {
@@ -568,9 +538,9 @@ class PaymentService implements IPaymentService {
       // 기부 내역이 없으면 첫 기부
       const isFirst = !donations || donations.length === 0;
       console.log('[checkFirstDonation] Database result:', {
+        nickname,
         isFirst,
         donationCount: donations?.length || 0,
-        donations,
       });
       return isFirst;
     } catch (err) {
@@ -587,6 +557,7 @@ class PaymentService implements IPaymentService {
 
   /**
    * 사용자 기부 통계 업데이트
+   * @deprecated 트리거가 자동으로 처리하므로 더 이상 사용하지 않음
    */
   private async updateUserDonationStats(
     userId: string,

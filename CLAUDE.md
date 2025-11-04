@@ -269,6 +269,8 @@ src/
 
 ## Database Schema (Supabase)
 
+**⚠️ Updated 2025-11-05**: user_id 제거, nickname 기반 구조로 전환
+
 ### Users Table
 ```sql
 CREATE TABLE users (
@@ -278,7 +280,8 @@ CREATE TABLE users (
   first_donation_at TIMESTAMP,
   last_donation_at TIMESTAMP,
   badge_earned BOOLEAN DEFAULT FALSE,
-  created_at TIMESTAMP DEFAULT NOW()
+  created_at TIMESTAMP DEFAULT NOW(),
+  updated_at TIMESTAMP DEFAULT NOW()
 );
 ```
 
@@ -286,26 +289,41 @@ CREATE TABLE users (
 ```sql
 CREATE TABLE donations (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  user_id UUID REFERENCES users(id),
-  nickname VARCHAR(12) NOT NULL,
+  nickname VARCHAR(12) NOT NULL,  -- ✅ No user_id (anonymous users)
   amount INTEGER DEFAULT 1000,
   receipt_token TEXT UNIQUE NOT NULL,
+  platform VARCHAR(20) DEFAULT 'google_play',
+  transaction_id TEXT,
   created_at TIMESTAMP DEFAULT NOW()
 );
+
+-- Index for performance
+CREATE INDEX idx_donations_nickname ON donations(nickname);
 ```
 
 ### Leaderboard View
 ```sql
 CREATE VIEW leaderboard AS
 SELECT
+  u.id,
   u.nickname,
   u.total_donated,
-  RANK() OVER (ORDER BY u.total_donated DESC) as rank,
-  u.last_donation_at
+  RANK() OVER (ORDER BY u.total_donated DESC, u.first_donation_at ASC) as rank,
+  u.last_donation_at,
+  u.badge_earned,
+  COUNT(d.id) as donation_count
 FROM users u
+LEFT JOIN donations d ON u.nickname = d.nickname  -- ✅ nickname-based join
 WHERE u.total_donated > 0
+GROUP BY u.id, u.nickname, u.total_donated, u.first_donation_at, u.last_donation_at, u.badge_earned
 ORDER BY rank;
 ```
+
+**Key Changes**:
+- ❌ `user_id` removed (no authentication required)
+- ✅ `nickname` is the sole identifier
+- ✅ Trigger auto-creates/updates `users` table from `donations`
+- ✅ RLS policies allow anonymous inserts
 
 **Service Layer**: All database operations go through service files in `src/services/`. Never write raw SQL in components.
 
@@ -376,57 +394,53 @@ type PaymentStatus =
 
 Product ID: `donate_1000won` (₩1,000)
 
-### First Donation Detection (Fixed 2025-11-05)
+### First Donation Detection (Updated 2025-11-05)
 
-**Problem**: 최초 후원 시 감사 메시지와 배지가 표시되지 않는 문제 발생
+**⚠️ Major Refactoring**: user_id 제거, nickname 기반 구조로 전환
 
-**Root Cause**: Hook과 PaymentService에서 각각 `checkFirstDonation()` 호출로 인한 이중 체크 및 로직 불일치
-- Hook: AsyncStorage 기반 체크
-- PaymentService: Database 기반 체크
-- 두 결과가 불일치하여 `isFirstDonation` 값이 부정확
+**Previous Problem**:
+- 익명 사용자의 첫 후원 시 배지와 감사 메시지가 두 번째 후원에 표시되는 문제
+- 원인: `user_id`가 null이므로 DB에서 이전 기부를 찾지 못함
 
-**Solution**: Single Source of Truth 원칙 적용
-1. **Hook 수정**: `useDonationPayment.native.ts`에서 중복 `checkFirstDonation()` 호출 제거
-2. **PaymentService 신뢰**: `PaymentResult.isFirstDonation` 값을 유일한 진실의 원천으로 사용
-3. **DB 기반 판단**: `payment.native.ts`의 `checkFirstDonation()`이 Supabase donations 테이블 조회
-4. **타입 안정성**: `PaymentResult.isFirstDonation`을 필수 필드로 변경 (optional 제거)
+**Solution**: nickname 기반 첫 기부 체크
+1. **DB 스키마 변경**: `donations.user_id` 컬럼 제거
+2. **checkFirstDonation() 수정**: nickname 파라미터 추가, nickname으로 donations 테이블 조회
+3. **트리거 업데이트**: nickname 기반으로 users 테이블 자동 생성/업데이트
+4. **RLS 정책**: 익명 사용자도 INSERT 가능
 
-**Implementation** (`src/services/payment.native.ts` Line 526-586):
+**Implementation** (`src/services/payment.native.ts` Line 516-556):
 ```typescript
-private async checkFirstDonation(): Promise<boolean> {
-  // 1. 사용자 세션 확인
-  const { data: { user } } = await supabase.auth.getUser();
+private async checkFirstDonation(nickname: string): Promise<boolean> {
+  // nickname으로 기부 내역 조회 (인증 불필요)
+  const { data: donations, error } = await supabase
+    .from('donations')
+    .select('id')
+    .eq('nickname', nickname)  // ✅ nickname 기반 체크
+    .limit(1);
 
-  if (!user) {
-    // 로그인 안 한 경우: AsyncStorage fallback
+  if (error) {
+    // 에러 시 AsyncStorage fallback
     const firstDonationDate = await AsyncStorage.getItem(STORAGE_KEYS.FIRST_DONATION);
     return !firstDonationDate;
   }
-
-  // 2. DB에서 기부 내역 조회 (Single Source of Truth)
-  const { data: donations } = await supabase
-    .from('donations')
-    .select('id')
-    .eq('user_id', user.id)
-    .limit(1);
 
   // 기부 내역이 없으면 첫 기부
   return !donations || donations.length === 0;
 }
 ```
 
-**Key Principles**:
-- **Single Source of Truth**: Database가 최종 판단 기준
-- **No Duplicate Checks**: Hook에서는 체크하지 않고 PaymentService 결과만 신뢰
-- **Fallback Strategy**: 에러 발생 시 AsyncStorage 사용
-- **Logging**: 상세한 로그로 디버깅 용이성 확보
+**Key Changes**:
+- ❌ **user_id 제거**: 로그인 없이 nickname만으로 식별
+- ✅ **nickname 기반**: 모든 쿼리가 nickname 사용
+- ✅ **트리거 자동화**: donations INSERT 시 users 자동 생성/업데이트
+- ✅ **익명 지원**: RLS 정책으로 anon 사용자 INSERT 허용
 
 **Files Modified** (2025-11-05):
-- `src/features/donation/hooks/useDonationPayment.native.ts` (164→157 lines)
-- `src/services/payment.native.ts` (로깅 강화, Line 526-586)
-- `src/types/payment.ts` (`isFirstDonation: boolean` - 필수 필드)
-- `src/services/payment.web.ts` (타입 일치)
-- `src/services/payment.ts` (플랫폼 라우터 재생성)
+- **DB Migrations**: `004_remove_user_id.sql`, `005_update_rls_for_anonymous.sql`
+- **Services**: `userService.ts`, `donationService.ts`, `donationFlowService.ts`
+- **PaymentService**: `payment.native.ts` (checkFirstDonation, saveDonationToSupabase)
+- **Types**: `database.types.ts` (Donation interface)
+- **Documentation**: `supabase/MIGRATION_GUIDE.md`
 
 ### Leaderboard Updates
 - Polling: React Query with `refetchInterval: 30000` (30s)
