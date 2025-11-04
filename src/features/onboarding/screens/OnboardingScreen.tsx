@@ -41,6 +41,7 @@ const SLIDES: OnboardingSlideData[] = [
 const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ navigation }) => {
   const { t } = useTranslation();
   const [nickname, setNickname] = useState('');
+  const [isNicknameValid, setIsNicknameValid] = useState(false);
 
   const totalSlides = SLIDES.length + 1; // 일반 슬라이드 + 닉네임 슬라이드
 
@@ -48,26 +49,18 @@ const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ navigation }) => {
    * 온보딩 완료 처리 및 메인 화면으로 이동
    */
   const handleComplete = async () => {
-    // 닉네임 유효성 검증
-    const trimmedNickname = nickname.trim();
-    if (trimmedNickname.length < 2) {
+    // 닉네임 유효성 검증 (블록 제출)
+    if (!isNicknameValid) {
       Alert.alert(
         t('dialog.error.title'),
-        t('nickname.validation.tooShort')
-      );
-      return;
-    }
-
-    if (trimmedNickname.length > 12) {
-      Alert.alert(
-        t('dialog.error.title'),
-        t('nickname.validation.tooLong')
+        t('nickname.validation.invalid')
       );
       return;
     }
 
     try {
-      // 닉네임 저장
+      // 닉네임 저장 (trim 적용)
+      const trimmedNickname = nickname.trim();
       await saveNickname(trimmedNickname);
 
       // 온보딩 완료 플래그 저장
@@ -113,6 +106,7 @@ const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ navigation }) => {
           index={SLIDES.length}
           nickname={nickname}
           onNicknameChange={setNickname}
+          onValidationChange={setIsNicknameValid}
         />
       </ScrollView>
 
@@ -124,6 +118,7 @@ const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ navigation }) => {
         isLastSlide={isLastSlide}
         onNext={handleNext}
         onSkip={handleComplete}
+        disabled={isLastSlide && !isNicknameValid}
       />
     </View>
   );

@@ -83,7 +83,10 @@
     "validation": {
       "tooShort": "닉네임은 최소 2자 이상이어야 합니다",
       "tooLong": "닉네임은 최대 12자까지 입력 가능합니다",
-      "invalid": "올바른 닉네임을 입력해주세요"
+      "invalid": "올바른 닉네임을 입력해주세요",
+      "duplicate": "이미 사용 중인 닉네임입니다",
+      "checking": "중복 확인 중...",
+      "checkFailed": "중복 확인에 실패했습니다"
     },
     "duplicate": {
       "title": "중복된 닉네임",

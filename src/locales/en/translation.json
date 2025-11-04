@@ -83,7 +83,10 @@
     "validation": {
       "tooShort": "Nickname must be at least 2 characters",
       "tooLong": "Nickname must be at most 12 characters",
-      "invalid": "Please enter a valid nickname"
+      "invalid": "Please enter a valid nickname",
+      "duplicate": "This nickname is already taken",
+      "checking": "Checking availability...",
+      "checkFailed": "Failed to check availability"
     },
     "duplicate": {
       "title": "Duplicate Nickname",

@@ -13,27 +13,31 @@ interface OnboardingActionsProps {
   isLastSlide: boolean;
   onNext: () => void;
   onSkip: () => void;
+  disabled?: boolean;
 }
 
 export const OnboardingActions: React.FC<OnboardingActionsProps> = ({
   isLastSlide,
   onNext,
   onSkip,
+  disabled = false,
 }) => {
   const { t } = useTranslation();
 
   return (
     <View style={styles.footer}>
       <TouchableOpacity
-        style={styles.button}
+        style={[styles.button, disabled && styles.buttonDisabled]}
         onPress={onNext}
+        disabled={disabled}
         accessible={true}
         accessibilityRole="button"
         accessibilityLabel={
           isLastSlide ? t('onboarding.button.start') : t('onboarding.button.next')
         }
+        accessibilityState={{ disabled }}
       >
-        <Text style={styles.buttonText}>
+        <Text style={[styles.buttonText, disabled && styles.buttonTextDisabled]}>
           {isLastSlide ? t('onboarding.button.start') : t('onboarding.button.next')}
         </Text>
       </TouchableOpacity>
@@ -71,9 +75,18 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
     elevation: 4,
   },
+  buttonDisabled: {
+    backgroundColor: colors.textDisabled,
+    shadowOpacity: 0,
+    elevation: 0,
+  },
   buttonText: {
     ...typography.button,
     color: colors.textOnPrimary,
+  },
+  buttonTextDisabled: {
+    color: colors.surface,
+    opacity: 0.7,
   },
   skipButton: {
     paddingVertical: 12,

@@ -6,9 +6,10 @@
  */
 
 import React from 'react';
-import { View, Text, TextInput, StyleSheet, Dimensions } from 'react-native';
+import { View, Text, TextInput, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { colors, typography } from '../../../theme';
+import { useNicknameValidation } from '../hooks/useNicknameValidation';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -16,18 +17,35 @@ interface NicknameInputSlideProps {
   index: number;
   onNicknameChange: (nickname: string) => void;
   nickname: string;
+  onValidationChange: (isValid: boolean) => void;
 }
 
 export const NicknameInputSlide: React.FC<NicknameInputSlideProps> = ({
   index,
   onNicknameChange,
   nickname,
+  onValidationChange,
 }) => {
   const { t } = useTranslation();
 
   const charCount = nickname.length;
   const maxChars = 12;
-  const isValid = charCount >= 2 && charCount <= maxChars;
+
+  // Use validation hook with debounced duplicate check
+  const {
+    isChecking,
+    isDuplicate,
+    lengthError,
+    hasError,
+    isValid,
+    checkError,
+    retry,
+  } = useNicknameValidation({ nickname });
+
+  // Notify parent component of validation state changes
+  React.useEffect(() => {
+    onValidationChange(isValid);
+  }, [isValid, onValidationChange]);
 
   return (
     <View style={styles.slide}>
@@ -41,7 +59,7 @@ export const NicknameInputSlide: React.FC<NicknameInputSlideProps> = ({
         {/* 닉네임 입력 필드 - NicknameScreen 스타일 */}
         <View style={styles.inputContainer}>
           <TextInput
-            style={styles.input}
+            style={[styles.input, hasError && styles.inputError]}
             value={nickname}
             onChangeText={onNicknameChange}
             placeholder={t('nickname.placeholder')}
@@ -56,19 +74,48 @@ export const NicknameInputSlide: React.FC<NicknameInputSlideProps> = ({
           <Text
             style={[
               styles.charCount,
-              !isValid && charCount > 0 && styles.charCountError,
+              hasError && charCount > 0 && styles.charCountError,
             ]}
           >
             {t('nickname.charCount', { current: charCount, max: maxChars })}
           </Text>
 
-          {/* 유효성 검증 메시지 */}
-          {charCount > 0 && !isValid && (
-            <Text style={styles.validationMessage}>
-              {charCount < 2
-                ? t('nickname.validation.tooShort')
-                : t('nickname.validation.tooLong')}
-            </Text>
+          {/* 에러 메시지 영역 */}
+          {charCount > 0 && (
+            <View style={styles.errorContainer}>
+              {/* 길이 검증 에러 */}
+              {lengthError && (
+                <Text style={styles.errorMessage}>{lengthError}</Text>
+              )}
+
+              {/* 중복 검증 에러 */}
+              {isDuplicate && (
+                <Text style={styles.errorMessage}>
+                  {t('nickname.validation.duplicate')}
+                </Text>
+              )}
+
+              {/* 중복 확인 중 인디케이터 */}
+              {isChecking && (
+                <Text style={styles.checkingMessage}>
+                  {t('nickname.validation.checking')}
+                </Text>
+              )}
+
+              {/* 네트워크 에러 + 재시도 버튼 */}
+              {checkError && (
+                <View style={styles.errorWithRetry}>
+                  <Text style={styles.errorMessage}>
+                    {t('nickname.validation.checkFailed')}
+                  </Text>
+                  <TouchableOpacity onPress={retry} style={styles.retryButton}>
+                    <Text style={styles.retryButtonText}>
+                      {t('common.retry')}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              )}
+            </View>
           )}
         </View>
 
@@ -119,6 +166,9 @@ const styles = StyleSheet.create({
     ...typography.titleMedium,
     color: colors.text,
   },
+  inputError: {
+    borderColor: colors.error,
+  },
   charCount: {
     ...typography.bodyMedium,
     color: colors.textDisabled,
@@ -128,11 +178,38 @@ const styles = StyleSheet.create({
   charCountError: {
     color: colors.error,
   },
-  validationMessage: {
+  errorContainer: {
+    marginTop: 4,
+    minHeight: 20,
+  },
+  errorMessage: {
     ...typography.bodySmall,
     color: colors.error,
-    marginTop: 4,
-    textAlign: 'center',
+    textAlign: 'left',
+    marginTop: 2,
+  },
+  checkingMessage: {
+    ...typography.bodySmall,
+    color: colors.textSecondary,
+    textAlign: 'left',
+    marginTop: 2,
+  },
+  errorWithRetry: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginTop: 2,
+  },
+  retryButton: {
+    paddingHorizontal: 12,
+    paddingVertical: 4,
+    backgroundColor: colors.primary,
+    borderRadius: 8,
+  },
+  retryButtonText: {
+    ...typography.bodySmall,
+    color: colors.surface,
+    fontWeight: '600',
   },
   hint: {
     ...typography.bodySmall,
