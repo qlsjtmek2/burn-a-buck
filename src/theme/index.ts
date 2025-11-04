@@ -204,6 +204,21 @@ export const darkTheme: MD3Theme = {
 export { colors };
 
 /**
+ * 타이포그래피 시스템 직접 접근
+ * StyleSheet에서 사용할 때
+ */
+export {
+  typography,
+  fontFamilies,
+  fontSizes,
+  fontWeights,
+  letterSpacing,
+  lineHeights,
+  typographyBySize,
+} from './typography';
+export type { Typography, FontSize, FontWeight } from './typography';
+
+/**
  * 테마 타입
  */
 export type AppTheme = typeof theme;

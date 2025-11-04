@@ -11,6 +11,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { PaperProvider } from 'react-native-paper';
+import * as Font from 'expo-font';
 import RootNavigator from './src/navigation/RootNavigator';
 // TODO: Phase 3에서 재활성화
 // import { paymentService } from './src/services/payment';
@@ -37,11 +38,21 @@ export default function App() {
   useEffect(() => {
     /**
      * 앱 시작 시 초기화
-     * 1. i18n 초기화
-     * 2. 결제 서비스 초기화
+     * 1. Pretendard 폰트 로딩
+     * 2. i18n 초기화
+     * 3. 결제 서비스 초기화
      */
     async function initializeApp() {
       try {
+        console.log('[App] Loading Pretendard fonts...');
+        await Font.loadAsync({
+          'Pretendard-Regular': require('./assets/fonts/Pretendard-Regular.otf'),
+          'Pretendard-Medium': require('./assets/fonts/Pretendard-Medium.otf'),
+          'Pretendard-SemiBold': require('./assets/fonts/Pretendard-SemiBold.otf'),
+          'Pretendard-Bold': require('./assets/fonts/Pretendard-Bold.otf'),
+        });
+        console.log('[App] Pretendard fonts loaded');
+
         console.log('[App] Initializing i18n...');
         await initializeI18n();
         console.log('[App] i18n initialized');

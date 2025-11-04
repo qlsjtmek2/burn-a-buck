@@ -48,10 +48,11 @@
     },
     "leaderboard": {
       "title": "리더보드",
-      "topRanker": "Top Ranker",
+      "topRanker": "명예의 전당",
       "recentDonations": "최근 기부",
       "rank": "{{rank}}위",
       "amount": "₩{{amount}}",
+      "donationCount": "{{count}}회 기부",
       "noData": "아직 기부 내역이 없습니다",
       "placeholder": "리더보드 영역",
       "placeholderSubtitle": "Phase 7에서 구현 예정"

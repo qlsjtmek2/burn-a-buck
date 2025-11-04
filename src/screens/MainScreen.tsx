@@ -2,14 +2,15 @@
  * Main Screen
  *
  * 메인 화면 - 기부 버튼 및 리더보드
- * Phase 7에서 상세 구현 예정
  */
 
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import type { MainScreenProps } from '../types/navigation';
-import { colors } from '../theme/colors';
+import { colors, typography } from '../theme';
+import { TopRankersSection } from '../components/leaderboard/TopRankersSection';
+import { RecentDonationsSection } from '../components/leaderboard/RecentDonationsSection';
 
 const MainScreen: React.FC<MainScreenProps> = ({ navigation }) => {
   const { t } = useTranslation();
@@ -29,19 +30,18 @@ const MainScreen: React.FC<MainScreenProps> = ({ navigation }) => {
         <Text style={styles.headerTitle}>{t('main.header.title')}</Text>
       </View>
 
-      {/* Content */}
-      <View style={styles.content}>
-        {/* TODO: Phase 7에서 구현 */}
-        {/* - 리더보드 (Top Ranker, Recent Donations) */}
-        {/* - 통계 표시 */}
+      {/* Content - 스크롤 가능한 리더보드 섹션들 */}
+      <ScrollView
+        style={styles.content}
+        contentContainerStyle={styles.contentContainer}
+        showsVerticalScrollIndicator={false}
+      >
+        {/* Top Rankers (1~3등) */}
+        <TopRankersSection />
 
-        <Text style={styles.placeholder}>
-          {t('main.leaderboard.placeholder')}
-        </Text>
-        <Text style={styles.placeholderSubtitle}>
-          {t('main.leaderboard.placeholderSubtitle')}
-        </Text>
-      </View>
+        {/* Recent Donations (최근 10명) */}
+        <RecentDonationsSection />
+      </ScrollView>
 
       {/* Donation Button */}
       <View style={styles.footer}>
@@ -72,25 +72,15 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   headerTitle: {
-    fontSize: 24,
-    fontWeight: 'bold',
+    ...typography.headlineSmall,
     color: colors.primary,
   },
   content: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 24,
   },
-  placeholder: {
-    fontSize: 20,
-    fontWeight: '600',
-    color: colors.text,
-    marginBottom: 8,
-  },
-  placeholderSubtitle: {
-    fontSize: 14,
-    color: colors.textSecondary,
+  contentContainer: {
+    paddingTop: 24,
+    paddingBottom: 16,
   },
   footer: {
     padding: 24,
@@ -107,9 +97,8 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   donationButtonText: {
+    ...typography.leaderboardName,
     color: colors.textOnPrimary,
-    fontSize: 20,
-    fontWeight: 'bold',
   },
 });
 

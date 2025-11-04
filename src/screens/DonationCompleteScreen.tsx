@@ -9,7 +9,7 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import type { DonationCompleteScreenProps } from '../types/navigation';
-import { colors } from '../theme/colors';
+import { colors, typography } from '../theme';
 
 const DonationCompleteScreen: React.FC<DonationCompleteScreenProps> = ({
   navigation,
@@ -94,17 +94,15 @@ const styles = StyleSheet.create({
     padding: 24,
   },
   title: {
-    fontSize: 32,
-    fontWeight: 'bold',
+    ...typography.headlineLarge,
     color: colors.primary,
     marginBottom: 16,
     textAlign: 'center',
   },
   message: {
-    fontSize: 18,
+    ...typography.titleMedium,
     color: colors.text,
     textAlign: 'center',
-    lineHeight: 28,
     marginBottom: 32,
   },
   rankContainer: {
@@ -121,13 +119,12 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   rankLabel: {
-    fontSize: 14,
+    ...typography.bodyMedium,
     color: colors.textSecondary,
     marginBottom: 8,
   },
   rankValue: {
-    fontSize: 36,
-    fontWeight: 'bold',
+    ...typography.displaySmall,
     color: colors.primary,
   },
   donationInfo: {
@@ -143,13 +140,12 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   donationLabel: {
-    fontSize: 14,
+    ...typography.bodyMedium,
     color: colors.textSecondary,
     marginBottom: 8,
   },
   donationAmount: {
-    fontSize: 28,
-    fontWeight: 'bold',
+    ...typography.headlineMedium,
     color: colors.text,
   },
   footer: {
@@ -168,9 +164,8 @@ const styles = StyleSheet.create({
     elevation: 4,
   },
   shareButtonText: {
+    ...typography.button,
     color: colors.textOnPrimary,
-    fontSize: 18,
-    fontWeight: '600',
   },
   backButton: {
     backgroundColor: colors.surface,
@@ -181,9 +176,8 @@ const styles = StyleSheet.create({
     borderColor: colors.primary,
   },
   backButtonText: {
+    ...typography.button,
     color: colors.primary,
-    fontSize: 18,
-    fontWeight: '600',
   },
 });
 

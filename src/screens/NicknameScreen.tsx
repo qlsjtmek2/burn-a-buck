@@ -19,7 +19,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import type { NicknameScreenProps } from '../types/navigation';
 import { saveNickname } from '../utils/onboarding';
-import { colors } from '../theme/colors';
+import { colors, typography } from '../theme';
 
 const NicknameScreen: React.FC<NicknameScreenProps> = ({
   navigation,
@@ -116,16 +116,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   title: {
-    fontSize: 28,
-    fontWeight: 'bold',
+    ...typography.headlineMedium,
     color: colors.text,
     marginBottom: 8,
   },
   subtitle: {
-    fontSize: 16,
+    ...typography.bodyLarge,
     color: colors.textSecondary,
     marginBottom: 32,
-    lineHeight: 24,
   },
   input: {
     backgroundColor: colors.surface,
@@ -134,11 +132,11 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     paddingHorizontal: 16,
     paddingVertical: 16,
-    fontSize: 18,
+    ...typography.titleMedium,
     color: colors.text,
   },
   charCount: {
-    fontSize: 14,
+    ...typography.bodyMedium,
     color: colors.textDisabled,
     textAlign: 'right',
     marginTop: 8,
@@ -161,9 +159,8 @@ const styles = StyleSheet.create({
     backgroundColor: colors.border,
   },
   buttonText: {
+    ...typography.button,
     color: colors.textOnPrimary,
-    fontSize: 18,
-    fontWeight: '600',
   },
 });
 

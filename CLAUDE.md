@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 **"천원 쓰레기통" (Burn a Buck)** - A donation-based mobile app where users pay ₩1,000 to receive a thank you message and get registered on a leaderboard. Users compete for rankings based on total donations and can share their achievements with friends.
 
-**Current Status**: Phase 2 completed (Supabase backend setup). Basic UI structure and theme system implemented.
+**Current Status**: Phase 7 in progress (Main Screen UI). Payment system architecture complete, leaderboard UI pending.
 
 **Tech Stack**:
 - **Frontend**: React Native 0.81.5 + Expo SDK 54
@@ -147,17 +147,31 @@ t('main.button.donate')  // Returns translated string
 
 ### Feature-Based Organization
 
+**Current State**: Transitioning from screens-based to feature-based architecture
+
 ```
 src/
-├── features/              # Feature modules (future)
+├── features/              # Feature modules (stub files - future refactor)
 │   ├── onboarding/
 │   ├── donation/
 │   ├── leaderboard/
 │   ├── nickname/
 │   └── share/
-├── screens/               # Current screen components
+├── screens/               # ⚠️ Current location of screen components
+│   ├── MainScreen.tsx
+│   ├── OnboardingScreen.tsx
+│   ├── NicknameScreen.tsx
+│   └── DonationCompleteScreen.tsx
 ├── components/            # Shared components
-├── services/              # API clients
+│   ├── PaymentErrorDialog.tsx
+│   └── PaymentLoadingDialog.tsx
+├── hooks/                 # Custom hooks (platform-specific when needed)
+│   ├── useDonationPayment.native.ts
+│   └── useDonationPayment.web.ts
+├── services/              # API clients (platform-specific when needed)
+│   ├── payment.ts         # Re-exports platform-specific implementation
+│   ├── payment.native.ts  # Android IAP implementation
+│   ├── payment.web.ts     # Web stub
 │   ├── supabase.ts        # Supabase client initialization
 │   ├── userService.ts     # User CRUD
 │   ├── donationService.ts # Donation CRUD
@@ -171,9 +185,18 @@ src/
 │   └── en/
 ├── config/                # App configuration
 ├── constants/             # App constants
+│   ├── payment.ts         # Payment-related constants
+│   └── storage.ts         # AsyncStorage keys
 ├── types/                 # TypeScript types
+│   ├── navigation.ts      # Navigation params
+│   ├── payment.ts         # Payment types
+│   └── database.types.ts  # Supabase types
 └── utils/                 # Utilities
+    ├── onboarding.ts      # Onboarding helpers
+    └── timeFormat.ts      # Time formatting
 ```
+
+**Migration Path**: Gradually move screen logic into `features/` as app grows.
 
 ## Database Schema (Supabase)
 
@@ -219,16 +242,54 @@ ORDER BY rank;
 
 ## Critical Implementation Patterns
 
-### Payment Flow (Phase 3 - Future)
-1. User taps donation button
-2. Google Play payment dialog
-3. On success:
-   - Verify receipt with Google
-   - Check if first-time donation (AsyncStorage + Supabase)
-   - Prompt for nickname (or use saved)
-   - Update Supabase (donations, users tables)
-   - Navigate to DonationComplete screen
-4. On failure: Show error dialog with retry
+### Payment Flow (Implemented - Platform-specific)
+
+**Architecture**:
+- Platform abstraction via `payment.ts` → `payment.native.ts` / `payment.web.ts`
+- Custom hook: `useDonationPayment` manages entire flow
+- Error/Loading states via dedicated dialog components
+
+**Flow** (implemented in `useDonationPayment.native.ts`):
+1. Initialize payment service on mount
+2. Check first-time donation (AsyncStorage: `STORAGE_KEYS.FIRST_DONATION`)
+3. Get saved nickname or navigate to Nickname screen
+4. Purchase via `paymentService.purchaseDonation(nickname)`
+   - Initialize IAP connection
+   - Load product: `donate_1000won`
+   - Request purchase
+   - Validate receipt with Google
+5. Save to Supabase (donations + users tables)
+6. Navigate to DonationComplete screen with params:
+   - `nickname`: string
+   - `amount`: 1000
+   - `isFirstDonation`: boolean
+
+**Key Files**:
+- `src/services/payment.ts` - Platform routing
+- `src/services/payment.native.ts` - Android IAP (react-native-iap v14)
+- `src/services/payment.web.ts` - Web placeholder
+- `src/hooks/useDonationPayment.native.ts` - Payment flow hook
+- `src/components/PaymentErrorDialog.tsx` - Error handling UI
+- `src/components/PaymentLoadingDialog.tsx` - Loading UI
+
+**Status Types** (see `src/types/payment.ts`):
+```typescript
+type PaymentStatus =
+  | 'idle'
+  | 'initializing'
+  | 'loading_products'
+  | 'purchasing'
+  | 'validating'
+  | 'saving'
+  | 'success'
+  | 'error';
+```
+
+**Error Codes**:
+- `E_USER_CANCELLED` - User cancelled payment
+- `E_NETWORK_ERROR` - Network connection issue
+- `E_VALIDATION_ERROR` - Receipt validation failed
+- `E_UNKNOWN_ERROR` - Unexpected error
 
 Product ID: `donate_1000won` (₩1,000)
 
@@ -250,6 +311,49 @@ Product ID: `donate_1000won` (₩1,000)
 - Key: `STORAGE_KEYS.NICKNAME` from `src/constants/storage.ts`
 
 ## Development Guidelines
+
+### Platform-Specific Implementation Pattern
+
+**When to use**:
+- Features requiring native APIs (payments, camera, location, etc.)
+- Web fallback needed for testing in browser
+
+**Pattern**:
+1. Create base service: `src/services/feature.ts` (exports common interface)
+2. Native implementation: `src/services/feature.native.ts`
+3. Web stub: `src/services/feature.web.ts`
+4. React Native auto-resolves `.native.ts` on mobile, `.web.ts` on web
+
+**Example** (Payment Service):
+```typescript
+// payment.ts - Export interface
+export { paymentService } from './payment.native';
+
+// payment.native.ts - Android implementation
+import { initConnection, requestPurchase } from 'react-native-iap';
+
+export const paymentService = {
+  async purchaseDonation(nickname: string) {
+    // Real IAP implementation
+  }
+};
+
+// payment.web.ts - Web stub
+export const paymentService = {
+  async purchaseDonation(nickname: string) {
+    throw new Error('Payment not supported on web');
+  }
+};
+```
+
+**Usage in Components**:
+```typescript
+// Import from base file - platform resolution automatic
+import { paymentService } from '../services/payment';
+
+// Works on both platforms
+await paymentService.purchaseDonation('nickname');
+```
 
 ### Onboarding Pattern
 Onboarding completion tracked via AsyncStorage:
@@ -356,7 +460,103 @@ Invoke skills when implementing features in their domain without waiting for use
 
 - **Phase 1**: ✅ Project setup complete
 - **Phase 2**: ✅ Supabase backend setup complete
+  - Database schema (users, donations, leaderboard view)
+  - Service layer (userService, donationService, leaderboardService)
 - **Phase 2+**: ✅ Theme system implemented (amber palette)
 - **Phase 2+**: ✅ Onboarding screens (2 slides)
-- **Phase 2+**: ✅ Basic navigation structure
-- **Next**: Phase 3 - Google Play In-App Purchase integration
+- **Phase 2+**: ✅ Basic navigation structure (Stack Navigator)
+- **Phase 3**: ✅ Payment service architecture implemented
+  - Platform-specific payment files (`payment.native.ts`, `payment.web.ts`)
+  - `useDonationPayment` hook with full flow management
+  - Payment error/loading dialogs
+  - Product ID: `donate_1000won` configured
+- **Phase 7**: ✅ Main Screen Implementation Complete
+  - ✅ Basic layout complete (header + donation button)
+  - ✅ Top Rankers leaderboard section (1-3등 with gold/silver/bronze borders)
+  - ✅ Recent donations leaderboard section (최근 10명 with time ago)
+  - ✅ React Query integration for real-time updates (30s refetch interval)
+  - ✅ Internationalization support (ko/en)
+  - ✅ UX-optimized design (information density, scannability, consistency)
+- **Next**: Phase 8 - Payment flow integration with actual donation button
+
+## Critical Type Definitions
+
+**Payment Status Flow** (`src/types/payment.ts`):
+```typescript
+type PaymentStatus =
+  | 'idle'              // Initial state
+  | 'initializing'      // Checking first donation
+  | 'loading_products'  // Loading IAP products
+  | 'purchasing'        // User in payment flow
+  | 'validating'        // Verifying receipt
+  | 'saving'           // Saving to Supabase
+  | 'success'          // Complete
+  | 'error';           // Failed
+
+interface PaymentError {
+  code: PaymentErrorCode;
+  message: string;
+  originalError?: any;
+}
+```
+
+**Navigation Params** (`src/types/navigation.ts`):
+```typescript
+type RootStackParamList = {
+  Onboarding: undefined;
+  Main: undefined;
+  Nickname: {};
+  DonationComplete: {
+    nickname: string;
+    amount: number;
+    isFirstDonation: boolean;
+  };
+};
+```
+
+**Database Types** (`src/types/database.types.ts`):
+- Auto-generated from Supabase schema
+- Used in service layer for type safety
+- Updated via `supabase gen types typescript`
+
+## UX Design Principles (Phase 7 Implementation)
+
+**Leaderboard Components** (`src/components/leaderboard/`):
+
+1. **Information Density**: Compact layout for maximum content visibility
+   - Top Rankers: ~50px per item (3 items visible without scroll)
+   - Recent Donations: ~50px per item (10 items visible with scroll)
+
+2. **Scannability**: F-pattern reading flow
+   - Left: Rank + emoji (visual anchor)
+   - Center: Name + amount (primary info)
+   - Right: Stats (secondary info)
+
+3. **Visual Hierarchy**:
+   - Primary info: Larger, bold fonts (nickname, amount)
+   - Secondary info: Smaller, lighter fonts (donation count, time)
+   - Rank differentiation: Gold/silver/bronze left border (4px)
+
+4. **Consistency**:
+   - Both sections use identical list structure
+   - Same padding (12px vertical, 12-16px horizontal)
+   - Same border radius (12px with proper corner handling)
+   - Shared separator pattern
+
+5. **Border Radius Handling**:
+   - Container: `borderRadius: 12`
+   - First item: `borderTopLeftRadius: 12`, `borderTopRightRadius: 12`
+   - Last item: `borderBottomLeftRadius: 12`, `borderBottomRightRadius: 12`
+   - Prevents corners from protruding outside container
+
+**Translation Keys** (`src/locales/{ko,en}/translation.json`):
+```typescript
+t('main.leaderboard.topRanker')         // "명예의 전당" / "Hall of Fame"
+t('main.leaderboard.recentDonations')   // "최근 기부" / "Recent Donations"
+t('main.leaderboard.donationCount', { count: 5 })  // "5회 기부" / "5 donations"
+```
+
+**React Query Hooks** (`src/hooks/useLeaderboard.ts`):
+- `useTopRankers(3)`: Fetches top 3 rankers with 30s auto-refresh
+- `useRecentDonations(10)`: Fetches recent 10 donations with 30s auto-refresh
+- `useLeaderboard(100)`: Fetches full leaderboard (future use)

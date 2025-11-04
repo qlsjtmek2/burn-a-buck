@@ -48,10 +48,11 @@
     },
     "leaderboard": {
       "title": "Leaderboard",
-      "topRanker": "Top Ranker",
+      "topRanker": "Hall of Fame",
       "recentDonations": "Recent Donations",
       "rank": "#{{rank}}",
       "amount": "₩{{amount}}",
+      "donationCount": "{{count}} donations",
       "noData": "No donations yet",
       "placeholder": "Leaderboard Area",
       "placeholderSubtitle": "Coming in Phase 7"

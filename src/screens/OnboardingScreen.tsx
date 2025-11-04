@@ -18,7 +18,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import type { OnboardingScreenProps } from '../types/navigation';
 import { setOnboardingCompleted } from '../utils/onboarding';
-import { colors } from '../theme/colors';
+import { colors, typography } from '../theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -213,28 +213,25 @@ const styles = StyleSheet.create({
     maxWidth: 400,
   },
   emoji: {
-    fontSize: 80,
+    ...typography.onboardingEmoji,
     marginBottom: 32,
   },
   title: {
-    fontSize: 32,
-    fontWeight: 'bold',
+    ...typography.headlineLarge,
     color: colors.primary,
     marginBottom: 16,
     textAlign: 'center',
   },
   subtitle: {
-    fontSize: 20,
-    fontWeight: '600',
+    ...typography.onboardingSubtitle,
     color: colors.text,
     marginBottom: 12,
     textAlign: 'center',
   },
   description: {
-    fontSize: 16,
+    ...typography.bodyLarge,
     color: colors.textSecondary,
     textAlign: 'center',
-    lineHeight: 24,
   },
   pagination: {
     flexDirection: 'row',
@@ -270,9 +267,8 @@ const styles = StyleSheet.create({
     elevation: 4,
   },
   buttonText: {
+    ...typography.button,
     color: colors.textOnPrimary,
-    fontSize: 18,
-    fontWeight: '600',
   },
   skipButton: {
     paddingVertical: 12,
@@ -280,9 +276,8 @@ const styles = StyleSheet.create({
     marginTop: 8,
   },
   skipButtonText: {
+    ...typography.onboardingSkip,
     color: colors.textSecondary,
-    fontSize: 16,
-    fontWeight: '500',
   },
 });
 
