@@ -61,14 +61,20 @@ const MainScreen: React.FC<MainScreenProps> = ({ navigation }) => {
   }, [clearError, handleDonation]);
 
   /**
-   * 개발용: AsyncStorage 초기화
+   * 개발용: 디버그 메뉴
    * __DEV__ 플래그로 프로덕션 빌드에서는 자동으로 제거됨
    */
-  const handleResetStorage = useCallback(async () => {
+  const handleDebugMenu = useCallback(() => {
     Alert.alert(
-      '🔧 개발용 초기화',
-      '어떤 데이터를 초기화하시겠습니까?',
+      '🔧 개발 도구',
+      '개발용 기능을 선택하세요',
       [
+        {
+          text: '닉네임 입력 화면 보기',
+          onPress: () => {
+            navigation.navigate('Nickname', {});
+          },
+        },
         {
           text: '온보딩만 초기화',
           onPress: async () => {
@@ -90,7 +96,7 @@ const MainScreen: React.FC<MainScreenProps> = ({ navigation }) => {
         },
       ]
     );
-  }, []);
+  }, [navigation]);
 
   return (
     <View style={styles.container}>
@@ -104,11 +110,11 @@ const MainScreen: React.FC<MainScreenProps> = ({ navigation }) => {
           </Text>
         )}
 
-        {/* 개발용 초기화 버튼 - 프로덕션 빌드에서 자동 제거 */}
+        {/* 개발용 디버그 버튼 - 프로덕션 빌드에서 자동 제거 */}
         {__DEV__ && (
           <TouchableOpacity
             style={styles.devButton}
-            onPress={handleResetStorage}
+            onPress={handleDebugMenu}
             activeOpacity={0.7}
           >
             <Text style={styles.devButtonText}>🔧</Text>
@@ -184,7 +190,7 @@ const styles = StyleSheet.create({
   },
   headerGreeting: {
     ...typography.titleMedium,
-    color: colors.textPrimary,
+    color: colors.text,
   },
   devButton: {
     position: 'absolute',
