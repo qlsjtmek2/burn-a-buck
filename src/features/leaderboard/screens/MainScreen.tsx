@@ -96,30 +96,24 @@ const MainScreen: React.FC<MainScreenProps> = ({ navigation }) => {
     <View style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
-        <View style={styles.headerTop}>
-          <View style={styles.headerTitleContainer}>
-            <Text style={styles.headerEmoji}>🗑️</Text>
-            <View style={styles.headerTextContainer}>
-              <Text style={styles.headerTitle}>{t('main.header.title')}</Text>
-              {nickname && (
-                <Text style={styles.headerNickname}>
-                  {t('main.header.greeting', { nickname })}
-                </Text>
-              )}
-            </View>
-          </View>
+        <Text style={styles.headerEmoji}>🗑️</Text>
 
-          {/* 개발용 초기화 버튼 - 프로덕션 빌드에서 자동 제거 */}
-          {__DEV__ && (
-            <TouchableOpacity
-              style={styles.devButton}
-              onPress={handleResetStorage}
-              activeOpacity={0.7}
-            >
-              <Text style={styles.devButtonText}>🔧</Text>
-            </TouchableOpacity>
-          )}
-        </View>
+        {nickname && (
+          <Text style={styles.headerGreeting}>
+            {t('main.header.greeting', { nickname })}
+          </Text>
+        )}
+
+        {/* 개발용 초기화 버튼 - 프로덕션 빌드에서 자동 제거 */}
+        {__DEV__ && (
+          <TouchableOpacity
+            style={styles.devButton}
+            onPress={handleResetStorage}
+            activeOpacity={0.7}
+          >
+            <Text style={styles.devButtonText}>🔧</Text>
+          </TouchableOpacity>
+        )}
       </View>
 
       {/* Content - 스크롤 가능한 리더보드 섹션들 */}
@@ -178,41 +172,30 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 3,
-  },
-  headerTop: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  headerTitleContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    flex: 1,
+    justifyContent: 'center',
   },
   headerEmoji: {
-    fontSize: 32,
-    marginRight: 12,
+    fontSize: 24,
+    position: 'absolute',
+    left: 24,
+    top: 48,
   },
-  headerTextContainer: {
-    flex: 1,
-  },
-  headerTitle: {
-    ...typography.headlineSmall,
-    color: colors.primary,
-  },
-  headerNickname: {
-    ...typography.bodyMedium,
-    color: colors.textSecondary,
-    marginTop: 2,
+  headerGreeting: {
+    ...typography.titleMedium,
+    color: colors.textPrimary,
   },
   devButton: {
+    position: 'absolute',
+    right: 24,
+    top: 48,
     width: 36,
     height: 36,
     borderRadius: 18,
     backgroundColor: colors.error + '20', // 20% opacity
     justifyContent: 'center',
     alignItems: 'center',
-    marginLeft: 12,
   },
   devButtonText: {
     fontSize: 18,

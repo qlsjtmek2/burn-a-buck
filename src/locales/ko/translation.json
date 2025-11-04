@@ -55,7 +55,7 @@
   "main": {
     "header": {
       "title": "천원 쓰레기통",
-      "greeting": "{{nickname}}님 환영합니다"
+      "greeting": "{{nickname}}님, 환영합니다"
     },
     "leaderboard": {
       "title": "리더보드",
