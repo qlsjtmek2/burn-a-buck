@@ -7,9 +7,9 @@
 import React from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, Modal } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { colors, typography } from '../theme';
-import type { PaymentError } from '../types/payment';
-import { PAYMENT_ERROR_CODES } from '../constants/payment';
+import { colors, typography } from '../../../theme';
+import type { PaymentError } from '../../../types/payment';
+import { PAYMENT_ERROR_CODES } from '../../../constants/payment';
 
 interface PaymentErrorDialogProps {
   /** 표시 여부 */
@@ -48,7 +48,7 @@ export const PaymentErrorDialog: React.FC<PaymentErrorDialogProps> = ({
     PAYMENT_ERROR_CODES.INIT_FAILED,
     PAYMENT_ERROR_CODES.PRODUCT_NOT_FOUND,
     PAYMENT_ERROR_CODES.PURCHASE_FAILED,
-  ].includes(error.code);
+  ].includes(error.code as any);
 
   return (
     <Modal

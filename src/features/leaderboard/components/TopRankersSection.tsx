@@ -7,10 +7,10 @@
 import React from 'react';
 import { View, Text, StyleSheet, ActivityIndicator, FlatList } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { useTopRankers } from '../../hooks/useLeaderboard';
-import { colors, typography } from '../../theme';
-import { formatAmount } from '../../utils/timeFormat';
-import type { LeaderboardEntry } from '../../types/database.types';
+import { useTopRankers } from '../hooks/useLeaderboard';
+import { colors, typography } from '../../../theme';
+import { formatAmount } from '../../../utils/timeFormat';
+import type { LeaderboardEntry } from '../../../types/database.types';
 
 export const TopRankersSection: React.FC = () => {
   const { t } = useTranslation();

@@ -5,7 +5,7 @@
  */
 
 import { supabase } from './supabase';
-import type { Donation, DonationInsert } from '@/types/database.types';
+import type { Donation, DonationInsert } from '../types/database.types';
 
 /**
  * 새 기부 내역 생성

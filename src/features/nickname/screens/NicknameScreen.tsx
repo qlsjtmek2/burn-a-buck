@@ -17,9 +17,9 @@ import {
   Alert,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import type { NicknameScreenProps } from '../types/navigation';
-import { saveNickname } from '../utils/onboarding';
-import { colors, typography } from '../theme';
+import type { NicknameScreenProps } from '../../../types/navigation';
+import { saveNickname } from '../../../utils/donationStorage';
+import { colors, typography } from '../../../theme';
 
 const NicknameScreen: React.FC<NicknameScreenProps> = ({
   navigation,
@@ -34,7 +34,8 @@ const NicknameScreen: React.FC<NicknameScreenProps> = ({
    */
   const handleSubmit = async () => {
     if (nickname.trim().length < 2) {
-      // TODO: Phase 10에서 유효성 검증 및 에러 처리
+      // Placeholder: Full validation in Phase 10
+      // See: CLAUDE.md - Phase 10 (Nickname validation)
       Alert.alert(t('dialog.error.title'), t('nickname.validation.tooShort'));
       return;
     }
@@ -69,10 +70,13 @@ const NicknameScreen: React.FC<NicknameScreenProps> = ({
         <Text style={styles.title}>{t('nickname.title')}</Text>
         <Text style={styles.subtitle}>{t('nickname.subtitle')}</Text>
 
-        {/* TODO: Phase 10에서 구현 */}
-        {/* - 닉네임 유효성 검증 (2-12자, 중복 확인) */}
-        {/* - 중복 닉네임 확인 다이얼로그 */}
-        {/* - 저장된 닉네임 자동 입력 */}
+        {/*
+          Placeholder: Full implementation in Phase 10
+          - Nickname validation (2-12 chars, duplicate check)
+          - Duplicate nickname confirmation dialog
+          - Auto-fill saved nickname
+          See: CLAUDE.md - Phase 10
+        */}
 
         <TextInput
           style={styles.input}

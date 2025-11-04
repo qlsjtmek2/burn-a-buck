@@ -12,11 +12,11 @@ import {
   validateReceiptClient,
   extractPurchaseToken,
   PRODUCT_IDS,
-} from './paymentService';
+} from './payment/index';
 import { createDonation, getDonationByReceipt } from './donationService';
 import { getUserById, createUser } from './userService';
-import type { Purchase, PurchaseResult, CreateDonationInput } from '@/types/payment.types';
-import type { User } from '@/types/database.types';
+import type { Purchase, PurchaseResult, CreateDonationInput } from '../types/payment';
+import type { User } from '../types/database.types';
 
 /**
  * 기부 플로우 결과

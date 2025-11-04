@@ -5,7 +5,7 @@
  */
 
 import { useState, useCallback } from 'react';
-import type { PaymentStatus, PaymentError } from '../types/payment';
+import type { PaymentStatus, PaymentError } from '../../../types/payment';
 
 /**
  * 기부 결제 훅 반환 타입

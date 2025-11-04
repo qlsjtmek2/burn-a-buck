@@ -5,7 +5,7 @@
  */
 
 import { supabase } from './supabase';
-import type { User, UserInsert, UserUpdate } from '@/types/database.types';
+import type { User, UserInsert, UserUpdate } from '../types/database.types';
 
 /**
  * 닉네임으로 사용자 조회

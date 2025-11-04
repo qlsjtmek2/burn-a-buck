@@ -2,16 +2,18 @@
  * Donation Payment Hook
  *
  * 기부 결제 플로우를 관리하는 커스텀 훅
+ * - UI 상태 관리 (status, error, loading)
+ * - Navigation 제어
+ * - 비즈니스 로직은 paymentService와 donationStorage에 위임
  */
 
 import { useState, useCallback, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import type { StackNavigationProp } from '@react-navigation/stack';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { paymentService } from '../services/payment';
-import { STORAGE_KEYS } from '../constants/storage';
-import type { PaymentStatus, PaymentError, PaymentResult } from '../types/payment';
-import type { RootStackParamList } from '../types/navigation';
+import { paymentService } from '../../../services/payment';
+import { checkFirstDonation, getSavedNickname } from '../../../utils/donationStorage';
+import type { PaymentStatus, PaymentError, PaymentResult } from '../../../types/payment';
+import type { RootStackParamList } from '../../../types/navigation';
 
 type NavigationProp = StackNavigationProp<RootStackParamList>;
 
@@ -50,31 +52,6 @@ export const useDonationPayment = (): UseDonationPaymentReturn => {
   );
 
   /**
-   * 첫 기부 여부 확인
-   */
-  const checkFirstDonation = useCallback(async (): Promise<boolean> => {
-    try {
-      const firstDonationDate = await AsyncStorage.getItem(STORAGE_KEYS.FIRST_DONATION);
-      return !firstDonationDate;
-    } catch (err) {
-      console.error('[useDonationPayment] Failed to check first donation:', err);
-      return true; // 에러 시 첫 기부로 간주
-    }
-  }, []);
-
-  /**
-   * 저장된 닉네임 가져오기
-   */
-  const getSavedNickname = useCallback(async (): Promise<string | null> => {
-    try {
-      return await AsyncStorage.getItem(STORAGE_KEYS.SAVED_NICKNAME);
-    } catch (err) {
-      console.error('[useDonationPayment] Failed to get saved nickname:', err);
-      return null;
-    }
-  }, []);
-
-  /**
    * 결제 시작
    */
   const startPayment = useCallback(
@@ -103,7 +80,7 @@ export const useDonationPayment = (): UseDonationPaymentReturn => {
           return;
         }
 
-        // Step 4: 결제 시작
+        // Step 4: 결제 시작 (비즈니스 로직은 paymentService에 위임)
         setStatus('purchasing');
         console.log('[useDonationPayment] Purchasing with nickname:', finalNickname);
 
@@ -118,17 +95,16 @@ export const useDonationPayment = (): UseDonationPaymentReturn => {
         console.log('[useDonationPayment] Payment successful:', result);
 
         // Step 6: 감사 화면으로 이동
+        if (!result.donation) {
+          throw new Error('Donation data is missing');
+        }
+
         navigation.navigate('DonationComplete', {
-          donation: result.donation
-            ? {
-                ...result.donation,
-                nickname: finalNickname,
-                amount: 1000,
-              }
-            : {
-                nickname: finalNickname,
-                amount: 1000,
-              },
+          donation: {
+            ...result.donation,
+            nickname: finalNickname,
+            amount: 1000,
+          },
           isFirstDonation: result.isFirstDonation || false,
         });
 
@@ -150,7 +126,7 @@ export const useDonationPayment = (): UseDonationPaymentReturn => {
         setError(paymentError);
       }
     },
-    [navigation, checkFirstDonation, getSavedNickname]
+    [navigation]
   );
 
   /**

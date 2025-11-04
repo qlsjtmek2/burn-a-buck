@@ -5,7 +5,7 @@
  */
 
 import { supabase } from './supabase';
-import type { LeaderboardEntry, LeaderboardStats } from '@/types/database.types';
+import type { LeaderboardEntry, LeaderboardStats } from '../types/database.types';
 
 /**
  * 상위 랭커 조회

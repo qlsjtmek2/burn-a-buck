@@ -7,8 +7,8 @@
 import React from 'react';
 import { StyleSheet, View, Text, Modal, ActivityIndicator } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { colors, typography } from '../theme';
-import type { PaymentStatus } from '../types/payment';
+import { colors, typography } from '../../../theme';
+import type { PaymentStatus } from '../../../types/payment';
 
 interface PaymentLoadingDialogProps {
   /** 표시 여부 */

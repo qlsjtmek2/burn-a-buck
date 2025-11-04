@@ -127,7 +127,7 @@ export async function initializeI18n(): Promise<void> {
       resources,
       lng: initialLanguage, // 초기 언어
       fallbackLng: 'ko', // 폴백 언어
-      compatibilityJSON: 'v3', // React Native에서 중요: Intl API 없이 작동
+      compatibilityJSON: 'v3' as any, // React Native에서 중요: Intl API 없이 작동 (타입 v4이지만 v3 필요)
       interpolation: {
         escapeValue: false, // React에서는 XSS 방지가 기본
       },

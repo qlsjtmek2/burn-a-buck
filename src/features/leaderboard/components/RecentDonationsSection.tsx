@@ -7,9 +7,9 @@
 import React from 'react';
 import { View, Text, StyleSheet, ActivityIndicator, FlatList } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { useRecentDonations } from '../../hooks/useLeaderboard';
-import { colors, typography } from '../../theme';
-import { formatAmount, getTimeAgo } from '../../utils/timeFormat';
+import { useRecentDonations } from '../hooks/useLeaderboard';
+import { colors, typography } from '../../../theme';
+import { formatAmount, getTimeAgo } from '../../../utils/timeFormat';
 
 interface RecentDonation {
   id: string;

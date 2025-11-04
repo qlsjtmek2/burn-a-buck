@@ -7,13 +7,13 @@
 import React, { useCallback } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import type { MainScreenProps } from '../types/navigation';
-import { colors, typography } from '../theme';
-import { TopRankersSection } from '../components/leaderboard/TopRankersSection';
-import { RecentDonationsSection } from '../components/leaderboard/RecentDonationsSection';
-import { useDonationPayment } from '../hooks/useDonationPayment';
-import { PaymentLoadingDialog } from '../components/PaymentLoadingDialog';
-import { PaymentErrorDialog } from '../components/PaymentErrorDialog';
+import type { MainScreenProps } from '../../../types/navigation';
+import { colors, typography } from '../../../theme';
+import { TopRankersSection } from '../components/TopRankersSection';
+import { RecentDonationsSection } from '../components/RecentDonationsSection';
+import { useDonationPayment } from '../../donation/hooks/useDonationPayment';
+import { PaymentLoadingDialog } from '../../donation/components/PaymentLoadingDialog';
+import { PaymentErrorDialog } from '../../donation/components/PaymentErrorDialog';
 
 const MainScreen: React.FC<MainScreenProps> = ({ navigation }) => {
   const { t } = useTranslation();

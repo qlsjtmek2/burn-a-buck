@@ -8,8 +8,8 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import type { DonationCompleteScreenProps } from '../types/navigation';
-import { colors, typography } from '../theme';
+import type { DonationCompleteScreenProps } from '../../../types/navigation';
+import { colors, typography } from '../../../theme';
 
 const DonationCompleteScreen: React.FC<DonationCompleteScreenProps> = ({
   navigation,
@@ -27,10 +27,10 @@ const DonationCompleteScreen: React.FC<DonationCompleteScreenProps> = ({
 
   /**
    * 공유하기
-   * TODO: Phase 12에서 구현
+   * Placeholder: Social share implementation in Phase 12
+   * See: CLAUDE.md - Phase 12 (Social sharing)
    */
   const handleShare = () => {
-    // Phase 12에서 소셜 공유 기능 구현
     console.log('[DonationCompleteScreen] Share feature - Coming in Phase 12');
   };
 
@@ -46,10 +46,13 @@ const DonationCompleteScreen: React.FC<DonationCompleteScreenProps> = ({
           {t('donationComplete.message', { nickname: donation.nickname })}
         </Text>
 
-        {/* TODO: Phase 11에서 구현 */}
-        {/* - 첫 기부 시 배지 애니메이션 */}
-        {/* - 현재 순위 표시 */}
-        {/* - 총 기부 금액 표시 */}
+        {/*
+          Placeholder: Enhanced UI in Phase 11
+          - First donation badge animation
+          - Current rank display
+          - Total donation amount
+          See: CLAUDE.md - Phase 11
+        */}
 
         {rank && (
           <View style={styles.rankContainer}>

@@ -5,9 +5,9 @@
  */
 
 import { useQuery } from '@tanstack/react-query';
-import { getTopRankers } from '../services/leaderboardService';
-import { getRecentDonations } from '../services/donationService';
-import type { LeaderboardEntry } from '../types/database.types';
+import { getTopRankers } from '../../../services/leaderboardService';
+import { getRecentDonations } from '../../../services/donationService';
+import type { LeaderboardEntry } from '../../../types/database.types';
 
 /**
  * Top Rankers 조회 Hook (1~3등)

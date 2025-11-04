@@ -12,10 +12,10 @@ import { checkOnboardingCompleted } from '../utils/onboarding';
 import { colors } from '../theme/colors';
 
 // Screens (lazy import for better performance)
-import OnboardingScreen from '../screens/OnboardingScreen';
-import MainScreen from '../screens/MainScreen';
-import NicknameScreen from '../screens/NicknameScreen';
-import DonationCompleteScreen from '../screens/DonationCompleteScreen';
+import OnboardingScreen from '../features/onboarding/screens/OnboardingScreen';
+import MainScreen from '../features/leaderboard/screens/MainScreen';
+import NicknameScreen from '../features/nickname/screens/NicknameScreen';
+import DonationCompleteScreen from '../features/donation/screens/DonationCompleteScreen';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -58,11 +58,11 @@ export const RootNavigator: React.FC = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator
+        id={undefined}
         initialRouteName={initialRouteName}
         screenOptions={{
           headerShown: false, // 헤더 숨김 (커스텀 헤더 사용)
           cardStyle: { backgroundColor: colors.background }, // 배경색
-          animationEnabled: true, // 화면 전환 애니메이션
         }}
       >
         {/* 온보딩 화면 */}
