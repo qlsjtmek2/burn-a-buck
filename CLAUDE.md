@@ -71,9 +71,25 @@ npx expo-doctor
 
 ## Architecture & Design Patterns
 
+### Code Quality Guidelines
+
+**CRITICAL RULES**:
+1. **Colors & Fonts**: ALWAYS use centralized values from `src/theme/`
+   - Colors: `import { colors } from '../theme'`
+   - Typography: `import { typography } from '../theme'`
+   - ❌ NEVER hardcode: `color: '#F59E0B'` or `fontSize: 18`
+2. **Error Handling**: ALWAYS use `src/utils/errorHandler.ts`
+   - `showPaymentErrorAlert()` for payment errors
+   - `showErrorAlert()` for general errors
+   - `logError()` for error logging (prepares for Sentry)
+3. **Type Safety**: Run `npm run type-check` before committing
+   - All code must pass TypeScript compilation
+   - Use proper type conversions for platform-specific APIs
+   - Import types from `src/types/` for consistency
+
 ### Theme System (src/theme/)
 
-**CRITICAL**: All colors must use the centralized theme system. Never hardcode color values.
+**Implementation**: All colors and fonts must use the centralized theme system. Never hardcode values.
 
 ```typescript
 // ✅ Correct
@@ -153,40 +169,56 @@ t('main.button.donate')  // Returns translated string
 
 ### Feature-Based Organization
 
-**Current State**: Transitioning from screens-based to feature-based architecture
+**Current State**: ✅ **Feature-Based Migration Complete** (2025-11-04)
 
 ```
 src/
-├── features/              # Feature modules (stub files - future refactor)
-│   ├── onboarding/
-│   ├── donation/
-│   ├── leaderboard/
-│   ├── nickname/
-│   └── share/
-├── screens/               # ⚠️ Current location of screen components
-│   ├── MainScreen.tsx
-│   ├── OnboardingScreen.tsx
-│   ├── NicknameScreen.tsx
-│   └── DonationCompleteScreen.tsx
-├── components/            # Shared components
-│   ├── PaymentErrorDialog.tsx
-│   └── PaymentLoadingDialog.tsx
-├── hooks/                 # Custom hooks (platform-specific when needed)
-│   ├── useDonationPayment.native.ts
-│   └── useDonationPayment.web.ts
+├── features/              # ✅ Feature-based architecture (fully migrated)
+│   ├── onboarding/        # Onboarding feature module
+│   │   ├── screens/OnboardingScreen.tsx
+│   │   ├── components/
+│   │   │   ├── OnboardingSlide.tsx
+│   │   │   ├── OnboardingPagination.tsx
+│   │   │   └── OnboardingActions.tsx
+│   │   └── hooks/useOnboarding.ts
+│   ├── donation/          # Donation & payment feature module
+│   │   ├── screens/DonationCompleteScreen.tsx
+│   │   ├── components/
+│   │   │   ├── PaymentErrorDialog.tsx
+│   │   │   └── PaymentLoadingDialog.tsx
+│   │   └── hooks/
+│   │       ├── useDonationPayment.ts          # Platform router
+│   │       ├── useDonationPayment.native.ts   # Android IAP
+│   │       └── useDonationPayment.web.ts      # Web stub
+│   ├── leaderboard/       # Leaderboard & main screen feature module
+│   │   ├── screens/MainScreen.tsx
+│   │   ├── components/
+│   │   │   ├── TopRankersSection.tsx
+│   │   │   └── RecentDonationsSection.tsx
+│   │   └── hooks/useLeaderboard.ts
+│   ├── nickname/          # Nickname input feature module
+│   │   └── screens/NicknameScreen.tsx
+│   └── share/             # Social sharing (future implementation)
+│       └── index.ts
 ├── services/              # API clients (platform-specific when needed)
-│   ├── payment.ts         # Re-exports platform-specific implementation
-│   ├── payment.native.ts  # Android IAP implementation
-│   ├── payment.web.ts     # Web stub
+│   ├── payment/           # ✨ NEW: Modular payment service
+│   │   ├── index.ts       # Platform router
+│   │   ├── iap.native.ts  # IAP implementation
+│   │   ├── iap.web.ts     # Web stub
+│   │   ├── constants.ts   # Product IDs
+│   │   └── validation.ts  # Receipt validation
 │   ├── supabase.ts        # Supabase client initialization
 │   ├── userService.ts     # User CRUD
 │   ├── donationService.ts # Donation CRUD
+│   ├── donationFlowService.ts  # Donation flow orchestration
 │   └── leaderboardService.ts
 ├── theme/                 # Theme system
 │   ├── colors.ts          # Color palette (single source of truth)
+│   ├── typography.ts      # Typography system
+│   ├── leaderboardStyles.ts  # ✨ NEW: Common leaderboard styles
 │   └── index.ts           # React Native Paper theme
 ├── navigation/            # Navigation config
-├── locales/               # i18n translations
+├── locales/               # i18n translations (✅ updated with error keys)
 │   ├── ko/
 │   └── en/
 ├── config/                # App configuration
@@ -195,14 +227,44 @@ src/
 │   └── storage.ts         # AsyncStorage keys
 ├── types/                 # TypeScript types
 │   ├── navigation.ts      # Navigation params
-│   ├── payment.ts         # Payment types
+│   ├── payment.ts         # ✨ UNIFIED: All payment types (merged from payment.types.ts)
 │   └── database.types.ts  # Supabase types
 └── utils/                 # Utilities
+    ├── errorHandler.ts    # ✨ NEW: Centralized error handling
+    ├── donationStorage.ts # ✨ NEW: AsyncStorage utilities for donations
     ├── onboarding.ts      # Onboarding helpers
     └── timeFormat.ts      # Time formatting
 ```
 
-**Migration Path**: Gradually move screen logic into `features/` as app grows.
+**✨ Recent Refactoring (2025-11-04)**:
+1. **Type Consolidation**: Merged `payment.types.ts` into `payment.ts` (single source of truth)
+2. **Payment Service Reorganization**: Split into modular `src/services/payment/` directory
+3. **Error Handler**: Created `src/utils/errorHandler.ts` with i18n support
+4. **Component Extraction**: OnboardingScreen now uses 3 extracted components + custom hook
+5. **Common Styles**: Created `leaderboardStyles.ts` for shared styling patterns
+6. **TODO Cleanup**: Converted all TODO comments to placeholder references
+7. **✅ TypeScript Errors Fixed**: All 18 type errors resolved
+   - `ProductPurchase` ↔ `Purchase` type conversion implemented
+   - `payment/index.ts` exports completed
+   - Platform-specific type handling (React Navigation 7, i18n v3)
+   - `npm run type-check` now passes without errors
+8. **✅ Hook Simplification**: `useDonationPayment` refactored (186→164 lines)
+   - AsyncStorage logic → `donationStorage.ts` utility
+   - Hook now handles only UI state + Navigation
+   - Improved separation of concerns
+9. **✅ Feature-Based Architecture Migration** (Phase 2.1 완료):
+   - All screens migrated: `src/screens/` → `src/features/*/screens/`
+   - All components migrated: `src/components/` → `src/features/*/components/`
+   - All hooks migrated: `src/hooks/` → `src/features/*/hooks/`
+   - Import paths updated across entire codebase
+   - TypeScript type-check passes: ✅
+   - Old directories removed: `src/screens/`, `src/components/`, `src/hooks/`
+
+**Architecture Benefits**:
+- **Improved Modularity**: Each feature is self-contained (screens + components + hooks)
+- **Better Scalability**: Easy to add new features without cross-contamination
+- **Enhanced Maintainability**: Related code grouped together by business domain
+- **Clearer Dependencies**: Import paths reflect feature relationships
 
 ## Database Schema (Supabase)
 
@@ -415,6 +477,92 @@ npx expo install --check    # Check compatibility
 npx expo install --fix      # Auto-fix versions
 ```
 
+## Refactoring Insights
+
+### Lessons Learned (2025-11-04 Refactoring)
+
+**작업 내용**: Phase 1-3 완료 + Phase 2.1 Feature-Based 아키텍처 마이그레이션 (총 7시간)
+
+#### 잘한 점 (Best Practices)
+
+1. **점진적 접근 (Incremental Approach)**
+   - 작은 단위로 리팩토링하여 리스크 최소화
+   - 각 단계마다 TypeScript 타입 체크로 검증
+   - 문제 발생 시 롤백 가능한 구조 유지
+
+2. **타입 안정성 우선 (Type Safety First)**
+   - 단일 소스 타입 정의: `payment.types.ts` 제거 → `payment.ts` 통합
+   - 모든 변경 후 `npm run type-check` 실행
+   - Platform-specific 타입 처리 (React Navigation 7, i18n v3)
+
+3. **명확한 책임 분리 (Clear Separation of Concerns)**
+   - Hook: UI 상태 + Navigation만 담당
+   - Service: 비즈니스 로직
+   - Util: 재사용 가능한 유틸리티
+   - AsyncStorage 로직 → `donationStorage.ts` 분리
+
+4. **컴포넌트 분해 (Component Extraction)**
+   - OnboardingScreen: 285 lines → 98 lines (65% 감소)
+   - 3개의 재사용 가능한 컴포넌트 추출
+   - Custom hook으로 로직 분리 (`useOnboarding.ts`)
+
+5. **Feature 모듈화 (Feature-Based Architecture)**
+   - 16개 파일 이동 (screens: 4, components: 7, hooks: 5)
+   - Business domain 기준으로 코드 그룹화
+   - 각 feature가 독립적으로 관리됨 (screens + components + hooks)
+
+6. **문서화 (Documentation)**
+   - CLAUDE.md 즉시 업데이트
+   - 변경사항 상세 기록
+   - 아키텍처 다이어그램 최신 상태 유지
+
+#### Feature-Based 구조의 장점
+
+1. **모듈성 (Modularity)**
+   - 각 feature가 독립적으로 관리됨
+   - 관련 코드가 한곳에 모여 있어 찾기 쉬움
+
+2. **확장성 (Scalability)**
+   - 새 feature 추가 시 다른 코드에 영향 없음
+   - Feature 단위로 팀 협업 가능
+
+3. **유지보수성 (Maintainability)**
+   - Business domain 기준으로 코드 검색
+   - 기능 제거 시 feature 디렉토리만 삭제
+
+4. **의존성 명확화 (Clear Dependencies)**
+   - Import 경로로 feature 간 관계 파악
+   - 순환 의존성 감지 용이
+
+#### 개선이 필요한 점
+
+1. **테스트 커버리지 부재**
+   - 리팩토링 전 테스트 작성 필요
+   - 회귀 테스트로 안전성 확보
+   - 향후 E2E 테스트 추가 계획
+
+2. **점진적 마이그레이션 전략**
+   - 한 번에 모든 파일 이동보다는 feature 단위로 점진적 이동 고려
+   - 하이브리드 구조 (old + new) 일시적 허용
+
+#### 핵심 인사이트
+
+1. **TypeScript는 리팩토링의 든든한 보험**
+   - 타입 체크로 대부분의 실수를 사전에 방지
+   - Import 경로 변경 시 컴파일 에러로 누락 감지
+
+2. **작은 단계로 자주 검증**
+   - 큰 변경을 작은 단계로 분해
+   - 각 단계마다 컴파일 + 실행 확인
+
+3. **문서화는 미래의 나를 위한 투자**
+   - 리팩토링 이유와 과정 기록
+   - 다음 리팩토링 시 참고 자료로 활용
+
+4. **Feature-Based는 확장 가능한 구조**
+   - 초기 설정 비용은 있지만 장기적으로 유리
+   - 팀 규모가 커질수록 더 큰 효과
+
 ## Deployment (Future - Phase 18)
 
 ### EAS Build Setup
@@ -502,7 +650,15 @@ Invoke skills when implementing features in their domain without waiting for use
   - ✅ Mock payment objects with fake receipts
   - ✅ Supabase integration working with mock payments
   - ✅ Full payment flow testable in Expo Go
+  - ✅ TypeScript type safety (18 errors resolved)
   - ⏳ Pending: Real IAP migration (Phase 17.5)
+- **Refactoring Status**:
+  - ✅ Type consolidation complete
+  - ✅ Payment service modularization
+  - ✅ Component extraction (OnboardingScreen)
+  - ✅ Error handling centralization
+  - ⏳ Pending: useDonationPayment hook simplification (Phase 3.2)
+  - ⏳ Pending: Feature-based architecture migration (Phase 2.1)
 - **Next Steps**:
   - Phase 8: Test complete payment flow in Expo Go
   - Phase 9-16: Implement remaining UI screens
@@ -590,4 +746,3 @@ t('main.leaderboard.donationCount', { count: 5 })  // "5회 기부" / "5 donatio
 - `useTopRankers(3)`: Fetches top 3 rankers with 30s auto-refresh
 - `useRecentDonations(10)`: Fetches recent 10 donations with 30s auto-refresh
 - `useLeaderboard(100)`: Fetches full leaderboard (future use)
-- 폰트는 하드코딩하지 말고, theme/typography.ts의 중앙화된 값을 사용하라.

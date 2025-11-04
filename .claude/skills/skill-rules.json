@@ -532,6 +532,82 @@
                     "(계획|구조).*?(앱 개발|프로젝트|기능)"
                 ]
             }
+        },
+        "code-refactoring": {
+            "type": "domain",
+            "enforcement": "suggest",
+            "priority": "high",
+            "description": "Systematic code refactoring guidance following Martin Fowler's methodology and 2025 best practices. Covers when to refactor, core techniques, Red-Green-Refactor workflow, React Native/TypeScript patterns, and anti-patterns to avoid.",
+            "promptTriggers": {
+                "keywords": [
+                    "refactor",
+                    "refactoring",
+                    "code smell",
+                    "technical debt",
+                    "clean code",
+                    "restructure",
+                    "improve code",
+                    "code quality",
+                    "extract function",
+                    "extract component",
+                    "rename",
+                    "simplify",
+                    "Martin Fowler",
+                    "TDD",
+                    "Red-Green-Refactor",
+                    "component extraction",
+                    "custom hook",
+                    "type safety",
+                    "TypeScript patterns",
+                    "React Native patterns",
+                    "SOLID principles",
+                    "design patterns",
+                    "legacy code",
+                    "modernize",
+                    "code duplication",
+                    "DRY",
+                    "리팩토링",
+                    "리팩터링",
+                    "코드 스멜",
+                    "기술 부채",
+                    "클린 코드",
+                    "코드 개선",
+                    "코드 품질",
+                    "함수 추출",
+                    "컴포넌트 추출",
+                    "이름 변경",
+                    "단순화",
+                    "레거시 코드",
+                    "현대화",
+                    "코드 중복"
+                ],
+                "intentPatterns": [
+                    "(refactor|improve|clean|restructure|modernize).*?(code|function|component|class)",
+                    "(extract|inline|rename|move|split).*?(function|method|component|variable|class)",
+                    "(reduce|remove|eliminate).*?(technical debt|code smell|duplication|complexity)",
+                    "(apply|follow|use).*?(best practices|patterns|SOLID|design patterns)",
+                    "(prepare|ready).*?(for|before).*?(new feature|refactoring)",
+                    "(simplify|decompose).*?(conditional|logic|function)",
+                    "(리팩토링|리팩터링|개선|정리).*?(코드|함수|컴포넌트)",
+                    "(추출|인라인|이름 변경|이동|분리).*?(함수|메서드|컴포넌트|변수)",
+                    "(제거|줄이기|없애기).*?(기술 부채|코드 스멜|중복|복잡도)"
+                ]
+            },
+            "fileTriggers": {
+                "pathPatterns": [
+                    "src/**/*.ts",
+                    "src/**/*.tsx",
+                    "src/**/*.js",
+                    "src/**/*.jsx"
+                ],
+                "pathExclusions": [
+                    "**/*.test.ts",
+                    "**/*.test.tsx",
+                    "**/*.spec.ts",
+                    "**/*.spec.tsx",
+                    "**/node_modules/**"
+                ]
+            }
         }
     },
     "notes": {
