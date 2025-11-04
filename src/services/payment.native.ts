@@ -516,13 +516,52 @@ class PaymentService implements IPaymentService {
   }
 
   /**
-   * 첫 기부 여부 확인
+   * 첫 기부 여부 확인 (데이터베이스 기반)
+   *
+   * AsyncStorage 대신 Supabase donations 테이블 확인
+   * Mock IAP 환경에서도 정확한 첫 기부 여부 판단
    */
   private async checkFirstDonation(): Promise<boolean> {
-    const firstDonationDate = await AsyncStorage.getItem(
-      STORAGE_KEYS.FIRST_DONATION
-    );
-    return !firstDonationDate;
+    try {
+      // 현재 사용자 세션 가져오기
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      if (!user) {
+        // 로그인하지 않은 경우 AsyncStorage 체크 (fallback)
+        const firstDonationDate = await AsyncStorage.getItem(
+          STORAGE_KEYS.FIRST_DONATION
+        );
+        return !firstDonationDate;
+      }
+
+      // 사용자의 기부 내역 조회
+      const { data: donations, error } = await supabase
+        .from('donations')
+        .select('id')
+        .eq('user_id', user.id)
+        .limit(1);
+
+      if (error) {
+        console.error('[checkFirstDonation] Database error:', error);
+        // 에러 시 AsyncStorage fallback
+        const firstDonationDate = await AsyncStorage.getItem(
+          STORAGE_KEYS.FIRST_DONATION
+        );
+        return !firstDonationDate;
+      }
+
+      // 기부 내역이 없으면 첫 기부
+      return !donations || donations.length === 0;
+    } catch (err) {
+      console.error('[checkFirstDonation] Error:', err);
+      // 에러 시 AsyncStorage fallback
+      const firstDonationDate = await AsyncStorage.getItem(
+        STORAGE_KEYS.FIRST_DONATION
+      );
+      return !firstDonationDate;
+    }
   }
 
   /**
