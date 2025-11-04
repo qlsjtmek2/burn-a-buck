@@ -42,3 +42,7 @@ yarn-error.*
 
 # documentation (generated)
 docs/
+
+# Claude Code (development environment - personal settings)
+.claude/
+dev/
