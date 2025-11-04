@@ -2,11 +2,11 @@
  * Nickname Input Slide
  *
  * 온보딩 마지막 단계의 닉네임 입력 슬라이드
+ * NicknameScreen의 TextField 스타일 사용 (아이콘 없음)
  */
 
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, Dimensions, Alert } from 'react-native';
-import { TextInput } from 'react-native-paper';
+import React from 'react';
+import { View, Text, TextInput, StyleSheet, Dimensions } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { colors, typography } from '../../../theme';
 
@@ -24,7 +24,6 @@ export const NicknameInputSlide: React.FC<NicknameInputSlideProps> = ({
   nickname,
 }) => {
   const { t } = useTranslation();
-  const [isFocused, setIsFocused] = useState(false);
 
   const charCount = nickname.length;
   const maxChars = 12;
@@ -33,34 +32,24 @@ export const NicknameInputSlide: React.FC<NicknameInputSlideProps> = ({
   return (
     <View style={styles.slide}>
       <View style={styles.slideContent}>
-        {/* 이모지 */}
-        <Text style={styles.emoji} accessibilityLabel={`Slide ${index + 1}`}>
-          👤
-        </Text>
-
         {/* 제목 */}
         <Text style={styles.title}>{t('nickname.title')}</Text>
 
         {/* 부제목 */}
         <Text style={styles.subtitle}>{t('nickname.subtitle')}</Text>
 
-        {/* 닉네임 입력 필드 */}
+        {/* 닉네임 입력 필드 - NicknameScreen 스타일 */}
         <View style={styles.inputContainer}>
           <TextInput
-            mode="outlined"
-            label={t('nickname.placeholder')}
+            style={styles.input}
             value={nickname}
             onChangeText={onNicknameChange}
-            onFocus={() => setIsFocused(true)}
-            onBlur={() => setIsFocused(false)}
+            placeholder={t('nickname.placeholder')}
+            placeholderTextColor={colors.textDisabled}
             maxLength={maxChars}
             autoCapitalize="none"
             autoCorrect={false}
-            style={styles.input}
-            outlineColor={colors.border}
-            activeOutlineColor={colors.primary}
-            textColor={colors.text}
-            placeholderTextColor={colors.textSecondary}
+            autoFocus
           />
 
           {/* 글자 수 표시 */}
@@ -104,19 +93,15 @@ const styles = StyleSheet.create({
     maxWidth: 400,
     width: '100%',
   },
-  emoji: {
-    ...typography.onboardingEmoji,
-    marginBottom: 32,
-  },
   title: {
     ...typography.headlineLarge,
     color: colors.primary,
-    marginBottom: 16,
+    marginBottom: 8,
     textAlign: 'center',
   },
   subtitle: {
     ...typography.onboardingSubtitle,
-    color: colors.text,
+    color: colors.textSecondary,
     marginBottom: 32,
     textAlign: 'center',
   },
@@ -126,11 +111,17 @@ const styles = StyleSheet.create({
   },
   input: {
     backgroundColor: colors.surface,
-    fontSize: 16,
+    borderWidth: 2,
+    borderColor: colors.border,
+    borderRadius: 12,
+    paddingHorizontal: 16,
+    paddingVertical: 16,
+    ...typography.titleMedium,
+    color: colors.text,
   },
   charCount: {
-    ...typography.bodySmall,
-    color: colors.textSecondary,
+    ...typography.bodyMedium,
+    color: colors.textDisabled,
     textAlign: 'right',
     marginTop: 8,
   },
