@@ -2,14 +2,20 @@
  * Donation Complete Screen
  *
  * 기부 완료 화면
- * Phase 11에서 상세 구현 예정
+ * Phase 9 구현 완료:
+ * - 감사 메시지 UI with animations
+ * - 최초 기부자 배지
+ * - 축하 애니메이션 (별빛 효과)
  */
 
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import type { DonationCompleteScreenProps } from '../../../types/navigation';
 import { colors, typography } from '../../../theme';
+import ThankYouMessage from '../components/ThankYouMessage';
+import FirstDonorBadge from '../components/FirstDonorBadge';
+import CelebrationAnimation from '../components/CelebrationAnimation';
 
 const DonationCompleteScreen: React.FC<DonationCompleteScreenProps> = ({
   navigation,
@@ -36,24 +42,23 @@ const DonationCompleteScreen: React.FC<DonationCompleteScreenProps> = ({
 
   return (
     <View style={styles.container}>
-      <View style={styles.content}>
+      {/* Celebration animation (only for first donation) */}
+      {isFirstDonation && <CelebrationAnimation />}
+
+      <ScrollView
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+      >
         {/* Thank You Message */}
-        <Text style={styles.title}>
-          {t(isFirstDonation ? 'donationComplete.title.first' : 'donationComplete.title.normal')}
-        </Text>
+        <ThankYouMessage
+          nickname={donation.nickname}
+          isFirstDonation={isFirstDonation}
+        />
 
-        <Text style={styles.message}>
-          {t('donationComplete.message', { nickname: donation.nickname })}
-        </Text>
+        {/* First Donor Badge (only for first donation) */}
+        {isFirstDonation && <FirstDonorBadge />}
 
-        {/*
-          Placeholder: Enhanced UI in Phase 11
-          - First donation badge animation
-          - Current rank display
-          - Total donation amount
-          See: CLAUDE.md - Phase 11
-        */}
-
+        {/* Rank Display */}
         {rank && (
           <View style={styles.rankContainer}>
             <Text style={styles.rankLabel}>{t('donationComplete.rank.label')}</Text>
@@ -63,15 +68,16 @@ const DonationCompleteScreen: React.FC<DonationCompleteScreenProps> = ({
           </View>
         )}
 
+        {/* Donation Amount */}
         <View style={styles.donationInfo}>
           <Text style={styles.donationLabel}>{t('donationComplete.donation.label')}</Text>
           <Text style={styles.donationAmount}>
             {t('donationComplete.donation.amount', { amount: donation.amount.toLocaleString() })}
           </Text>
         </View>
-      </View>
+      </ScrollView>
 
-      {/* Actions */}
+      {/* Action Buttons */}
       <View style={styles.footer}>
         <TouchableOpacity style={styles.shareButton} onPress={handleShare}>
           <Text style={styles.shareButtonText}>{t('donationComplete.button.share')}</Text>
@@ -90,23 +96,12 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.background,
   },
-  content: {
-    flex: 1,
+  scrollContent: {
+    flexGrow: 1,
     justifyContent: 'center',
     alignItems: 'center',
     padding: 24,
-  },
-  title: {
-    ...typography.headlineLarge,
-    color: colors.primary,
-    marginBottom: 16,
-    textAlign: 'center',
-  },
-  message: {
-    ...typography.titleMedium,
-    color: colors.text,
-    textAlign: 'center',
-    marginBottom: 32,
+    paddingTop: 48,
   },
   rankContainer: {
     backgroundColor: colors.surface,
