@@ -44,4 +44,4 @@ yarn-error.*
 docs/
 
 # Claude Code settings (local development environment)
-.claude/
+.claude/*.zip

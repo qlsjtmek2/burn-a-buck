@@ -11,7 +11,7 @@ import { useState, useCallback, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import type { StackNavigationProp } from '@react-navigation/stack';
 import { paymentService } from '../../../services/payment';
-import { checkFirstDonation, getSavedNickname } from '../../../utils/donationStorage';
+import { getSavedNickname } from '../../../utils/donationStorage';
 import type { PaymentStatus, PaymentError, PaymentResult } from '../../../types/payment';
 import type { RootStackParamList } from '../../../types/navigation';
 
@@ -60,19 +60,14 @@ export const useDonationPayment = (): UseDonationPaymentReturn => {
         console.log('[useDonationPayment] Starting payment...');
         setError(null);
 
-        // Step 1: 첫 기부 여부 확인
-        setStatus('initializing');
-        const isFirst = await checkFirstDonation();
-        setIsFirstDonation(isFirst);
-
-        // Step 2: 닉네임 확인 (제공되지 않은 경우)
+        // Step 1: 닉네임 확인 (제공되지 않은 경우)
         let finalNickname = nickname;
 
         if (!finalNickname) {
           finalNickname = await getSavedNickname();
         }
 
-        // Step 3: 닉네임이 없으면 닉네임 입력 화면으로 이동
+        // Step 2: 닉네임이 없으면 닉네임 입력 화면으로 이동
         if (!finalNickname) {
           console.log('[useDonationPayment] No nickname, navigating to nickname screen');
           navigation.navigate('Nickname', {});
@@ -80,7 +75,8 @@ export const useDonationPayment = (): UseDonationPaymentReturn => {
           return;
         }
 
-        // Step 4: 결제 시작 (비즈니스 로직은 paymentService에 위임)
+        // Step 3: 결제 시작 (비즈니스 로직은 paymentService에 위임)
+        // 첫 기부 여부 판단은 paymentService가 담당 (DB 기반, Single Source of Truth)
         setStatus('purchasing');
         console.log('[useDonationPayment] Purchasing with nickname:', finalNickname);
 
@@ -90,11 +86,14 @@ export const useDonationPayment = (): UseDonationPaymentReturn => {
           throw result.error || new Error('Payment failed');
         }
 
-        // Step 5: 결제 성공
+        // Step 4: 결제 성공
         setStatus('success');
         console.log('[useDonationPayment] Payment successful:', result);
 
-        // Step 6: 감사 화면으로 이동
+        // PaymentService의 isFirstDonation 결과 신뢰 (DB 기반 판단)
+        setIsFirstDonation(result.isFirstDonation || false);
+
+        // Step 5: 감사 화면으로 이동
         if (!result.donation) {
           throw new Error('Donation data is missing');
         }
@@ -108,7 +107,7 @@ export const useDonationPayment = (): UseDonationPaymentReturn => {
           isFirstDonation: result.isFirstDonation || false,
         });
 
-        // Step 7: 상태 초기화
+        // Step 6: 상태 초기화
         setTimeout(() => {
           setStatus('idle');
         }, 1000);

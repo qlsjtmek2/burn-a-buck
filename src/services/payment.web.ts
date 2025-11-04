@@ -47,6 +47,7 @@ class WebPaymentService implements IPaymentService {
 
     return {
       success: false,
+      isFirstDonation: false,
       error,
     };
   }
@@ -68,6 +69,7 @@ class WebPaymentService implements IPaymentService {
     console.warn('[WebPaymentService] finalizePurchase called on web (not supported)');
     return {
       success: false,
+      isFirstDonation: false,
       error: {
         code: PAYMENT_ERROR_CODES.INIT_FAILED,
         message: 'Web platform does not support payments',

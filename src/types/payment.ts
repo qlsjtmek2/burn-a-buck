@@ -192,8 +192,8 @@ export interface PaymentResult {
   success: boolean;
   /** 기부 정보 (성공 시) */
   donation?: DonationInfo;
-  /** 첫 기부 여부 */
-  isFirstDonation?: boolean;
+  /** 첫 기부 여부 (필수 - DB 기반 판단) */
+  isFirstDonation: boolean;
   /** 에러 정보 (실패 시) */
   error?: PaymentError;
 }

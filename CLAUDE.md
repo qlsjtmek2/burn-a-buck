@@ -333,18 +333,18 @@ ORDER BY rank;
 1. Initialize payment service on mount
    - **Mock mode**: Skip IAP connection
    - **Real mode**: Connect to Google Play Billing
-2. Check first-time donation (AsyncStorage: `STORAGE_KEYS.FIRST_DONATION`)
-3. Get saved nickname or navigate to Nickname screen
-4. Purchase via `paymentService.purchaseDonation(nickname)`
+2. Get saved nickname or navigate to Nickname screen
+3. Purchase via `paymentService.purchaseDonation(nickname)`
    - **Mock mode**: Generate fake Purchase object (0.5s delay)
    - **Real mode**: Request purchase from Google Play
    - Load product: `donate_1000won`
+   - **First donation check**: PaymentService checks database (Single Source of Truth)
    - Validate receipt (mock receipts always valid)
-5. Save to Supabase (donations + users tables) - **Always real**
-6. Navigate to DonationComplete screen with params:
+4. Save to Supabase (donations + users tables) - **Always real**
+5. Navigate to DonationComplete screen with params:
    - `nickname`: string
    - `amount`: 1000
-   - `isFirstDonation`: boolean
+   - `isFirstDonation`: boolean (from PaymentService result)
 
 **Key Files**:
 - `src/config/env.ts` - **⚠️ IAP mode configuration**
@@ -375,6 +375,58 @@ type PaymentStatus =
 - `E_UNKNOWN_ERROR` - Unexpected error
 
 Product ID: `donate_1000won` (₩1,000)
+
+### First Donation Detection (Fixed 2025-11-05)
+
+**Problem**: 최초 후원 시 감사 메시지와 배지가 표시되지 않는 문제 발생
+
+**Root Cause**: Hook과 PaymentService에서 각각 `checkFirstDonation()` 호출로 인한 이중 체크 및 로직 불일치
+- Hook: AsyncStorage 기반 체크
+- PaymentService: Database 기반 체크
+- 두 결과가 불일치하여 `isFirstDonation` 값이 부정확
+
+**Solution**: Single Source of Truth 원칙 적용
+1. **Hook 수정**: `useDonationPayment.native.ts`에서 중복 `checkFirstDonation()` 호출 제거
+2. **PaymentService 신뢰**: `PaymentResult.isFirstDonation` 값을 유일한 진실의 원천으로 사용
+3. **DB 기반 판단**: `payment.native.ts`의 `checkFirstDonation()`이 Supabase donations 테이블 조회
+4. **타입 안정성**: `PaymentResult.isFirstDonation`을 필수 필드로 변경 (optional 제거)
+
+**Implementation** (`src/services/payment.native.ts` Line 526-586):
+```typescript
+private async checkFirstDonation(): Promise<boolean> {
+  // 1. 사용자 세션 확인
+  const { data: { user } } = await supabase.auth.getUser();
+
+  if (!user) {
+    // 로그인 안 한 경우: AsyncStorage fallback
+    const firstDonationDate = await AsyncStorage.getItem(STORAGE_KEYS.FIRST_DONATION);
+    return !firstDonationDate;
+  }
+
+  // 2. DB에서 기부 내역 조회 (Single Source of Truth)
+  const { data: donations } = await supabase
+    .from('donations')
+    .select('id')
+    .eq('user_id', user.id)
+    .limit(1);
+
+  // 기부 내역이 없으면 첫 기부
+  return !donations || donations.length === 0;
+}
+```
+
+**Key Principles**:
+- **Single Source of Truth**: Database가 최종 판단 기준
+- **No Duplicate Checks**: Hook에서는 체크하지 않고 PaymentService 결과만 신뢰
+- **Fallback Strategy**: 에러 발생 시 AsyncStorage 사용
+- **Logging**: 상세한 로그로 디버깅 용이성 확보
+
+**Files Modified** (2025-11-05):
+- `src/features/donation/hooks/useDonationPayment.native.ts` (164→157 lines)
+- `src/services/payment.native.ts` (로깅 강화, Line 526-586)
+- `src/types/payment.ts` (`isFirstDonation: boolean` - 필수 필드)
+- `src/services/payment.web.ts` (타입 일치)
+- `src/services/payment.ts` (플랫폼 라우터 재생성)
 
 ### Leaderboard Updates
 - Polling: React Query with `refetchInterval: 30000` (30s)
