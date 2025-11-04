@@ -107,7 +107,20 @@
     "processing": "Processing payment...",
     "validating": "Validating receipt...",
     "saving": "Saving...",
+    "loading": {
+      "initializing": "Preparing payment...",
+      "loadingProducts": "Loading products...",
+      "purchasing": "Processing payment...",
+      "validating": "Validating receipt...",
+      "saving": "Saving donation...",
+      "processing": "Processing...",
+      "hint": "Please wait a moment"
+    },
     "error": {
+      "title": "Payment Error",
+      "retry": "Retry",
+      "cancel": "Cancel",
+      "close": "Close",
       "userCancelled": "Payment cancelled.",
       "initFailed": "Failed to initialize payment system.",
       "productNotFound": "Payment product not found.",

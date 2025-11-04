@@ -4,24 +4,43 @@
  * 메인 화면 - 기부 버튼 및 리더보드
  */
 
-import React from 'react';
+import React, { useCallback } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import type { MainScreenProps } from '../types/navigation';
 import { colors, typography } from '../theme';
 import { TopRankersSection } from '../components/leaderboard/TopRankersSection';
 import { RecentDonationsSection } from '../components/leaderboard/RecentDonationsSection';
+import { useDonationPayment } from '../hooks/useDonationPayment';
+import { PaymentLoadingDialog } from '../components/PaymentLoadingDialog';
+import { PaymentErrorDialog } from '../components/PaymentErrorDialog';
 
 const MainScreen: React.FC<MainScreenProps> = ({ navigation }) => {
   const { t } = useTranslation();
+
+  // 결제 플로우 관리 hook
+  const { status, isLoading, error, startPayment, clearError } = useDonationPayment();
+
   /**
    * 기부 버튼 클릭 핸들러
-   * TODO: Phase 8에서 결제 플로우 연동
+   * useDonationPayment hook을 통해 전체 결제 플로우 시작
    */
-  const handleDonation = () => {
-    // 임시: 닉네임 화면으로 이동
-    navigation.navigate('Nickname', {});
-  };
+  const handleDonation = useCallback(async () => {
+    try {
+      await startPayment();
+    } catch (err) {
+      // 에러는 hook 내부에서 처리됨
+      console.error('[MainScreen] Payment error:', err);
+    }
+  }, [startPayment]);
+
+  /**
+   * 에러 다이얼로그 재시도 핸들러
+   */
+  const handleRetry = useCallback(async () => {
+    clearError();
+    await handleDonation();
+  }, [clearError, handleDonation]);
 
   return (
     <View style={styles.container}>
@@ -45,12 +64,28 @@ const MainScreen: React.FC<MainScreenProps> = ({ navigation }) => {
 
       {/* Donation Button */}
       <View style={styles.footer}>
-        <TouchableOpacity style={styles.donationButton} onPress={handleDonation}>
+        <TouchableOpacity
+          style={styles.donationButton}
+          onPress={handleDonation}
+          disabled={isLoading}
+          activeOpacity={0.8}
+        >
           <Text style={styles.donationButtonText}>
             {t('main.button.donate')}
           </Text>
         </TouchableOpacity>
       </View>
+
+      {/* Payment Loading Dialog */}
+      <PaymentLoadingDialog visible={isLoading} status={status} />
+
+      {/* Payment Error Dialog */}
+      <PaymentErrorDialog
+        visible={!!error && status === 'error'}
+        error={error}
+        onClose={clearError}
+        onRetry={handleRetry}
+      />
     </View>
   );
 };

@@ -107,7 +107,20 @@
     "processing": "결제 진행 중...",
     "validating": "영수증 검증 중...",
     "saving": "저장 중...",
+    "loading": {
+      "initializing": "결제 준비 중...",
+      "loadingProducts": "상품 정보 불러오는 중...",
+      "purchasing": "결제 진행 중...",
+      "validating": "영수증 검증 중...",
+      "saving": "기부 내역 저장 중...",
+      "processing": "처리 중...",
+      "hint": "잠시만 기다려주세요"
+    },
     "error": {
+      "title": "결제 오류",
+      "retry": "다시 시도",
+      "cancel": "취소",
+      "close": "닫기",
       "userCancelled": "결제가 취소되었습니다.",
       "initFailed": "결제 시스템 초기화에 실패했습니다.",
       "productNotFound": "결제 상품을 찾을 수 없습니다.",
