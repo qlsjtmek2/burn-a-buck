@@ -6,7 +6,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 **"천원 쓰레기통" (Burn a Buck)** - A donation-based mobile app where users pay ₩1,000 to receive a thank you message and get registered on a leaderboard. Users compete for rankings based on total donations and can share their achievements with friends.
 
-**Current Status**: Phase 7 in progress (Main Screen UI). Payment system architecture complete, leaderboard UI pending.
+**Current Status**:
+- Phase 7 ✅ Complete (Main Screen UI + Leaderboard)
+- Phase 8 🚧 In Progress (Payment Flow with Mock IAP)
+- **⚠️ Using Mock IAP**: Currently using simulated payments for Expo Go testing
+- **Next Milestone**: Phase 17.5 - Migrate to real IAP with Development Build
 
 **Tech Stack**:
 - **Frontend**: React Native 0.81.5 + Expo SDK 54
@@ -14,7 +18,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **Navigation**: React Navigation 7 (Stack Navigator)
 - **Backend**: Supabase (PostgreSQL, Auth, Storage, Realtime)
 - **State Management**: Zustand (client) + React Query (server state)
-- **Payment**: react-native-iap (Google Play In-App Purchase)
+- **Payment**: react-native-iap v13 (⚠️ Mock mode - see `src/config/env.ts`)
+  - Mock IAP for Expo Go development
+  - Will upgrade to v14 + real IAP in Phase 17.5
 - **Internationalization**: i18next + expo-localization
 - **Animations**: React Native Reanimated 4.1
 
@@ -242,31 +248,45 @@ ORDER BY rank;
 
 ## Critical Implementation Patterns
 
-### Payment Flow (Implemented - Platform-specific)
+### Payment Flow (Implemented - Platform-specific with Mock IAP)
+
+**⚠️ Current Mode: Mock IAP for Expo Go Development**
+- **Status**: Using simulated payments to test full flow without real IAP
+- **Configuration**: `src/config/env.ts` - `IAP_TEST_MODE = __DEV__`
+- **Benefits**:
+  - ✅ Test in Expo Go without Development Build
+  - ✅ Supabase integration works with real data
+  - ✅ Complete payment flow validation
+  - ✅ Faster development iteration
+- **Migration Plan**: Phase 17.5 - Switch to real IAP with Development Build
 
 **Architecture**:
 - Platform abstraction via `payment.ts` → `payment.native.ts` / `payment.web.ts`
 - Custom hook: `useDonationPayment` manages entire flow
 - Error/Loading states via dedicated dialog components
+- **Mock/Real IAP toggled by `IAP_TEST_MODE`** (see `src/config/env.ts`)
 
 **Flow** (implemented in `useDonationPayment.native.ts`):
 1. Initialize payment service on mount
+   - **Mock mode**: Skip IAP connection
+   - **Real mode**: Connect to Google Play Billing
 2. Check first-time donation (AsyncStorage: `STORAGE_KEYS.FIRST_DONATION`)
 3. Get saved nickname or navigate to Nickname screen
 4. Purchase via `paymentService.purchaseDonation(nickname)`
-   - Initialize IAP connection
+   - **Mock mode**: Generate fake Purchase object (0.5s delay)
+   - **Real mode**: Request purchase from Google Play
    - Load product: `donate_1000won`
-   - Request purchase
-   - Validate receipt with Google
-5. Save to Supabase (donations + users tables)
+   - Validate receipt (mock receipts always valid)
+5. Save to Supabase (donations + users tables) - **Always real**
 6. Navigate to DonationComplete screen with params:
    - `nickname`: string
    - `amount`: 1000
    - `isFirstDonation`: boolean
 
 **Key Files**:
+- `src/config/env.ts` - **⚠️ IAP mode configuration**
 - `src/services/payment.ts` - Platform routing
-- `src/services/payment.native.ts` - Android IAP (react-native-iap v14)
+- `src/services/payment.native.ts` - Android IAP with Mock/Real mode
 - `src/services/payment.web.ts` - Web placeholder
 - `src/hooks/useDonationPayment.native.ts` - Payment flow hook
 - `src/components/PaymentErrorDialog.tsx` - Error handling UI
@@ -477,7 +497,17 @@ Invoke skills when implementing features in their domain without waiting for use
   - ✅ React Query integration for real-time updates (30s refetch interval)
   - ✅ Internationalization support (ko/en)
   - ✅ UX-optimized design (information density, scannability, consistency)
-- **Next**: Phase 8 - Payment flow integration with actual donation button
+- **Phase 8**: 🚧 Payment flow integration with Mock IAP
+  - ✅ Mock IAP implementation (`src/config/env.ts` - `IAP_TEST_MODE`)
+  - ✅ Mock payment objects with fake receipts
+  - ✅ Supabase integration working with mock payments
+  - ✅ Full payment flow testable in Expo Go
+  - ⏳ Pending: Real IAP migration (Phase 17.5)
+- **Next Steps**:
+  - Phase 8: Test complete payment flow in Expo Go
+  - Phase 9-16: Implement remaining UI screens
+  - Phase 17.5: Migrate to real IAP with Development Build
+  - Phase 18: Production deployment
 
 ## Critical Type Definitions
 

@@ -34,6 +34,7 @@ import type {
   DonationRecord,
   Platform as PlatformType,
 } from '../types/payment';
+import { IAP_TEST_MODE } from '../config/env';
 
 /**
  * AsyncStorage 키
@@ -42,6 +43,30 @@ const STORAGE_KEYS = {
   FIRST_DONATION: '@burn-a-buck:first-donation',
   PENDING_PURCHASE: '@burn-a-buck:pending-purchase',
 } as const;
+
+/**
+ * Platform 매핑 함수
+ * React Native Platform.OS → Supabase platform 값
+ */
+function mapPlatformToDb(platform: PlatformType): 'google_play' | 'app_store' {
+  return platform === 'android' ? 'google_play' : 'app_store';
+}
+
+/**
+ * Supabase 응답을 DonationInfo 타입으로 변환
+ */
+function mapDonationRecord(record: any): DonationRecord {
+  return {
+    id: record.id,
+    user_id: record.user_id,
+    nickname: record.nickname,
+    amount: record.amount,
+    receipt_token: record.receipt_token,
+    transaction_id: record.transaction_id,
+    platform: record.platform === 'google_play' ? 'android' : 'ios',
+    created_at: record.created_at,
+  };
+}
 
 /**
  * Payment Service 구현
@@ -62,6 +87,13 @@ class PaymentService implements IPaymentService {
 
     try {
       console.log('[PaymentService] Initializing...');
+
+      if (IAP_TEST_MODE) {
+        console.log('[PaymentService] ⚠️ Running in TEST MODE - IAP simulated');
+        this.isInitialized = true;
+        return;
+      }
+
       await initConnection();
 
       // 구매 업데이트 리스너 등록
@@ -126,6 +158,22 @@ class PaymentService implements IPaymentService {
         Platform.OS === 'android' ? [PRODUCT_IDS.ANDROID] : [PRODUCT_IDS.IOS];
 
       console.log('[PaymentService] Fetching products:', productIds);
+
+      // TEST MODE: 가짜 상품 정보 반환
+      if (IAP_TEST_MODE) {
+        const mockProduct: ProductPurchase = {
+          productId: productIds[0],
+          title: '천원 쓰레기통 기부',
+          description: '₩1,000 기부하고 명예의 전당에 이름 올리기',
+          price: '₩1,000',
+          currency: 'KRW',
+          localizedPrice: '₩1,000',
+          type: 'inapp',
+        };
+        console.log('[PaymentService] ⚠️ TEST MODE - Returning mock product:', mockProduct);
+        return [mockProduct];
+      }
+
       const products = await getProducts({ skus: productIds });
 
       if (!products || products.length === 0) {
@@ -155,20 +203,62 @@ class PaymentService implements IPaymentService {
 
       console.log('[PaymentService] Requesting purchase:', productId);
 
-      // 구매 요청
-      const purchase = await requestPurchase({ sku: productId });
+      let purchase: Purchase;
 
-      if (!purchase) {
-        throw this.createPaymentError(PAYMENT_ERROR_CODES.PURCHASE_FAILED);
+      // TEST MODE: 가짜 Purchase 객체 생성
+      if (IAP_TEST_MODE) {
+        console.log('[PaymentService] ⚠️ TEST MODE - Creating mock purchase');
+
+        // 사용자 확인 다이얼로그 시뮬레이션 (선택 사항)
+        const shouldProceed = await new Promise<boolean>((resolve) => {
+          setTimeout(() => resolve(true), 500); // 0.5초 지연으로 실제 결제 느낌 시뮬레이션
+        });
+
+        if (!shouldProceed) {
+          throw this.createPaymentError(PAYMENT_ERROR_CODES.USER_CANCELLED);
+        }
+
+        const mockPurchase: Purchase = {
+          productId,
+          transactionId: `mock_txn_${Date.now()}`,
+          transactionDate: Date.now(),
+          transactionReceipt: JSON.stringify({
+            purchaseToken: `mock_token_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+            orderId: `mock_order_${Date.now()}`,
+            packageName: 'com.qlsjtmek2.burnaabuck',
+            productId,
+            purchaseTime: Date.now(),
+            purchaseState: 0,
+          }),
+          purchaseToken: `mock_token_${Date.now()}`,
+          quantityAndroid: 1,
+          acknowledged: false,
+          isAcknowledgedAndroid: false,
+          purchaseStateAndroid: 1,
+          obfuscatedAccountIdAndroid: '',
+          obfuscatedProfileIdAndroid: '',
+        } as Purchase;
+
+        console.log('[PaymentService] ⚠️ TEST MODE - Mock purchase created:', mockPurchase);
+        purchase = mockPurchase;
+      } else {
+        // 실제 구매 요청
+        purchase = await requestPurchase({ sku: productId });
+
+        if (!purchase) {
+          throw this.createPaymentError(PAYMENT_ERROR_CODES.PURCHASE_FAILED);
+        }
+
+        console.log('[PaymentService] Purchase successful:', purchase);
       }
-
-      console.log('[PaymentService] Purchase successful:', purchase);
 
       // 구매 완료 처리 (영수증 검증 및 Supabase 저장)
       const result = await this.finalizePurchase(purchase, nickname);
 
       // 거래 완료 처리
-      await finishTransaction({ purchase, isConsumable: true });
+      if (!IAP_TEST_MODE) {
+        await finishTransaction({ purchase, isConsumable: true });
+      }
 
       return result;
     } catch (error: any) {
@@ -177,6 +267,7 @@ class PaymentService implements IPaymentService {
       // 사용자 취소 에러 처리
       if (
         error?.code === 'E_USER_CANCELLED' ||
+        error?.code === PAYMENT_ERROR_CODES.USER_CANCELLED ||
         error?.message?.includes('cancelled')
       ) {
         throw this.createPaymentError(PAYMENT_ERROR_CODES.USER_CANCELLED, error);
@@ -347,13 +438,13 @@ class PaymentService implements IPaymentService {
       const isFirstDonation = await this.checkFirstDonation();
 
       // 4. donations 테이블에 저장
-      const donationData: Partial<DonationRecord> = {
+      const donationData = {
         user_id: user?.id || null,
         nickname,
         amount: 1000,
         receipt_token: receiptInfo.token,
         transaction_id: receiptInfo.transactionId,
-        platform: receiptInfo.platform,
+        platform: mapPlatformToDb(receiptInfo.platform),
       };
 
       const { data: donation, error: insertError } = await supabase

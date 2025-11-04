@@ -247,22 +247,22 @@ ORDER BY rank;
 
 ### 작업 26-29: 결제 처리
 
-- [ ] **후원 버튼 클릭 시 결제 화면 트리거**
+- [x] **후원 버튼 클릭 시 결제 화면 트리거**
   - Google Play 결제 화면 띄우기
   - MainScreen에 `useDonationPayment` hook 통합
   - 후원 버튼에 `handleDonation` 이벤트 연결
 
-- [ ] **Google Play 결제 처리 로직 구현**
+- [x] **Google Play 결제 처리 로직 구현**
   - 결제 시작 (`payment.native.ts`)
   - 결제 중 로딩 표시 (`PaymentLoadingDialog`)
   - 상태별 로딩 메시지 (initializing, purchasing, validating, saving)
 
-- [ ] **결제 성공/실패 처리 및 다이얼로그 구현**
+- [x] **결제 성공/실패 처리 및 다이얼로그 구현**
   - 성공: 감사 화면으로 이동 (`DonationComplete`)
   - 실패: 에러 다이얼로그 표시 (`PaymentErrorDialog`)
   - 재시도 기능 포함
 
-- [ ] **최초 후원 여부 검증 로직 구현**
+- [x] **최초 후원 여부 검증 로직 구현**
   - AsyncStorage에서 확인 (`STORAGE_KEYS.FIRST_DONATION`)
   - `useDonationPayment` hook에서 `checkFirstDonation()` 구현
   - 서버에서도 확인 (`payment.native.ts` → `saveDonationToSupabase`)
@@ -426,6 +426,8 @@ ORDER BY rank;
 
 - [ ] **.env 내 Development Settings 주석 처리**
 
+- [ ] **src/config/env __DEV__ = false로 바꾸기**
+
 - [ ] **결제 플로우 E2E 테스트 (샌드박스 환경)**
   - 테스트 결제 계정 사용
 
@@ -464,6 +466,189 @@ ORDER BY rank;
 
 ---
 
+## 🎯 Phase 17.5: Mock IAP를 실제 IAP로 교체
+
+### 배경
+현재 개발 단계에서는 Expo Go에서 테스트할 수 있도록 Mock IAP 구현을 사용하고 있습니다.
+배포 전에 실제 Google Play In-App Purchase로 교체해야 합니다.
+
+### 체크리스트: Mock에서 실제 IAP로 전환
+
+#### 0. 의존성 최신화 (Development Build 전 필수)
+- [ ] **react-native-iap v14로 업그레이드**
+  ```bash
+  npm install react-native-iap@latest react-native-nitro-modules@latest
+  ```
+  - v14는 Nitro Modules 사용으로 성능 향상
+  - React Native 0.79+ 필요
+  - Breaking changes 확인: [v14 마이그레이션 가이드](https://hyochan.github.io/react-native-iap/)
+
+- [ ] **Expo SDK 최신 버전으로 업그레이드 (선택)**
+  ```bash
+  npx expo install expo@latest
+  npx expo install --fix
+  ```
+  - 현재: SDK 54 → 최신: SDK 52+ (2025년 기준)
+  - React Native 버전도 함께 업그레이드됨
+
+- [ ] **주요 의존성 최신화**
+  ```bash
+  # React Navigation 최신화
+  npx expo install @react-navigation/native@latest @react-navigation/stack@latest
+
+  # React Query 최신화
+  npm install @tanstack/react-query@latest
+
+  # React Native Paper 최신화
+  npx expo install react-native-paper@latest
+
+  # 기타 Expo 패키지 최신화
+  npx expo install --check
+  npx expo install --fix
+  ```
+
+- [ ] **Breaking Changes 확인 및 코드 수정**
+  - react-native-iap v14: API 변경사항 확인
+  - React Navigation: 라우팅 변경사항
+  - React Query: 설정 변경사항
+  - TypeScript 타입 에러 수정
+
+- [ ] **테스트 실행 (Mock 모드)**
+  ```bash
+  npm start
+  # Expo Go에서 앱 동작 확인
+  # 모든 화면 정상 작동 확인
+  ```
+
+#### 1. Development Build 환경 설정
+- [ ] **expo-dev-client 설치**
+  ```bash
+  npx expo install expo-dev-client
+  ```
+
+- [ ] **Native 디렉토리 생성 (Prebuild)**
+  ```bash
+  npx expo prebuild --clean
+  ```
+
+- [ ] **Kotlin 버전 설정 (Android)**
+  - `app.json`에 `expo-build-properties` 플러그인 추가
+  - Kotlin 2.1.20 이상 지정 (react-native-iap v14 요구사항)
+  ```json
+  {
+    "expo": {
+      "plugins": [
+        [
+          "expo-build-properties",
+          {
+            "android": {
+              "kotlinVersion": "2.1.20"
+            }
+          }
+        ]
+      ]
+    }
+  }
+  ```
+
+#### 2. Google Play Console 설정
+- [ ] **Google Play Console에 앱 등록**
+  - 패키지 이름: `com.qlsjtmek2.burnaabuck`
+  - 앱 제목 및 설명 등록
+
+- [ ] **인앱 상품 등록**
+  - Product ID: `donate_1000won`
+  - 제품 유형: 소모성 (Consumable)
+  - 가격: ₩1,000
+  - 제품 이름: "천원 쓰레기통 기부"
+  - 제품 설명: "₩1,000 기부하고 명예의 전당에 이름 올리기"
+
+- [ ] **테스트 계정 등록**
+  - 라이센스 테스트 계정 추가
+  - 샌드박스 환경 설정
+
+#### 3. 코드 변경사항
+- [ ] **env.ts 수정: IAP_TEST_MODE를 false로 변경**
+  ```typescript
+  // src/config/env.ts
+  export const IAP_TEST_MODE = false; // 또는 조건부로 설정
+  ```
+
+- [ ] **프로덕션 환경 설정 추가 (선택사항)**
+  ```typescript
+  // src/config/env.ts
+  export const IAP_TEST_MODE = __DEV__ && !process.env.USE_REAL_IAP;
+  ```
+
+#### 4. EAS Build로 테스트 빌드 생성
+- [ ] **EAS Build 설정**
+  ```bash
+  npm install -g eas-cli
+  eas login
+  eas build:configure
+  ```
+
+- [ ] **Development Build 생성 (Android)**
+  ```bash
+  eas build --platform android --profile development
+  ```
+
+- [ ] **빌드 설치 및 실제 기기 테스트**
+  - APK 다운로드 및 설치
+  - 실제 Google Play 결제 테스트 (샌드박스)
+
+#### 5. 실제 IAP 테스트
+- [ ] **결제 플로우 테스트**
+  - 상품 조회 (getProducts) 동작 확인
+  - 구매 요청 (requestPurchase) 정상 작동
+  - 영수증 검증 (validateReceipt) 확인
+  - Supabase 저장 확인
+
+- [ ] **에러 처리 테스트**
+  - 사용자 취소 (USER_CANCELLED)
+  - 네트워크 오류 (NETWORK_ERROR)
+  - 중복 결제 방지 (DUPLICATE_PAYMENT)
+
+- [ ] **리더보드 업데이트 확인**
+  - 결제 후 리더보드 즉시 반영
+  - 닉네임 표시 정상
+  - 순위 계산 정확성
+
+#### 6. Mock 코드 정리 (선택사항)
+- [ ] **Mock 관련 코드 제거 또는 주석 처리**
+  - `payment.native.ts`의 `if (IAP_TEST_MODE)` 블록 제거
+  - 또는 프로덕션 빌드에서 자동으로 제외되도록 설정
+
+- [ ] **env.ts에서 테스트 모드 플래그 제거 (선택)**
+  - 완전히 제거하거나 주석 처리
+
+#### 7. 검증
+- [ ] **내부 테스터 피드백 수집**
+  - 최소 3-5명의 테스터에게 배포
+  - 실제 결제 테스트 (샌드박스)
+  - 버그 리포트 수집 및 수정
+
+- [ ] **프로덕션 빌드 생성**
+  ```bash
+  eas build --platform android --profile production
+  ```
+
+### 주의사항
+- ⚠️ **현재 버전**: react-native-iap v13, Expo SDK 54, React Native 0.81.5
+- ⚠️ **목표 버전**: react-native-iap v14+, Expo SDK 52+, React Native 0.79+
+- ⚠️ Mock IAP 사용 시 Supabase 데이터베이스에는 실제 데이터가 저장됩니다
+- ⚠️ 실제 IAP 테스트는 반드시 실제 기기에서 수행해야 합니다 (시뮬레이터/에뮬레이터 불가)
+- ⚠️ Google Play Console 상품 등록 후 활성화까지 몇 시간 소요될 수 있습니다
+- ⚠️ 샌드박스 테스트 계정으로 테스트 시 실제 결제는 발생하지 않습니다
+- ⚠️ 의존성 업그레이드 시 Breaking Changes 확인 필수 (특히 react-native-iap v13 → v14)
+
+### 관련 리소스
+- [React Native IAP 공식 문서](https://hyochan.github.io/react-native-iap/)
+- [Expo Development Build 가이드](https://docs.expo.dev/develop/development-builds/introduction/)
+- [Google Play Console 인앱 상품 설정](https://support.google.com/googleplay/android-developer/answer/1153481)
+
+---
+
 ## 🎯 Phase 18: 배포 준비
 
 ### 작업 70-72: 출시
@@ -495,26 +680,62 @@ ORDER BY rank;
 
 ## 📦 필수 패키지 목록
 
+### 현재 버전 (개발 중)
 ```json
 {
   "dependencies": {
-    "@react-navigation/native": "^6.x",
-    "@react-navigation/stack": "^6.x",
+    "@react-navigation/native": "^7.x",
+    "@react-navigation/stack": "^7.x",
     "@supabase/supabase-js": "^2.x",
-    "react-native-iap": "^12.x",
+    "react-native-iap": "^13.x",
+    "react-native-nitro-modules": "^0.x",
     "zustand": "^4.x",
     "@tanstack/react-query": "^5.x",
-    "react-i18next": "^13.x",
+    "react-i18next": "^15.x",
     "i18next": "^23.x",
-    "@react-native-async-storage/async-storage": "^1.x",
+    "@react-native-async-storage/async-storage": "^2.x",
+    "react-native-paper": "^5.x",
     "react-native-share": "^10.x",
-    "@react-native-kakao/share": "^2.x",
-    "react-native-reanimated": "^3.x",
+    "react-native-reanimated": "^4.x",
     "react-native-gesture-handler": "^2.x",
-    "expo-localization": "^15.x"
+    "expo-localization": "^15.x",
+    "expo": "~54.0.0",
+    "expo-dev-client": "^5.x"
   }
 }
 ```
+
+### 목표 버전 (Phase 17.5 업그레이드 후)
+```json
+{
+  "dependencies": {
+    "@react-navigation/native": "^7.x",
+    "@react-navigation/stack": "^7.x",
+    "@supabase/supabase-js": "^2.x",
+    "react-native-iap": "^14.x",
+    "react-native-nitro-modules": "latest",
+    "zustand": "^5.x",
+    "@tanstack/react-query": "^5.x",
+    "react-i18next": "^15.x",
+    "i18next": "^23.x",
+    "@react-native-async-storage/async-storage": "^2.x",
+    "react-native-paper": "^5.x",
+    "react-native-share": "^11.x",
+    "react-native-reanimated": "^4.x",
+    "react-native-gesture-handler": "^2.x",
+    "expo-localization": "latest",
+    "expo": "^52.0.0",
+    "expo-dev-client": "latest"
+  }
+}
+```
+
+### 주요 변경사항
+- **react-native-iap**: v13 → v14 (Nitro Modules, 성능 향상)
+- **Expo SDK**: 54 → 52+ (최신 안정 버전)
+- **React Native**: 0.81.5 → 0.79+ (react-native-iap v14 요구사항)
+- **zustand**: v4 → v5 (최신 기능)
+- **@tanstack/react-query**: v5 유지 (안정 버전)
 
 ---
 

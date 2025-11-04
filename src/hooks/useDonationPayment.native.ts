@@ -119,8 +119,16 @@ export const useDonationPayment = (): UseDonationPaymentReturn => {
 
         // Step 6: 감사 화면으로 이동
         navigation.navigate('DonationComplete', {
-          nickname: finalNickname,
-          amount: 1000,
+          donation: result.donation
+            ? {
+                ...result.donation,
+                nickname: finalNickname,
+                amount: 1000,
+              }
+            : {
+                nickname: finalNickname,
+                amount: 1000,
+              },
           isFirstDonation: result.isFirstDonation || false,
         });
 
