@@ -14,7 +14,6 @@ import { colors } from '../theme/colors';
 // Screens (lazy import for better performance)
 import OnboardingScreen from '../features/onboarding/screens/OnboardingScreen';
 import MainScreen from '../features/leaderboard/screens/MainScreen';
-import NicknameScreen from '../features/nickname/screens/NicknameScreen';
 import DonationCompleteScreen from '../features/donation/screens/DonationCompleteScreen';
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -82,16 +81,6 @@ export const RootNavigator: React.FC = () => {
           options={{
             headerShown: false,
             gestureEnabled: false, // 뒤로가기 제스처 비활성화 (온보딩으로 돌아가지 않도록)
-          }}
-        />
-
-        {/* 닉네임 입력 화면 */}
-        <Stack.Screen
-          name="Nickname"
-          component={NicknameScreen}
-          options={{
-            headerShown: false,
-            gestureEnabled: true,
           }}
         />
 

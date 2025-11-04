@@ -17,9 +17,6 @@ export type RootStackParamList = {
   /** 메인 화면 (기부 버튼) */
   Main: undefined;
 
-  /** 닉네임 입력 화면 */
-  Nickname: Record<string, never>;
-
   /** 기부 완료 화면 */
   DonationComplete: {
     /** 기부 정보 */
@@ -40,11 +37,6 @@ export type OnboardingScreenProps = StackScreenProps<
 >;
 
 export type MainScreenProps = StackScreenProps<RootStackParamList, 'Main'>;
-
-export type NicknameScreenProps = StackScreenProps<
-  RootStackParamList,
-  'Nickname'
->;
 
 export type DonationCompleteScreenProps = StackScreenProps<
   RootStackParamList,

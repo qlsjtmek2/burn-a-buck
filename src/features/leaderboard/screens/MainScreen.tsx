@@ -70,12 +70,6 @@ const MainScreen: React.FC<MainScreenProps> = ({ navigation }) => {
       '개발용 기능을 선택하세요',
       [
         {
-          text: '닉네임 입력 화면 보기',
-          onPress: () => {
-            navigation.navigate('Nickname', {});
-          },
-        },
-        {
           text: '온보딩만 초기화',
           onPress: async () => {
             await AsyncStorage.removeItem(STORAGE_KEYS.ONBOARDING_COMPLETED);
@@ -96,7 +90,7 @@ const MainScreen: React.FC<MainScreenProps> = ({ navigation }) => {
         },
       ]
     );
-  }, [navigation]);
+  }, []);
 
   return (
     <View style={styles.container}>
