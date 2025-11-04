@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
   sectionTitle: {
-    ...typography.leaderboardName,
+    ...typography.sectionTitle,
     color: colors.text,
     marginBottom: 16,
     paddingHorizontal: 24,

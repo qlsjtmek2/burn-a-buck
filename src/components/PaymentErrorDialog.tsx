@@ -146,11 +146,10 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   debugInfo: {
-    ...typography.bodySmall,
+    ...typography.debugInfo,
     color: colors.error,
     textAlign: 'center',
     marginBottom: 16,
-    fontFamily: 'monospace',
   },
   buttonContainer: {
     flexDirection: 'row',

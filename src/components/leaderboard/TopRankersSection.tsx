@@ -161,7 +161,7 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
   sectionTitle: {
-    ...typography.titleMedium,
+    ...typography.sectionTitle,
     color: colors.text,
     marginBottom: 12,
     paddingHorizontal: 24,

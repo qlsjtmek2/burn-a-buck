@@ -60,39 +60,51 @@ export const fontSizes = {
 
 /**
  * Letter Spacing
- * Material Design 3 기준 자간
+ * Material Design 3 + 한글 최적화 기준
+ *
+ * 참고:
+ * - MD3: Label M/S는 0.1px
+ * - 한글 폰트는 자간 증가 권장
  */
 export const letterSpacing = {
-  tight: 0, // Display, Headline
-  normal: 0.1, // Title Medium/Small
-  wide: 0.15, // Title Medium
-  wider: 0.25, // Body Medium
-  widest: 0.5, // Body Large, Label
+  tight: 0,    // Display, Headline, Title Large
+  normal: 0.1, // Title Medium/Small, Label
+  wide: 0.15,  // Title Medium (강조)
+  wider: 0.25, // (미사용)
+  widest: 0.5, // Body Large (한글 가독성)
 } as const;
 
 /**
  * Line Heights
- * 가독성을 위한 행간 설정
+ * 한글 가독성 최적화 (CJK: 1.7 비율 권장, WCAG: 최소 1.5)
+ *
+ * 참고:
+ * - Material Design 3 공식 스펙 적용
+ * - 한글은 라틴 폰트보다 높은 행간 필요 (1.7 vs 1.2)
+ * - 모바일 화면은 더 넓은 행간 권장
  */
 export const lineHeights = {
   // Display
-  xl3: 64,
-  xl2: 52,
-  xl: 44,
+  xl3: 64,  // 57px → 64px (1.12 비율)
+  xl2: 52,  // 45px → 52px (1.16 비율)
+  xl: 44,   // 36px → 44px (1.22 비율)
 
   // Headline
-  lg3: 40,
-  lg2: 36,
-  lg: 32,
+  lg3: 40,  // 32px → 40px (1.25 비율)
+  lg2: 36,  // 28px → 36px (1.29 비율)
+  lg: 32,   // 24px → 32px (1.33 비율)
 
-  // Title
-  md3: 28,
-  md: 24,
-  sm: 20,
+  // Title (MD3 기준 + 한글 최적화)
+  md3: 30,  // 22px → 30px (1.36 비율) - MD3 공식
+  md: 28,   // 18px → 28px (1.56 비율) - 한글 최적화
+  md1: 24,  // 16px → 24px (1.5 비율) - Title Small 전용
+  sm: 20,   // 14px → 20px (1.43 비율)
 
-  // Body & Label
-  base: 24,
-  xs: 16,
+  // Body & Label (한글 1.7 비율 권장)
+  base: 28, // 16px → 28px (1.75 비율) - WCAG 권장
+  baseMd: 24, // 14px → 24px (1.71 비율)
+  baseSm: 20, // 12px → 20px (1.67 비율)
+  xs: 16,   // Label용
 } as const;
 
 /**
@@ -192,7 +204,7 @@ export const typography = {
     fontSize: fontSizes.md1,
     fontWeight: fontWeights.semibold,
     letterSpacing: letterSpacing.normal,
-    lineHeight: lineHeights.md,
+    lineHeight: lineHeights.md1,
   } as TextStyle,
 
   // ========================================
@@ -210,8 +222,8 @@ export const typography = {
     fontFamily: fontFamilies.pretendard.regular,
     fontSize: fontSizes.sm,
     fontWeight: fontWeights.regular,
-    letterSpacing: letterSpacing.wider,
-    lineHeight: lineHeights.sm,
+    letterSpacing: letterSpacing.widest,
+    lineHeight: lineHeights.baseMd,
   } as TextStyle,
 
   bodySmall: {
@@ -219,7 +231,7 @@ export const typography = {
     fontSize: fontSizes.xs,
     fontWeight: fontWeights.regular,
     letterSpacing: letterSpacing.widest,
-    lineHeight: lineHeights.xs,
+    lineHeight: lineHeights.baseSm,
   } as TextStyle,
 
   // ========================================
@@ -237,7 +249,7 @@ export const typography = {
     fontFamily: fontFamilies.pretendard.semibold,
     fontSize: fontSizes.xs,
     fontWeight: fontWeights.semibold,
-    letterSpacing: letterSpacing.widest,
+    letterSpacing: letterSpacing.normal, // MD3: 0.1px
     lineHeight: lineHeights.xs,
   } as TextStyle,
 
@@ -245,7 +257,7 @@ export const typography = {
     fontFamily: fontFamilies.pretendard.semibold,
     fontSize: fontSizes.xs2,
     fontWeight: fontWeights.semibold,
-    letterSpacing: letterSpacing.widest,
+    letterSpacing: letterSpacing.normal, // MD3: 0.1px
     lineHeight: lineHeights.xs,
   } as TextStyle,
 
@@ -275,11 +287,11 @@ export const typography = {
     letterSpacing: letterSpacing.tight,
   } as TextStyle,
 
-  // 리더보드 통계 (13-15px, medium-semibold)
+  // 리더보드 통계 (12px, semibold)
   leaderboardStats: {
-    fontFamily: fontFamilies.pretendard.bold,
-    fontSize: 13,
-    fontWeight: fontWeights.medium,
+    fontFamily: fontFamilies.pretendard.semibold,
+    fontSize: fontSizes.xs,
+    fontWeight: fontWeights.semibold,
     letterSpacing: letterSpacing.tight,
   } as TextStyle,
 
@@ -318,6 +330,28 @@ export const typography = {
   // 이모지 (20px)
   emoji: {
     fontSize: fontSizes.md2,
+  } as TextStyle,
+
+  // ========================================
+  // Special Purpose (특수 목적)
+  // ========================================
+
+  // 디버그 정보 (Monospace, 12px)
+  debugInfo: {
+    fontFamily: 'monospace', // 시스템 monospace 폰트
+    fontSize: fontSizes.xs,
+    fontWeight: fontWeights.regular,
+    letterSpacing: letterSpacing.normal,
+    lineHeight: lineHeights.xs,
+  } as TextStyle,
+
+  // 섹션 제목 (리더보드, 설정 등 - 18px, semibold)
+  sectionTitle: {
+    fontFamily: fontFamilies.pretendard.semibold,
+    fontSize: fontSizes.md,
+    fontWeight: fontWeights.semibold,
+    letterSpacing: letterSpacing.wide,
+    lineHeight: lineHeights.md,
   } as TextStyle,
 } as const;
 

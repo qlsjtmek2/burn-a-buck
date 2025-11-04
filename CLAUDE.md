@@ -560,3 +560,4 @@ t('main.leaderboard.donationCount', { count: 5 })  // "5회 기부" / "5 donatio
 - `useTopRankers(3)`: Fetches top 3 rankers with 30s auto-refresh
 - `useRecentDonations(10)`: Fetches recent 10 donations with 30s auto-refresh
 - `useLeaderboard(100)`: Fetches full leaderboard (future use)
+- 폰트는 하드코딩하지 말고, theme/typography.ts의 중앙화된 값을 사용하라.
