@@ -42,3 +42,6 @@ yarn-error.*
 
 # documentation (generated)
 docs/
+
+# Claude Code settings (local development environment)
+.claude/
