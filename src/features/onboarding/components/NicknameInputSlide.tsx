@@ -58,6 +58,16 @@ export const NicknameInputSlide: React.FC<NicknameInputSlideProps> = ({
 
         {/* 닉네임 입력 필드 - NicknameScreen 스타일 */}
         <View style={styles.inputContainer}>
+          {/* 글자 수 표시 (TextField 위) */}
+          <Text
+            style={[
+              styles.charCount,
+              hasError && charCount > 0 && styles.charCountError,
+            ]}
+          >
+            {t('nickname.charCount', { current: charCount, max: maxChars })}
+          </Text>
+
           <TextInput
             style={[styles.input, hasError && styles.inputError]}
             value={nickname}
@@ -70,17 +80,7 @@ export const NicknameInputSlide: React.FC<NicknameInputSlideProps> = ({
             autoFocus
           />
 
-          {/* 글자 수 표시 */}
-          <Text
-            style={[
-              styles.charCount,
-              hasError && charCount > 0 && styles.charCountError,
-            ]}
-          >
-            {t('nickname.charCount', { current: charCount, max: maxChars })}
-          </Text>
-
-          {/* 에러 메시지 영역 */}
+          {/* 에러 메시지 영역 (TextField 바로 아래 왼쪽) */}
           {charCount > 0 && (
             <View style={styles.errorContainer}>
               {/* 길이 검증 에러 */}
@@ -173,14 +173,15 @@ const styles = StyleSheet.create({
     ...typography.bodyMedium,
     color: colors.textDisabled,
     textAlign: 'right',
-    marginTop: 8,
+    marginBottom: 4,
   },
   charCountError: {
     color: colors.error,
   },
   errorContainer: {
-    marginTop: 4,
+    marginTop: 6,
     minHeight: 20,
+    alignItems: 'flex-start',
   },
   errorMessage: {
     ...typography.bodySmall,
