@@ -229,7 +229,7 @@ ORDER BY rank;
   - Primary 색상
   - 그림자 효과
 
-- [ ] **Top Ranker 리더보드 섹션 구현 (1~3등 특별 테두리)**
+- [x] **Top Ranker 리더보드 섹션 구현 (1~3등 특별 테두리)**
   - 금, 은, 동 테두리 효과
   - "랭킹" 타이틀
 
@@ -243,24 +243,29 @@ ORDER BY rank;
 
 ---
 
-## 🎯 Phase 8: 결제 플로우 구현
+## 🎯 Phase 8: 결제 플로우 구현 ✅
 
 ### 작업 26-29: 결제 처리
 
 - [ ] **후원 버튼 클릭 시 결제 화면 트리거**
   - Google Play 결제 화면 띄우기
+  - MainScreen에 `useDonationPayment` hook 통합
+  - 후원 버튼에 `handleDonation` 이벤트 연결
 
 - [ ] **Google Play 결제 처리 로직 구현**
-  - 결제 시작
-  - 결제 중 로딩 표시
+  - 결제 시작 (`payment.native.ts`)
+  - 결제 중 로딩 표시 (`PaymentLoadingDialog`)
+  - 상태별 로딩 메시지 (initializing, purchasing, validating, saving)
 
 - [ ] **결제 성공/실패 처리 및 다이얼로그 구현**
-  - 성공: 감사 화면으로 이동
-  - 실패: 에러 다이얼로그 표시
+  - 성공: 감사 화면으로 이동 (`DonationComplete`)
+  - 실패: 에러 다이얼로그 표시 (`PaymentErrorDialog`)
+  - 재시도 기능 포함
 
 - [ ] **최초 후원 여부 검증 로직 구현**
-  - AsyncStorage에서 확인
-  - 서버에서도 확인
+  - AsyncStorage에서 확인 (`STORAGE_KEYS.FIRST_DONATION`)
+  - `useDonationPayment` hook에서 `checkFirstDonation()` 구현
+  - 서버에서도 확인 (`payment.native.ts` → `saveDonationToSupabase`)
 
 ---
 
