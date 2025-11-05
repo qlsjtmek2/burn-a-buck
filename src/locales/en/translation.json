@@ -70,7 +70,6 @@
       "noData": "No donations yet",
       "placeholder": "Leaderboard Area",
       "placeholderSubtitle": "Coming in Phase 7",
-      "lastUpdated": "Last updated: {{time}}",
       "emptyState": {
         "topRanker": {
           "title": "No Rankers Yet",

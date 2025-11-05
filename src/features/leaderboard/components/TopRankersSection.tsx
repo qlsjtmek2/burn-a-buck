@@ -12,12 +12,11 @@ import { colors, typography } from '../../../theme';
 import { formatAmount } from '../../../utils/timeFormat';
 import type { LeaderboardEntry } from '../../../types/database.types';
 import { AnimatedNumber } from './AnimatedNumber';
-import { LastUpdateIndicator } from '../../../components/leaderboard/LastUpdateIndicator';
 import { EmptyState } from '../../../components/common/EmptyState';
 
 export const TopRankersSection: React.FC = () => {
   const { t } = useTranslation();
-  const { data: topRankers, isLoading, isError, dataUpdatedAt } = useTopRankers(3);
+  const { data: topRankers, isLoading, isError } = useTopRankers(3);
 
   /**
    * 순위별 테두리 색상
@@ -138,9 +137,7 @@ export const TopRankersSection: React.FC = () => {
   if (isError || !topRankers || topRankers.length === 0) {
     return (
       <View style={styles.container}>
-        <View style={styles.titleContainer}>
-          <Text style={styles.sectionTitle}>{t('main.leaderboard.topRanker')}</Text>
-        </View>
+        <Text style={styles.sectionTitle}>{t('main.leaderboard.topRanker')}</Text>
         <EmptyState
           icon="🗑️"
           title={t('main.leaderboard.emptyState.topRanker.title')}
@@ -152,10 +149,7 @@ export const TopRankersSection: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.titleContainer}>
-        <Text style={styles.sectionTitle}>{t('main.leaderboard.topRanker')}</Text>
-        <LastUpdateIndicator timestamp={dataUpdatedAt} />
-      </View>
+      <Text style={styles.sectionTitle}>{t('main.leaderboard.topRanker')}</Text>
       <View style={styles.listContainer}>
         <FlatList
           data={topRankers}
@@ -174,13 +168,11 @@ const styles = StyleSheet.create({
   container: {
     marginBottom: 24,
   },
-  titleContainer: {
-    paddingHorizontal: 24,
-    marginBottom: 12,
-  },
   sectionTitle: {
     ...typography.sectionTitle,
     color: colors.text,
+    marginBottom: 12,
+    paddingHorizontal: 24,
   },
   loadingContainer: {
     paddingVertical: 40,

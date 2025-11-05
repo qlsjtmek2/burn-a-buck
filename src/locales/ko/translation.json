@@ -70,7 +70,6 @@
       "noData": "아직 기부 내역이 없습니다",
       "placeholder": "리더보드 영역",
       "placeholderSubtitle": "Phase 7에서 구현 예정",
-      "lastUpdated": "마지막 업데이트: {{time}}",
       "emptyState": {
         "topRanker": {
           "title": "아직 랭커가 없어요",
