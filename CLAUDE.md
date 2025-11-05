@@ -201,10 +201,6 @@ src/
 │   │   └── hooks/useLeaderboard.ts
 │   ├── nickname/          # Nickname input feature module
 │   │   └── screens/NicknameScreen.tsx
-│   └── share/             # Social sharing feature module ✅
-│       ├── components/ShareBottomSheet.tsx
-│       ├── hooks/useShare.ts
-│       └── index.ts
 ├── services/              # API clients (platform-specific when needed)
 │   ├── payment/           # ✨ NEW: Modular payment service
 │   │   ├── index.ts       # Platform router
@@ -217,7 +213,7 @@ src/
 │   ├── donationService.ts # Donation CRUD
 │   ├── donationFlowService.ts  # Donation flow orchestration
 │   ├── leaderboardService.ts
-│   └── shareService.ts    # ✨ NEW: Social sharing service
+│   └── shareService.ts    # System share sheet (단일 shareGeneral 함수)
 ├── theme/                 # Theme system
 │   ├── colors.ts          # Color palette (single source of truth)
 │   ├── typography.ts      # Typography system
@@ -234,39 +230,56 @@ src/
 ├── types/                 # TypeScript types
 │   ├── navigation.ts      # Navigation params
 │   ├── payment.ts         # ✨ UNIFIED: All payment types (merged from payment.types.ts)
-│   ├── share.ts           # ✨ NEW: Share types
+│   ├── share.ts           # Share types (ShareData, ShareMessage)
 │   └── database.types.ts  # Supabase types
 └── utils/                 # Utilities
     ├── errorHandler.ts    # ✨ NEW: Centralized error handling
     ├── donationStorage.ts # ✨ NEW: AsyncStorage utilities for donations
     ├── onboarding.ts      # Onboarding helpers
-    ├── shareTemplates.ts  # ✨ NEW: Share message templates
+    ├── shareTemplates.ts  # Share message template (createShareMessage)
     └── timeFormat.ts      # Time formatting
 ```
 
 **✨ Recent Development (2025-11-05)**:
 
-### Phase 12: Social Sharing Implementation
-1. **Share Feature Module**: Complete feature-based implementation
-   - `ShareBottomSheet` component with 7 platform options
-   - `useShare` hook for state management
-   - Feature module: `src/features/share/`
-2. **Share Service**: Platform-specific sharing implementation
-   - `shareService.ts` with 6 sharing methods
-   - Support: Kakao, Instagram, Facebook, Twitter, SMS, Copy Link, More
-   - Error handling with i18n support
-3. **Share Templates**: Dynamic message generation
-   - `shareTemplates.ts` with template functions
-   - Supports rank, amount, donation count placeholders
-   - Korean/English message templates
-4. **Type System**: Complete TypeScript support
-   - `src/types/share.ts` with all share types
-   - Platform-specific type definitions
-   - `npm run type-check` passes without errors
-5. **i18n Integration**: Full internationalization support
-   - Korean translations in `src/locales/ko/translation.json`
-   - English translations in `src/locales/en/translation.json`
-   - 30+ translation keys added
+### Phase 12: 공유 기능 단순화 (2025-11-05)
+
+**문제**: 복잡한 플랫폼 선택 UI (ShareBottomSheet)가 오히려 사용자 경험을 저해
+
+**해결책**: 시스템 공유 시트 직접 사용으로 대폭 단순화
+
+1. **UI 단순화**:
+   - ❌ ShareBottomSheet 컴포넌트 삭제 (226줄)
+   - ❌ useShare 훅 삭제 (96줄)
+   - ❌ share feature 모듈 전체 삭제
+   - ✅ 공유 버튼 클릭 → 시스템 공유 시트 바로 표시
+
+2. **서비스 통합**:
+   - ❌ shareService.expogo.ts, shareService.native.ts, shareService.web.ts 삭제
+   - ✅ shareService.ts 단일 파일로 통합 (68줄)
+   - ✅ `shareGeneral()` 함수 하나로 모든 공유 처리
+   - ✅ Optional react-native-share with fallback to RN Share API
+
+3. **타입 정리**:
+   - ❌ SharePlatform, SharePlatformOption, ShareResult 제거
+   - ✅ ShareData, ShareMessage 타입만 유지 (18줄)
+
+4. **템플릿 단순화**:
+   - ❌ createSMSMessage, createKakaoMessage 삭제
+   - ✅ createShareMessage() 함수만 유지 (43줄)
+
+5. **번역 키 정리**:
+   - ❌ share.platform.*, share.copyLink.*, share.expoGoMode.*, share.kakao.*, share.error.* 삭제
+   - ✅ share.template.* 키만 유지
+
+**결과**:
+- **코드 감소**: 1,218줄 삭제 (82% 감소)
+- **파일 감소**: 6개 파일 삭제
+- **최종 구조**: 3개 파일, 총 129줄
+  - `shareService.ts` (68줄)
+  - `shareTemplates.ts` (43줄)
+  - `share.ts` (18줄)
+- **UX 개선**: 복잡한 선택 UI 제거 → 직관적인 시스템 공유 시트
 
 ### Previous Refactoring (2025-11-04):
 1. **Type Consolidation**: Merged `payment.types.ts` into `payment.ts` (single source of truth)
@@ -425,68 +438,62 @@ type PaymentStatus =
 
 Product ID: `donate_1000won` (₩1,000)
 
-### Share Flow (Implemented - Platform-specific with Mock Mode)
+### Share Flow (Simplified - System Share Sheet)
 
-**⚠️ Current Mode: Mock Share for Expo Go Development**
-- **Status**: Using React Native built-in Share API to test flow without react-native-share
-- **Configuration**: `src/config/env.ts` - `SHARE_TEST_MODE = __DEV__`
-- **Benefits**:
-  - ✅ Test in Expo Go without Development Build
-  - ✅ Full share flow validation (general share, SMS, copy link)
-  - ✅ Platform-specific shares fallback to general share with user notification
-  - ✅ Faster development iteration
-- **Migration Plan**: Phase 17.5 - Switch to react-native-share with Development Build
+**Current Implementation**: 단순 시스템 공유 시트 사용 (2025-11-05)
 
 **Architecture**:
-- Platform abstraction via `shareService.ts` → `shareService.native.ts` / `shareService.expogo.ts` / `shareService.web.ts`
-- Custom hook: `useShare` manages share flow
-- ShareBottomSheet component for platform selection
-- **Mock/Real Share toggled by `SHARE_TEST_MODE`** (see `src/config/env.ts`)
+- **Single File**: `src/services/shareService.ts` (68줄)
+- **Single Function**: `shareGeneral(data: ShareData)` - 시스템 공유 시트 표시
+- **Optional Dependency Pattern**: react-native-share를 optional로 로드, 실패 시 React Native 내장 Share API로 자동 폴백
 
-**Expo Go Mode (Mock)** - `shareService.expogo.ts`:
-1. **General Share** (`more`): React Native built-in `Share.share()` API
-   - ✅ Works in Expo Go
-   - ✅ System share sheet on both iOS and Android
-2. **Platform-specific shares** (`instagram`, `facebook`, `twitter`):
-   - ⚠️ Fallback to general share with notification
-   - Alert: "Expo Go에서는 일반 공유만 지원됩니다"
-3. **SMS Share**: `Linking.openURL()` with `sms:` scheme
-   - ✅ Works in Expo Go
-4. **Copy Link**: `expo-clipboard`
-   - ✅ Works in Expo Go
-5. **Kakao Share**: Alert + fallback to general share
-   - ⚠️ Requires KakaoTalk SDK (Phase 17.5)
+**Implementation**:
+```typescript
+// shareService.ts
+let Share: any = null;
+let shareAvailable = false;
 
-**Development Build Mode (Real)** - `shareService.native.ts`:
-1. **All shares**: `react-native-share` package
-   - ✅ Instagram direct share: `Share.Social.INSTAGRAM`
-   - ✅ Facebook direct share: `Share.Social.FACEBOOK`
-   - ✅ Twitter direct share: `Share.Social.TWITTER`
-   - ✅ General share: `Share.open()`
-2. **SMS, Copy Link**: Same as Mock mode (platform-independent)
-3. **Kakao Share**: KakaoTalk SDK integration (Phase 17.5)
+try {
+  Share = require('react-native-share').default;
+  shareAvailable = true;
+} catch (error) {
+  shareAvailable = false;
+}
+
+export const shareGeneral = async (data: ShareData): Promise<void> => {
+  const { title, message, url } = createShareMessage(data);
+  const fullMessage = `${message}\n\n${url}`;
+
+  if (shareAvailable && Share) {
+    // react-native-share 사용 (Development Build)
+    await Share.open({ title, message: fullMessage, url });
+  } else {
+    // React Native 내장 Share API 사용 (Expo Go)
+    const { Share: RNShare } = require('react-native');
+    await RNShare.share({ title, message: fullMessage }, { dialogTitle: title });
+  }
+};
+```
+
+**Usage in DonationCompleteScreen**:
+```typescript
+import { shareGeneral } from '../../../services/shareService';
+
+const handleShareButtonPress = async () => {
+  await shareGeneral(shareData);
+};
+```
 
 **Key Files**:
-- `src/config/env.ts` - **⚠️ Share mode configuration**
-- `src/services/shareService.ts` - Platform router (SHARE_TEST_MODE based)
-- `src/services/shareService.expogo.ts` - Expo Go Mock (RN built-in Share)
-- `src/services/shareService.native.ts` - Development Build Real (react-native-share)
-- `src/services/shareService.web.ts` - Web (Web Share API)
-- `src/features/share/hooks/useShare.ts` - Share flow hook
-- `src/features/share/components/ShareBottomSheet.tsx` - Platform selection UI
-- `src/utils/shareTemplates.ts` - Dynamic message generation
+- `src/services/shareService.ts` - 시스템 공유 시트 서비스
+- `src/utils/shareTemplates.ts` - 공유 메시지 템플릿 생성
+- `src/types/share.ts` - ShareData, ShareMessage 타입
 
-**Share Platforms**:
-- `kakao`: KakaoTalk (Expo Go: fallback, Dev Build: SDK)
-- `instagram`: Instagram (Expo Go: fallback, Dev Build: direct)
-- `facebook`: Facebook (Expo Go: fallback, Dev Build: direct)
-- `twitter`: Twitter (Expo Go: fallback, Dev Build: direct)
-- `sms`: SMS (both modes: Linking API)
-- `copy_link`: Copy Link (both modes: expo-clipboard)
-- `more`: General Share (both modes: system share sheet)
-
-**Migration to Development Build**:
-When switching from Expo Go to Development Build, the share service automatically uses `shareService.native.ts` because `SHARE_TEST_MODE` becomes `false` in production builds. No code changes needed!
+**Benefits**:
+- ✅ **단순성**: 복잡한 플랫폼 선택 UI 제거
+- ✅ **호환성**: Expo Go와 Development Build 모두 지원
+- ✅ **직관성**: 사용자가 익숙한 시스템 공유 시트 사용
+- ✅ **유지보수성**: 1,218줄 감소 (82% 코드 감소)
 
 ### First Donation Detection (Updated 2025-11-05)
 
@@ -723,6 +730,46 @@ npx expo install --fix      # Auto-fix versions
 4. **Feature-Based는 확장 가능한 구조**
    - 초기 설정 비용은 있지만 장기적으로 유리
    - 팀 규모가 커질수록 더 큰 효과
+
+### Lessons Learned (2025-11-05 공유 기능 단순화)
+
+**작업 내용**: 복잡한 공유 UI 제거, 시스템 공유 시트 직접 사용 (1,218줄 감소, 82%)
+
+#### 핵심 인사이트
+
+1. **단순함의 가치 (Value of Simplicity)**
+   - 복잡한 플랫폼 선택 UI (ShareBottomSheet)가 오히려 사용자 경험 저해
+   - 사용자가 익숙한 시스템 공유 시트가 더 직관적
+   - "기능이 많다 = 좋다"는 착각에서 벗어나기
+
+2. **코드 감소 = 유지보수 향상 (Less Code = Better Maintenance)**
+   - 1,218줄 감소로 버그 발생 가능성 대폭 감소
+   - 읽어야 할 코드가 적을수록 이해하기 쉬움
+   - 6개 파일 삭제로 파일 탐색 시간 절약
+
+3. **Optional Dependency Pattern**
+   - `try-catch`로 네이티브 모듈을 optional로 처리
+   - Expo Go 호환성 확보 (fallback to RN Share API)
+   - 런타임에 환경에 맞는 구현 자동 선택
+   ```typescript
+   try {
+     Share = require('react-native-share').default;
+     shareAvailable = true;
+   } catch (error) {
+     shareAvailable = false; // Fallback to RN Share
+   }
+   ```
+
+4. **"사용자가 원하는 것"을 정확히 파악**
+   - 처음 요구사항: "공유 기능 추가"
+   - 초기 구현: 7개 플랫폼 선택 UI + 복잡한 라우팅
+   - 실제 필요: 시스템 공유 시트로 간단히 공유
+   - **교훈**: 요구사항의 본질을 파악하고 최소한으로 구현
+
+5. **리팩토링은 "빼기"의 예술**
+   - 기능을 추가하는 것보다 제거하는 것이 더 어려움
+   - 하지만 제거할 때 가장 큰 가치가 생김
+   - 정기적으로 "이 코드가 정말 필요한가?" 질문하기
 
 ## Deployment (Future - Phase 18)
 
