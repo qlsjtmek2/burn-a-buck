@@ -34,7 +34,15 @@
     },
     "plugins": [
       "expo-font",
-      "expo-dev-client"
+      "expo-dev-client",
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "kotlinVersion": "2.1.20"
+          }
+        }
+      ]
     ],
     "extra": {
       "eas": {
