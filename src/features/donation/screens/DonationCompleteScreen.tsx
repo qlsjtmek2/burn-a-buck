@@ -8,7 +8,7 @@
  * - 축하 애니메이션 (별빛 효과)
  */
 
-import React from 'react';
+import React, { useMemo } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useQueryClient } from '@tanstack/react-query';
@@ -17,6 +17,8 @@ import { colors, typography } from '../../../theme';
 import ThankYouMessage from '../components/ThankYouMessage';
 import FirstDonorBadge from '../components/FirstDonorBadge';
 import CelebrationAnimation from '../components/CelebrationAnimation';
+import { ShareBottomSheet, useShare } from '../../share';
+import type { ShareData } from '../../../types/share';
 
 const DonationCompleteScreen: React.FC<DonationCompleteScreenProps> = ({
   navigation,
@@ -25,6 +27,20 @@ const DonationCompleteScreen: React.FC<DonationCompleteScreenProps> = ({
   const { t } = useTranslation();
   const queryClient = useQueryClient();
   const { donation, isFirstDonation, rank, totalDonated } = route.params;
+
+  // Share hook
+  const { isBottomSheetVisible, showBottomSheet, hideBottomSheet, handleShare: shareToplatform } = useShare();
+
+  // Prepare share data
+  const shareData: ShareData = useMemo(
+    () => ({
+      nickname: donation.nickname,
+      rank,
+      totalAmount: totalDonated || donation.amount,
+      donationCount: undefined, // Not available in this screen
+    }),
+    [donation, rank, totalDonated]
+  );
 
   /**
    * 메인 화면으로 돌아가기
@@ -40,12 +56,10 @@ const DonationCompleteScreen: React.FC<DonationCompleteScreenProps> = ({
   };
 
   /**
-   * 공유하기
-   * Placeholder: Social share implementation in Phase 12
-   * See: CLAUDE.md - Phase 12 (Social sharing)
+   * 공유 버튼 클릭 - Bottom Sheet 표시
    */
-  const handleShare = () => {
-    console.log('[DonationCompleteScreen] Share feature - Coming in Phase 12');
+  const handleShareButtonPress = () => {
+    showBottomSheet();
   };
 
   return (
@@ -102,7 +116,7 @@ const DonationCompleteScreen: React.FC<DonationCompleteScreenProps> = ({
 
       {/* Action Buttons */}
       <View style={styles.footer}>
-        <TouchableOpacity style={styles.shareButton} onPress={handleShare}>
+        <TouchableOpacity style={styles.shareButton} onPress={handleShareButtonPress}>
           <Text style={styles.shareButtonText}>{t('donationComplete.button.share')}</Text>
         </TouchableOpacity>
 
@@ -110,6 +124,13 @@ const DonationCompleteScreen: React.FC<DonationCompleteScreenProps> = ({
           <Text style={styles.backButtonText}>{t('donationComplete.button.backToMain')}</Text>
         </TouchableOpacity>
       </View>
+
+      {/* Share Bottom Sheet */}
+      <ShareBottomSheet
+        visible={isBottomSheetVisible}
+        onDismiss={hideBottomSheet}
+        onSelectPlatform={(platform) => shareToplatform(platform, shareData)}
+      />
     </View>
   );
 };
