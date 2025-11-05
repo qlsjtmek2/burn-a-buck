@@ -674,6 +674,234 @@
                     "(디버그|디버깅|트러블슈팅).*?(도와|해줘)"
                 ]
             }
+        },
+        "app-name-generator": {
+            "type": "domain",
+            "enforcement": "suggest",
+            "priority": "high",
+            "description": "Generate catchy, memorable app names with ASO optimization. Creates 10-15 name candidates across naming strategies and lets user select via AskUserQuestion. Use for brainstorming, rebranding, or creative naming.",
+            "promptTriggers": {
+                "keywords": [
+                    "app name",
+                    "앱 이름",
+                    "naming",
+                    "네이밍",
+                    "brand name",
+                    "브랜드 이름",
+                    "name ideas",
+                    "이름 아이디어",
+                    "brainstorm name",
+                    "이름 생각"
+                ],
+                "intentPatterns": [
+                    "(create|generate|brainstorm|suggest|need).*?(app name|앱 이름|name ideas)",
+                    "(help|suggest).*?(naming|네이밍|name)",
+                    "(생성|만들|제안).*?(앱 이름|이름)"
+                ]
+            }
+        },
+        "app-tagline-generator": {
+            "type": "domain",
+            "enforcement": "suggest",
+            "priority": "high",
+            "description": "Create concise app taglines (short descriptions) under 80 characters for Google Play and 30 characters for App Store subtitle. Generates 3-5 options with AskUserQuestion. Use for one-liners, marketing taglines, or store short descriptions.",
+            "promptTriggers": {
+                "keywords": [
+                    "tagline",
+                    "태그라인",
+                    "one-liner",
+                    "한 줄 설명",
+                    "short description",
+                    "짧은 설명",
+                    "subtitle",
+                    "부제목",
+                    "slogan",
+                    "슬로건",
+                    "catch phrase",
+                    "캐치 프레이즈"
+                ],
+                "intentPatterns": [
+                    "(create|generate|write|need).*?(tagline|한 줄 설명|short description|짧은 설명)",
+                    "(suggest|help).*?(tagline|slogan|one-liner|태그라인|슬로건)",
+                    "(생성|만들|작성).*?(태그라인|한 줄 설명|짧은 설명)"
+                ]
+            }
+        },
+        "app-description-generator": {
+            "type": "domain",
+            "enforcement": "suggest",
+            "priority": "high",
+            "description": "Create Google Play Store ASO-optimized app descriptions following 2025 best practices (max 1000 chars, 2.5-3% keyword density). Generates concise descriptions with strategic keyword placement, natural language flow, and bilingual versions (Korean + English). Includes ASO analysis and first 250-char optimization.",
+            "promptTriggers": {
+                "keywords": [
+                    "app description",
+                    "앱 설명",
+                    "store description",
+                    "스토어 설명",
+                    "full description",
+                    "전체 설명",
+                    "app store copy",
+                    "스토어 카피",
+                    "marketing copy",
+                    "마케팅 카피",
+                    "ASO",
+                    "ASO 최적화"
+                ],
+                "intentPatterns": [
+                    "(create|generate|write|need).*?(app description|앱 설명|store description|스토어 설명)",
+                    "(optimize|improve).*?(description|설명|ASO)",
+                    "(생성|만들|작성).*?(앱 설명|스토어 설명|전체 설명)"
+                ]
+            }
+        },
+        "app-visual-generator": {
+            "type": "domain",
+            "enforcement": "suggest",
+            "priority": "medium",
+            "description": "Generate AI image prompts for mobile app visuals including app icons (512x512px) and feature graphics (1024x500px). Covers cute, playful, minimalist designs following 2025 trends and Material Design 3 specifications.",
+            "promptTriggers": {
+                "keywords": [
+                    "app icon",
+                    "앱 아이콘",
+                    "icon design",
+                    "아이콘 디자인",
+                    "graphic image",
+                    "그래픽 이미지",
+                    "feature graphic",
+                    "store banner",
+                    "store graphic",
+                    "Play Store graphic",
+                    "App Store asset",
+                    "512x512",
+                    "1024x500",
+                    "cute icon",
+                    "귀여운 아이콘",
+                    "playful icon",
+                    "minimalist icon",
+                    "미니멀 아이콘",
+                    "3D icon",
+                    "Material Design",
+                    "visual branding",
+                    "app branding",
+                    "앱 브랜딩",
+                    "비주얼 디자인"
+                ],
+                "intentPatterns": [
+                    "(create|generate|design|make).*?(app icon|앱 아이콘|icon|아이콘)",
+                    "(create|generate|design|make).*?(graphic|그래픽|banner|visual|이미지)",
+                    "(create|generate|design|make).*?(feature graphic|store banner|Play Store graphic)",
+                    "(need|want).*?(512x512|1024x500|icon|graphic)",
+                    "(만들|생성|디자인).*?(앱 아이콘|아이콘|그래픽|이미지)",
+                    "(귀엽|playful|미니멀|3D).*?(아이콘|icon|디자인)"
+                ]
+            }
+        },
+        "image-background-remover": {
+            "type": "domain",
+            "enforcement": "suggest",
+            "priority": "high",
+            "description": "Remove backgrounds from images using AI and create multiple styled versions (transparent, solid ambient color, gradient ambient color). Use for image processing, background removal, app icon creation, icon design, transparent backgrounds, and creating assets with ambient color backgrounds. Handles PNG, JPG, and other common image formats.",
+            "promptTriggers": {
+                "keywords": [
+                    "background removal",
+                    "배경 제거",
+                    "remove background",
+                    "배경 없애",
+                    "transparent background",
+                    "투명 배경",
+                    "image processing",
+                    "이미지 처리",
+                    "ambient color",
+                    "앰비언트 컬러",
+                    "gradient background",
+                    "그라디언트 배경",
+                    "solid background",
+                    "단색 배경",
+                    "app icon",
+                    "앱 아이콘",
+                    "icon variations",
+                    "아이콘 변형",
+                    "product photo",
+                    "제품 사진",
+                    "design asset",
+                    "디자인 에셋",
+                    "remove bg",
+                    "rembg",
+                    "PNG",
+                    "asset creation",
+                    "에셋 생성",
+                    "multiple versions",
+                    "여러 버전"
+                ],
+                "intentPatterns": [
+                    "(remove|delete|cut|extract).*?(background|배경)",
+                    "(create|make|generate).*?(transparent|투명).*?(background|image|icon|배경|이미지|아이콘)",
+                    "(create|make|generate).*?(app icon|앱 아이콘|icon variations|아이콘 변형)",
+                    "(process|edit|modify).*?(image|photo|picture|이미지|사진)",
+                    "(ambient|gradient|solid).*?(color|background|배경|컬러)",
+                    "(배경|bg).*?(제거|없애|지우|투명)",
+                    "(만들|생성|처리).*?(투명|배경 없는|여러 버전)"
+                ]
+            },
+            "fileTriggers": {
+                "pathPatterns": [
+                    "assets/**/*.png",
+                    "assets/**/*.jpg",
+                    "assets/**/*.jpeg",
+                    "src/assets/**/*.png",
+                    "public/images/**/*.png"
+                ]
+            }
+        },
+        "app-icon-generator": {
+            "type": "domain",
+            "enforcement": "suggest",
+            "priority": "high",
+            "description": "Generate platform-specific app icons from single source icon. Creates adaptive-icon.png (Android), splash-icon.png (splash screen), and favicon.png (web) with proper dimensions and Safe Zone optimization.",
+            "promptTriggers": {
+                "keywords": [
+                    "app icon",
+                    "앱 아이콘",
+                    "adaptive icon",
+                    "적응형 아이콘",
+                    "splash icon",
+                    "스플래시 아이콘",
+                    "favicon",
+                    "파비콘",
+                    "icon generation",
+                    "아이콘 생성",
+                    "generate icons",
+                    "아이콘 만들기",
+                    "multi-platform icons",
+                    "멀티 플랫폼 아이콘",
+                    "Safe Zone",
+                    "세이프 존",
+                    "icon assets",
+                    "아이콘 에셋",
+                    "branding",
+                    "브랜딩",
+                    "app.json",
+                    "icon.png",
+                    "adaptive-icon.png",
+                    "splash-icon.png"
+                ],
+                "intentPatterns": [
+                    "(generate|create|make).*?(app icon|앱 아이콘|icons|아이콘)",
+                    "(create|generate|make).*?(adaptive icon|적응형 아이콘|splash icon|스플래시 아이콘|favicon|파비콘)",
+                    "(setup|configure|update).*?(branding|브랜딩|icons|아이콘)",
+                    "(convert|transform).*?(icon|아이콘).*?(multi-platform|멀티 플랫폼)",
+                    "(생성|만들|변환).*?(앱 아이콘|아이콘|아이콘 에셋)"
+                ]
+            },
+            "fileTriggers": {
+                "pathPatterns": [
+                    "assets/icon.png",
+                    "assets/adaptive-icon.png",
+                    "assets/splash-icon.png",
+                    "assets/favicon.png",
+                    "app.json"
+                ]
+            }
         }
     },
     "notes": {

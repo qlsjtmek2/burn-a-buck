@@ -957,6 +957,7 @@ Use these skills proactively when working on relevant tasks:
 - **app-deployment**: EAS Build, App Store/Google Play deployment
 - **web-research**: Up-to-date library documentation, best practices
 - **app-todolist-generator**: Generate comprehensive task lists
+- **app-icon-generator**: Generate platform-specific icons from single source icon (adaptive-icon, splash-icon, favicon)
 - **error-tracking**: Sentry integration (future)
 
 Invoke skills when implementing features in their domain without waiting for user requests.
