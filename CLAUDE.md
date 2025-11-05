@@ -11,6 +11,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - Phase 8 ✅ Complete (Payment Flow with Mock IAP)
 - Phase 9 ✅ Complete (Thank You Screen with Animations)
 - Phase 12 ✅ Complete (Social Sharing Feature)
+- Phase 13 ✅ Complete (Leaderboard Animations)
 - **⚠️ Using Mock IAP**: Currently using simulated payments for Expo Go testing
 - **Next Milestone**: Phase 17.5 - Migrate to real IAP with Development Build
 
@@ -876,6 +877,24 @@ Invoke skills when implementing features in their domain without waiting for use
   - ✅ i18n support (ko/en) for all share-related strings
   - ✅ TypeScript type safety verified
   - ⏳ Pending: KakaoTalk SDK integration (requires Development Build)
+- **Phase 13**: ✅ Leaderboard Animations Complete
+  - ❌ ~~**AnimatedListItem** (Top-down fade-in)~~ - **Removed**
+    - **Reason**: Repetitive viewing causes fatigue (app opens = animation plays)
+    - **Alternative**: Instant content display for faster access
+    - **Decision**: Prioritize quick content access over decorative animation
+  - ✅ **AnimatedNumber** component: Number counting animation
+    - Uses Reanimated `useAnimatedReaction` + `runOnJS`
+    - Smooth counting effect (700ms duration, Easing.out)
+    - Applied to rank numbers in TopRankersSection
+  - ✅ **usePrevious** hook: Data change detection
+    - Generic utility hook for tracking previous render values
+    - Essential for React Query data change detection
+  - ✅ **Slide-in animation** for new donations (RecentDonationsSection):
+    - Real-time feedback when new donors appear
+    - Uses `SlideInUp` (500ms) + `Layout.springify()` for smooth insertion
+    - Previous items slide down gracefully
+  - ✅ TypeScript type safety verified
+  - ✅ Performance optimized: Only 2 core animations (counting + slide-in)
 - **Refactoring Status**:
   - ✅ Type consolidation complete
   - ✅ Payment service modularization

@@ -4,12 +4,14 @@
  * 최근 기부 내역을 표시하는 섹션 (시간 포함)
  */
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator, FlatList } from 'react-native';
 import { useTranslation } from 'react-i18next';
+import Animated, { SlideInUp, Layout } from 'react-native-reanimated';
 import { useRecentDonations } from '../hooks/useLeaderboard';
 import { colors, typography } from '../../../theme';
 import { formatAmount, getTimeAgo } from '../../../utils/timeFormat';
+import { usePrevious } from '../../../utils/hooks/usePrevious';
 
 interface RecentDonation {
   id: string;
@@ -22,14 +24,36 @@ export const RecentDonationsSection: React.FC = () => {
   const { t } = useTranslation();
   const { data: recentDonations, isLoading, isError } = useRecentDonations(10);
 
+  // 새로 추가된 항목 추적
+  const previousData = usePrevious(recentDonations);
+  const [newItemIds, setNewItemIds] = useState<Set<string>>(new Set());
+
+  // 데이터 변경 감지
+  useEffect(() => {
+    if (!previousData || !recentDonations) return;
+
+    const prevIds = new Set(previousData.map((d) => d.id));
+    const newIds = recentDonations.filter((d) => !prevIds.has(d.id)).map((d) => d.id);
+
+    if (newIds.length > 0) {
+      setNewItemIds(new Set(newIds));
+
+      // 1초 후 new flag 제거 (애니메이션 완료 후)
+      setTimeout(() => {
+        setNewItemIds(new Set());
+      }, 1000);
+    }
+  }, [recentDonations, previousData]);
+
   /**
    * 각 기부 항목 렌더링
    */
   const renderDonationItem = ({ item, index }: { item: RecentDonation; index: number }) => {
     const isFirst = index === 0;
     const isLast = index === (recentDonations?.length ?? 0) - 1;
+    const isNewItem = newItemIds.has(item.id);
 
-    return (
+    const contentView = (
       <View
         style={[
           styles.donationItem,
@@ -51,6 +75,18 @@ export const RecentDonationsSection: React.FC = () => {
         </View>
       </View>
     );
+
+    // 새 항목: slide-in 애니메이션
+    if (isNewItem) {
+      return (
+        <Animated.View entering={SlideInUp.duration(500)} layout={Layout.springify()}>
+          {contentView}
+        </Animated.View>
+      );
+    }
+
+    // 일반 항목: 애니메이션 없음
+    return contentView;
   };
 
   /**

@@ -11,6 +11,7 @@ import { useTopRankers } from '../hooks/useLeaderboard';
 import { colors, typography } from '../../../theme';
 import { formatAmount } from '../../../utils/timeFormat';
 import type { LeaderboardEntry } from '../../../types/database.types';
+import { AnimatedNumber } from './AnimatedNumber';
 
 export const TopRankersSection: React.FC = () => {
   const { t } = useTranslation();
@@ -87,7 +88,11 @@ export const TopRankersSection: React.FC = () => {
         {/* 왼쪽: 순위 + 이모지 */}
         <View style={styles.rankSection}>
           <Text style={styles.rankEmoji}>{emoji}</Text>
-          <Text style={[styles.rankText, { color: borderColor }]}>{rank}위</Text>
+          <AnimatedNumber
+            value={rank}
+            suffix="위"
+            style={[styles.rankText, { color: borderColor }]}
+          />
         </View>
 
         {/* 중앙: 닉네임 + 금액 */}
