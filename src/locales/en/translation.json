@@ -216,6 +216,11 @@
         "message": "The link has been copied to clipboard."
       }
     },
+    "expoGoMode": {
+      "title": "Share Feature Limited",
+      "message": "Only general sharing is supported in Expo Go.\nDirect sharing to {{platform}} is available in the production build.",
+      "useGeneral": "Use General Share"
+    },
     "kakao": {
       "notAvailable": {
         "title": "KakaoTalk Share",

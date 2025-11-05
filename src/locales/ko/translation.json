@@ -216,6 +216,11 @@
         "message": "링크가 클립보드에 복사되었습니다."
       }
     },
+    "expoGoMode": {
+      "title": "공유 기능 제한",
+      "message": "Expo Go에서는 일반 공유만 지원됩니다.\n{{platform}}(으)로 직접 공유는 정식 빌드에서 가능합니다.",
+      "useGeneral": "일반 공유 사용"
+    },
     "kakao": {
       "notAvailable": {
         "title": "카카오톡 공유",

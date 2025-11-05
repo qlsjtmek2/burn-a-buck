@@ -425,6 +425,69 @@ type PaymentStatus =
 
 Product ID: `donate_1000won` (₩1,000)
 
+### Share Flow (Implemented - Platform-specific with Mock Mode)
+
+**⚠️ Current Mode: Mock Share for Expo Go Development**
+- **Status**: Using React Native built-in Share API to test flow without react-native-share
+- **Configuration**: `src/config/env.ts` - `SHARE_TEST_MODE = __DEV__`
+- **Benefits**:
+  - ✅ Test in Expo Go without Development Build
+  - ✅ Full share flow validation (general share, SMS, copy link)
+  - ✅ Platform-specific shares fallback to general share with user notification
+  - ✅ Faster development iteration
+- **Migration Plan**: Phase 17.5 - Switch to react-native-share with Development Build
+
+**Architecture**:
+- Platform abstraction via `shareService.ts` → `shareService.native.ts` / `shareService.expogo.ts` / `shareService.web.ts`
+- Custom hook: `useShare` manages share flow
+- ShareBottomSheet component for platform selection
+- **Mock/Real Share toggled by `SHARE_TEST_MODE`** (see `src/config/env.ts`)
+
+**Expo Go Mode (Mock)** - `shareService.expogo.ts`:
+1. **General Share** (`more`): React Native built-in `Share.share()` API
+   - ✅ Works in Expo Go
+   - ✅ System share sheet on both iOS and Android
+2. **Platform-specific shares** (`instagram`, `facebook`, `twitter`):
+   - ⚠️ Fallback to general share with notification
+   - Alert: "Expo Go에서는 일반 공유만 지원됩니다"
+3. **SMS Share**: `Linking.openURL()` with `sms:` scheme
+   - ✅ Works in Expo Go
+4. **Copy Link**: `expo-clipboard`
+   - ✅ Works in Expo Go
+5. **Kakao Share**: Alert + fallback to general share
+   - ⚠️ Requires KakaoTalk SDK (Phase 17.5)
+
+**Development Build Mode (Real)** - `shareService.native.ts`:
+1. **All shares**: `react-native-share` package
+   - ✅ Instagram direct share: `Share.Social.INSTAGRAM`
+   - ✅ Facebook direct share: `Share.Social.FACEBOOK`
+   - ✅ Twitter direct share: `Share.Social.TWITTER`
+   - ✅ General share: `Share.open()`
+2. **SMS, Copy Link**: Same as Mock mode (platform-independent)
+3. **Kakao Share**: KakaoTalk SDK integration (Phase 17.5)
+
+**Key Files**:
+- `src/config/env.ts` - **⚠️ Share mode configuration**
+- `src/services/shareService.ts` - Platform router (SHARE_TEST_MODE based)
+- `src/services/shareService.expogo.ts` - Expo Go Mock (RN built-in Share)
+- `src/services/shareService.native.ts` - Development Build Real (react-native-share)
+- `src/services/shareService.web.ts` - Web (Web Share API)
+- `src/features/share/hooks/useShare.ts` - Share flow hook
+- `src/features/share/components/ShareBottomSheet.tsx` - Platform selection UI
+- `src/utils/shareTemplates.ts` - Dynamic message generation
+
+**Share Platforms**:
+- `kakao`: KakaoTalk (Expo Go: fallback, Dev Build: SDK)
+- `instagram`: Instagram (Expo Go: fallback, Dev Build: direct)
+- `facebook`: Facebook (Expo Go: fallback, Dev Build: direct)
+- `twitter`: Twitter (Expo Go: fallback, Dev Build: direct)
+- `sms`: SMS (both modes: Linking API)
+- `copy_link`: Copy Link (both modes: expo-clipboard)
+- `more`: General Share (both modes: system share sheet)
+
+**Migration to Development Build**:
+When switching from Expo Go to Development Build, the share service automatically uses `shareService.native.ts` because `SHARE_TEST_MODE` becomes `false` in production builds. No code changes needed!
+
 ### First Donation Detection (Updated 2025-11-05)
 
 **⚠️ Major Refactoring**: user_id 제거, nickname 기반 구조로 전환
