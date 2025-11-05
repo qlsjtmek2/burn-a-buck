@@ -12,6 +12,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - Phase 9 ✅ Complete (Thank You Screen with Animations)
 - Phase 12 ✅ Complete (Social Sharing Feature)
 - Phase 13 ✅ Complete (Leaderboard Animations)
+- Phase 14 ✅ Complete (Error Handling & Edge Cases)
 - **⚠️ Using Mock IAP**: Currently using simulated payments for Expo Go testing
 - **Next Milestone**: Phase 17.5 - Migrate to real IAP with Development Build
 
@@ -27,6 +28,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **Internationalization**: i18next + expo-localization
 - **Animations**: React Native Reanimated 4.1
 - **Sharing**: react-native-share (social media) + expo-clipboard (link copy)
+- **Network Detection**: @react-native-community/netinfo (Expo Go compatible)
 
 ## Development Commands
 
@@ -202,6 +204,14 @@ src/
 │   │   └── hooks/useLeaderboard.ts
 │   ├── nickname/          # Nickname input feature module
 │   │   └── screens/NicknameScreen.tsx
+├── components/            # ✨ NEW: Common reusable components
+│   ├── common/
+│   │   ├── NetworkStatusBar.tsx  # Offline banner (Phase 14)
+│   │   └── EmptyState.tsx        # Empty state UI (Phase 14)
+│   └── leaderboard/
+│       └── LastUpdateIndicator.tsx  # Last update time (Phase 14)
+├── hooks/                 # ✨ NEW: Global custom hooks
+│   └── useNetworkStatus.ts       # Network state detection (Phase 14)
 ├── services/              # API clients (platform-specific when needed)
 │   ├── payment/           # ✨ NEW: Modular payment service
 │   │   ├── index.ts       # Platform router
@@ -242,6 +252,48 @@ src/
 ```
 
 **✨ Recent Development (2025-11-05)**:
+
+### Phase 14: 에러 처리 및 엣지 케이스 (2025-11-05)
+
+**구현 내용**: 네트워크 오프라인 모드, 마지막 업데이트 시간 표시, 빈 상태 UI 개선
+
+1. **Phase 14.1: 네트워크 상태 감지**:
+   - ✅ @react-native-community/netinfo 패키지 추가 (Expo Go 호환 확인)
+   - ✅ `useNetworkStatus` 훅 구현 (온라인/오프라인 감지)
+   - ✅ `NetworkStatusBar` 컴포넌트 (오프라인 시 상단 배너 표시)
+   - ✅ App.tsx에 통합
+
+2. **Phase 14.2: 마지막 업데이트 시간**:
+   - ✅ `LastUpdateIndicator` 컴포넌트 구현
+   - ✅ TopRankersSection, RecentDonationsSection에 적용
+   - ✅ React Query의 `dataUpdatedAt` 활용
+   - ✅ i18n 키 추가: `main.leaderboard.lastUpdated`
+
+3. **Phase 14.3: 빈 상태 UI 개선**:
+   - ✅ `EmptyState` 재사용 가능 컴포넌트 (이모지 + 제목 + 메시지)
+   - ✅ TopRankersSection, RecentDonationsSection 빈 상태 개선
+   - ✅ i18n 키 추가: `emptyState.topRanker`, `emptyState.recentDonations`
+   - ❌ 인라인 빈 상태 코드 제거 (~20줄)
+
+4. **타입 수정**:
+   - ✅ `timeFormat.ts` getTimeAgo 시그니처 변경 (number 지원)
+
+**결과**:
+- **새 파일**: 4개 (3 컴포넌트 + 1 훅)
+- **수정 파일**: 8개
+- **추가 코드**: ~180줄
+- **제거 코드**: ~20줄 (인라인 빈 상태)
+- **순증가**: +160줄
+
+**✅ 이미 구현된 기능** (추가 작업 불필요):
+- **자동 재시도 로직**: React Query 설정 완료 (retry: 3)
+- **결제 실패 다이얼로그**: PaymentErrorDialog 구현 완료
+
+**핵심 설계 원칙**:
+1. **기존 인프라 활용**: React Query의 retry, cache, staleTime 사용
+2. **최소한의 코드**: Phase 12 교훈 적용 (단순함의 가치)
+3. **재사용성**: EmptyState, LastUpdateIndicator는 다른 화면에서도 사용 가능
+4. **성능**: 추가 네트워크 요청 없음, React Query 캐시 활용
 
 ### Phase 12: 공유 기능 단순화 (2025-11-05)
 
