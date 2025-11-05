@@ -13,6 +13,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - Phase 12 ✅ Complete (Social Sharing Feature)
 - Phase 13 ✅ Complete (Leaderboard Animations)
 - Phase 14 ✅ Complete (Error Handling & Edge Cases)
+- Phase 15 ✅ Complete (Loading States & UX Improvements)
 - **⚠️ Using Mock IAP**: Currently using simulated payments for Expo Go testing
 - **Next Milestone**: Phase 17.5 - Migrate to real IAP with Development Build
 
@@ -29,6 +30,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **Animations**: React Native Reanimated 4.1
 - **Sharing**: react-native-share (social media) + expo-clipboard (link copy)
 - **Network Detection**: @react-native-community/netinfo (Expo Go compatible)
+- **Skeleton Loading**: Moti 0.30 (Shimmer skeleton with Reanimated 4.x)
 
 ## Development Commands
 
@@ -288,6 +290,43 @@ src/
 3. **재사용성**: EmptyState는 다른 화면에서도 사용 가능
 4. **성능**: 추가 네트워크 요청 없음, React Query 캐시 활용
 5. **불필요한 정보 제거**: 자동 업데이트 환경에서 "N초 전" 표시는 무의미
+
+### Phase 15: 로딩 상태 및 UX 개선 (2025-11-05)
+
+**구현 내용**: Moti Skeleton 로딩 + Pull-to-Refresh
+
+1. **Skeleton 로딩 (Moti 0.30)**:
+   - ✅ `moti` 패키지 설치 (Reanimated 4.x 호환)
+   - ✅ TopRankersSection: 3개 항목 skeleton (Shimmer 애니메이션)
+   - ✅ RecentDonationsSection: 10개 항목 skeleton (Shimmer 애니메이션)
+   - ❌ ActivityIndicator 제거 → Skeleton 로딩으로 교체
+   - ✅ 레이아웃 안정성 향상 (CLS 방지)
+
+2. **Pull-to-Refresh**:
+   - ✅ MainScreen에 RefreshControl 추가 (React Native 내장 API)
+   - ✅ React Query의 `invalidateQueries` 활용
+   - ✅ TopRankers + RecentDonations 동시 새로고침
+   - ✅ Platform-specific 색상 (Android: colors, iOS: tintColor)
+
+**결과**:
+- **새 파일**: 0개
+- **수정 파일**: 3개 (TopRankersSection, RecentDonationsSection, MainScreen)
+- **추가 코드**: ~90줄
+- **외부 의존성**: Moti 0.30 (Reanimated 4.x peer dependency)
+
+**핵심 설계 원칙**:
+1. **Reanimated 4.x 호환**: `react-native-skeleton-content` (구버전 Reanimated 2.1) 대신 Moti 사용
+2. **기존 인프라 활용**: React Query의 invalidateQueries로 Pull-to-Refresh 구현
+3. **프로페셔널한 UX**: Shimmer 애니메이션으로 로딩 상태 명확히 표시
+
+**Trade-off 분석**:
+- **Skeleton vs ActivityIndicator**: 레이아웃 안정성 ↑, 사용자 예측 가능성 ↑
+- **Moti 선택**: Expo Go 호환 + Reanimated 4.x 완벽 지원
+
+**Systematic Debugging 적용**:
+- **문제**: `react-native-skeleton-content`의 구버전 종속성 (`react-native-reanimated 2.1.0`, `react-native-redash 16.3.0`)이 `proc is not a function` 에러 유발
+- **해결**: Moti로 교체 (Reanimated 4.x 호환)
+- **교훈**: 외부 라이브러리 종속성을 항상 검증하고, 버전 호환성을 확인해야 함
 
 ### Phase 12: 공유 기능 단순화 (2025-11-05)
 

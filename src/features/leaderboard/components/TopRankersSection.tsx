@@ -5,8 +5,9 @@
  */
 
 import React from 'react';
-import { View, Text, StyleSheet, ActivityIndicator, FlatList } from 'react-native';
+import { View, Text, StyleSheet, FlatList } from 'react-native';
 import { useTranslation } from 'react-i18next';
+import { Skeleton } from 'moti/skeleton';
 import { useTopRankers } from '../hooks/useLeaderboard';
 import { colors, typography } from '../../../theme';
 import { formatAmount } from '../../../utils/timeFormat';
@@ -123,12 +124,57 @@ export const TopRankersSection: React.FC = () => {
     return <View style={styles.separator} />;
   };
 
+  /**
+   * Skeleton 로딩 렌더링 (3개 항목)
+   */
+  const renderSkeletonItem = (index: number) => {
+    const isFirst = index === 0;
+    const isLast = index === 2; // 3개 중 마지막
+
+    return (
+      <View
+        key={`skeleton-${index}`}
+        style={[
+          styles.rankerItem,
+          styles.skeletonItem,
+          isFirst && styles.firstItem,
+          isLast && styles.lastItem,
+        ]}
+      >
+        {/* 왼쪽: 순위 skeleton */}
+        <View style={styles.rankSection}>
+          <Skeleton colorMode="light" width={24} height={24} radius="round" />
+          <Skeleton colorMode="light" width={40} height={16} radius={4} />
+        </View>
+
+        {/* 중앙: 닉네임 + 금액 skeleton */}
+        <View style={styles.infoSection}>
+          <Skeleton colorMode="light" width="70%" height={18} radius={4} />
+          <View style={{ height: 4 }} />
+          <Skeleton colorMode="light" width="50%" height={16} radius={4} />
+        </View>
+
+        {/* 오른쪽: 통계 skeleton */}
+        <View style={styles.statsSection}>
+          <Skeleton colorMode="light" width={50} height={14} radius={4} />
+        </View>
+      </View>
+    );
+  };
+
   if (isLoading) {
     return (
       <View style={styles.container}>
         <Text style={styles.sectionTitle}>{t('main.leaderboard.topRanker')}</Text>
-        <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color={colors.primary} />
+        <View style={styles.listContainer}>
+          <Skeleton.Group show={true}>
+            {[0, 1, 2].map((index) => (
+              <React.Fragment key={`skeleton-wrapper-${index}`}>
+                {renderSkeletonItem(index)}
+                {index < 2 && <View style={styles.separator} />}
+              </React.Fragment>
+            ))}
+          </Skeleton.Group>
         </View>
       </View>
     );
@@ -173,10 +219,6 @@ const styles = StyleSheet.create({
     color: colors.text,
     marginBottom: 12,
     paddingHorizontal: 24,
-  },
-  loadingContainer: {
-    paddingVertical: 40,
-    alignItems: 'center',
   },
   listContainer: {
     backgroundColor: colors.surface,
@@ -241,6 +283,9 @@ const styles = StyleSheet.create({
     height: 1,
     backgroundColor: colors.border,
     marginHorizontal: 12,
+  },
+  skeletonItem: {
+    backgroundColor: colors.surface,
   },
 });
 

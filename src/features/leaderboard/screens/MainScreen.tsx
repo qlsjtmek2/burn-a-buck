@@ -5,8 +5,9 @@
  */
 
 import React, { useCallback, useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Alert } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, RefreshControl, Alert } from 'react-native';
 import { useTranslation } from 'react-i18next';
+import { useQueryClient } from '@tanstack/react-query';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import type { MainScreenProps } from '../../../types/navigation';
 import { colors, typography } from '../../../theme';
@@ -20,7 +21,9 @@ import { getNickname } from '../../../utils/nickname';
 
 const MainScreen: React.FC<MainScreenProps> = ({ navigation }) => {
   const { t } = useTranslation();
+  const queryClient = useQueryClient();
   const [nickname, setNickname] = useState<string>('');
+  const [refreshing, setRefreshing] = useState<boolean>(false);
 
   // 결제 플로우 관리 hook
   const { status, isLoading, error, startPayment, clearError } = useDonationPayment();
@@ -59,6 +62,25 @@ const MainScreen: React.FC<MainScreenProps> = ({ navigation }) => {
     clearError();
     await handleDonation();
   }, [clearError, handleDonation]);
+
+  /**
+   * Pull-to-refresh 핸들러
+   * React Query 캐시를 무효화하여 자동 refetch
+   */
+  const handleRefresh = useCallback(async () => {
+    setRefreshing(true);
+    try {
+      // TopRankers와 RecentDonations 캐시 무효화
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ['topRankers'] }),
+        queryClient.invalidateQueries({ queryKey: ['recentDonations'] }),
+      ]);
+    } catch (error) {
+      console.error('[MainScreen] Refresh error:', error);
+    } finally {
+      setRefreshing(false);
+    }
+  }, [queryClient]);
 
   /**
    * 개발용: 디버그 메뉴
@@ -121,6 +143,14 @@ const MainScreen: React.FC<MainScreenProps> = ({ navigation }) => {
         style={styles.content}
         contentContainerStyle={styles.contentContainer}
         showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={handleRefresh}
+            colors={[colors.primary]} // Android
+            tintColor={colors.primary} // iOS
+          />
+        }
       >
         {/* Top Rankers (1~3등) */}
         <TopRankersSection />
