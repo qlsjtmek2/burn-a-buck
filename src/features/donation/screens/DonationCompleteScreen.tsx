@@ -66,32 +66,37 @@ const DonationCompleteScreen: React.FC<DonationCompleteScreenProps> = ({
         {/* First Donor Badge (only for first donation) */}
         {isFirstDonation && <FirstDonorBadge />}
 
-        {/* Rank Display */}
+        {/* Rank Card */}
         {rank && (
-          <View style={styles.rankContainer}>
-            <Text style={styles.rankLabel}>{t('donationComplete.rank.label')}</Text>
-            <Text style={styles.rankValue}>
-              {t('donationComplete.rank.value', { rank })}
-            </Text>
+          <View style={styles.statsCard}>
+            <View style={styles.statRow}>
+              <Text style={styles.statLabel}>{t('donationComplete.rank.label')}</Text>
+              <Text style={styles.rankValue}>
+                {t('donationComplete.rank.value', { rank })}
+              </Text>
+            </View>
           </View>
         )}
 
-        {/* Total Donated Amount */}
-        {totalDonated && (
-          <View style={styles.totalDonatedContainer}>
-            <Text style={styles.totalDonatedLabel}>{t('donationComplete.totalDonated.label')}</Text>
-            <Text style={styles.totalDonatedAmount}>
-              {t('donationComplete.totalDonated.amount', { amount: totalDonated.toLocaleString() })}
+        {/* Amount Card - Total and current donation */}
+        <View style={styles.statsCard}>
+          {/* Total Donated */}
+          {totalDonated && (
+            <View style={styles.statRow}>
+              <Text style={styles.statLabel}>{t('donationComplete.totalDonated.label')}</Text>
+              <Text style={styles.totalDonatedValue}>
+                {t('donationComplete.totalDonated.amount', { amount: totalDonated.toLocaleString() })}
+              </Text>
+            </View>
+          )}
+
+          {/* This Donation */}
+          <View style={styles.statRow}>
+            <Text style={styles.statLabel}>{t('donationComplete.donation.label')}</Text>
+            <Text style={styles.donationValue}>
+              {t('donationComplete.donation.amount', { amount: donation.amount.toLocaleString() })}
             </Text>
           </View>
-        )}
-
-        {/* Donation Amount */}
-        <View style={styles.donationInfo}>
-          <Text style={styles.donationLabel}>{t('donationComplete.donation.label')}</Text>
-          <Text style={styles.donationAmount}>
-            {t('donationComplete.donation.amount', { amount: donation.amount.toLocaleString() })}
-          </Text>
         </View>
       </ScrollView>
 
@@ -121,69 +126,40 @@ const styles = StyleSheet.create({
     padding: 24,
     paddingTop: 48,
   },
-  rankContainer: {
+  statsCard: {
     backgroundColor: colors.surface,
     borderRadius: 12,
     padding: 20,
+    minWidth: 280,
+    width: '100%',
+    maxWidth: 400,
     marginBottom: 16,
-    minWidth: 200,
-    alignItems: 'center',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 3,
   },
-  rankLabel: {
+  statRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical: 4,
+  },
+  statLabel: {
     ...typography.bodyMedium,
     color: colors.textSecondary,
-    marginBottom: 8,
   },
   rankValue: {
     ...typography.displaySmall,
     color: colors.primary,
-  },
-  totalDonatedContainer: {
-    backgroundColor: colors.surface,
-    borderRadius: 12,
-    padding: 20,
-    marginBottom: 16,
-    minWidth: 200,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  totalDonatedLabel: {
-    ...typography.bodyMedium,
-    color: colors.textSecondary,
-    marginBottom: 8,
-  },
-  totalDonatedAmount: {
-    ...typography.headlineMedium,
-    color: colors.success,
     fontWeight: 'bold',
   },
-  donationInfo: {
-    backgroundColor: colors.surface,
-    borderRadius: 12,
-    padding: 20,
-    minWidth: 200,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
+  totalDonatedValue: {
+    ...typography.headlineMedium,
+    color: colors.success,
   },
-  donationLabel: {
-    ...typography.bodyMedium,
-    color: colors.textSecondary,
-    marginBottom: 8,
-  },
-  donationAmount: {
+  donationValue: {
     ...typography.headlineMedium,
     color: colors.text,
   },

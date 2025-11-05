@@ -818,3 +818,4 @@ t('main.leaderboard.donationCount', { count: 5 })  // "5회 기부" / "5 donatio
 - `useTopRankers(3)`: Fetches top 3 rankers with 30s auto-refresh
 - `useRecentDonations(10)`: Fetches recent 10 donations with 30s auto-refresh
 - `useLeaderboard(100)`: Fetches full leaderboard (future use)
+- 후원, 기부, 버리다 세 용어가 혼재되어있음. '버린다'라는 표현으로 통일한다.

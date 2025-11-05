@@ -106,11 +106,11 @@
       "value": "#{{rank}}"
     },
     "totalDonated": {
-      "label": "Total Donated",
+      "label": "Total Burned",
       "amount": "₩{{amount}}"
     },
     "donation": {
-      "label": "This Donation",
+      "label": "This Burn",
       "amount": "₩{{amount}}"
     },
     "badge": {

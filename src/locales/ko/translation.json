@@ -106,11 +106,11 @@
       "value": "{{rank}}위"
     },
     "totalDonated": {
-      "label": "총 후원금액",
+      "label": "총 버린 금액",
       "amount": "₩{{amount}}"
     },
     "donation": {
-      "label": "이번 기부 금액",
+      "label": "이번 버린 금액",
       "amount": "₩{{amount}}"
     },
     "badge": {
