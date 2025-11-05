@@ -33,7 +33,13 @@
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
-      "expo-font"
-    ]
+      "expo-font",
+      "expo-dev-client"
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "3c24f65b-a499-4c45-ab22-e2480c353be9"
+      }
+    }
   }
 }
