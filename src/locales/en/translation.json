@@ -105,8 +105,12 @@
       "label": "Current Rank",
       "value": "#{{rank}}"
     },
+    "totalDonated": {
+      "label": "Total Donated",
+      "amount": "₩{{amount}}"
+    },
     "donation": {
-      "label": "Donation Amount",
+      "label": "This Donation",
       "amount": "₩{{amount}}"
     },
     "badge": {

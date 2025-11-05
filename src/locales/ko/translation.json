@@ -105,8 +105,12 @@
       "label": "현재 순위",
       "value": "{{rank}}위"
     },
+    "totalDonated": {
+      "label": "총 후원금액",
+      "amount": "₩{{amount}}"
+    },
     "donation": {
-      "label": "기부 금액",
+      "label": "이번 기부 금액",
       "amount": "₩{{amount}}"
     },
     "badge": {

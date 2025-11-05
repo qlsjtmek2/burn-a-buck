@@ -11,6 +11,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { useTranslation } from 'react-i18next';
+import { useQueryClient } from '@tanstack/react-query';
 import type { DonationCompleteScreenProps } from '../../../types/navigation';
 import { colors, typography } from '../../../theme';
 import ThankYouMessage from '../components/ThankYouMessage';
@@ -22,12 +23,19 @@ const DonationCompleteScreen: React.FC<DonationCompleteScreenProps> = ({
   route,
 }) => {
   const { t } = useTranslation();
-  const { donation, isFirstDonation, rank } = route.params;
+  const queryClient = useQueryClient();
+  const { donation, isFirstDonation, rank, totalDonated } = route.params;
 
   /**
    * 메인 화면으로 돌아가기
    */
-  const handleBackToMain = () => {
+  const handleBackToMain = async () => {
+    // React Query 캐시 무효화 (메인 화면 즉시 업데이트)
+    console.log('[DonationCompleteScreen] Invalidating cache before navigation...');
+    await queryClient.invalidateQueries({ queryKey: ['leaderboard', 'top'] });
+    await queryClient.invalidateQueries({ queryKey: ['donations', 'recent'] });
+    await queryClient.invalidateQueries({ queryKey: ['leaderboard', 'full'] });
+
     navigation.navigate('Main');
   };
 
@@ -64,6 +72,16 @@ const DonationCompleteScreen: React.FC<DonationCompleteScreenProps> = ({
             <Text style={styles.rankLabel}>{t('donationComplete.rank.label')}</Text>
             <Text style={styles.rankValue}>
               {t('donationComplete.rank.value', { rank })}
+            </Text>
+          </View>
+        )}
+
+        {/* Total Donated Amount */}
+        {totalDonated && (
+          <View style={styles.totalDonatedContainer}>
+            <Text style={styles.totalDonatedLabel}>{t('donationComplete.totalDonated.label')}</Text>
+            <Text style={styles.totalDonatedAmount}>
+              {t('donationComplete.totalDonated.amount', { amount: totalDonated.toLocaleString() })}
             </Text>
           </View>
         )}
@@ -124,6 +142,29 @@ const styles = StyleSheet.create({
   rankValue: {
     ...typography.displaySmall,
     color: colors.primary,
+  },
+  totalDonatedContainer: {
+    backgroundColor: colors.surface,
+    borderRadius: 12,
+    padding: 20,
+    marginBottom: 16,
+    minWidth: 200,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  totalDonatedLabel: {
+    ...typography.bodyMedium,
+    color: colors.textSecondary,
+    marginBottom: 8,
+  },
+  totalDonatedAmount: {
+    ...typography.headlineMedium,
+    color: colors.success,
+    fontWeight: 'bold',
   },
   donationInfo: {
     backgroundColor: colors.surface,

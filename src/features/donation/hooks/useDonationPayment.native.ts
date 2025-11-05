@@ -9,8 +9,10 @@
 
 import { useState, useCallback, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
+import { useQueryClient } from '@tanstack/react-query';
 import type { StackNavigationProp } from '@react-navigation/stack';
 import { paymentService } from '../../../services/payment';
+import { getPostDonationData } from '../../../services/donationFlowService';
 import { getSavedNickname } from '../../../utils/donationStorage';
 import type { PaymentStatus, PaymentError, PaymentResult } from '../../../types/payment';
 import type { RootStackParamList } from '../../../types/navigation';
@@ -42,6 +44,7 @@ export interface UseDonationPaymentReturn {
  */
 export const useDonationPayment = (): UseDonationPaymentReturn => {
   const navigation = useNavigation<NavigationProp>();
+  const queryClient = useQueryClient();
 
   const [status, setStatus] = useState<PaymentStatus>('idle');
   const [error, setError] = useState<PaymentError | null>(null);
@@ -94,7 +97,16 @@ export const useDonationPayment = (): UseDonationPaymentReturn => {
         // PaymentService의 isFirstDonation 결과 신뢰 (DB 기반 판단)
         setIsFirstDonation(result.isFirstDonation || false);
 
-        // Step 5: 감사 화면으로 이동
+        // Step 5: 순위 및 총 후원금액 조회
+        console.log('[useDonationPayment] Fetching post-donation data...');
+        const postDonationData = await getPostDonationData(finalNickname);
+
+        const rank = postDonationData?.rank || undefined;
+        const totalDonated = postDonationData?.user?.total_donated || undefined;
+
+        console.log('[useDonationPayment] Post-donation data:', { rank, totalDonated });
+
+        // Step 6: 감사 화면으로 이동
         if (!result.donation) {
           throw new Error('Donation data is missing');
         }
@@ -106,9 +118,17 @@ export const useDonationPayment = (): UseDonationPaymentReturn => {
             amount: 1000,
           },
           isFirstDonation: result.isFirstDonation || false,
+          rank,
+          totalDonated,
         });
 
-        // Step 6: 상태 초기화
+        // Step 7: React Query 캐시 무효화 (메인 화면 즉시 업데이트)
+        console.log('[useDonationPayment] Invalidating React Query cache...');
+        await queryClient.invalidateQueries({ queryKey: ['leaderboard', 'top'] });
+        await queryClient.invalidateQueries({ queryKey: ['donations', 'recent'] });
+        await queryClient.invalidateQueries({ queryKey: ['leaderboard', 'full'] });
+
+        // Step 8: 상태 초기화
         setTimeout(() => {
           setStatus('idle');
         }, 1000);

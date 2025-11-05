@@ -25,6 +25,8 @@ export type RootStackParamList = {
     isFirstDonation: boolean;
     /** 사용자 순위 (선택사항) */
     rank?: number;
+    /** 총 후원금액 (선택사항) */
+    totalDonated?: number;
   };
 };
 
