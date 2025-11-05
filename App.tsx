@@ -17,6 +17,7 @@ import RootNavigator from './src/navigation/RootNavigator';
 // import { paymentService } from './src/services/payment';
 import { initializeI18n } from './src/config/i18n';
 import { theme } from './src/theme';
+import { NetworkStatusBar } from './src/components/common/NetworkStatusBar';
 
 // React Query Client 설정
 const queryClient = new QueryClient({
@@ -96,6 +97,7 @@ export default function App() {
       <PaperProvider theme={theme}>
         <SafeAreaProvider>
           <QueryClientProvider client={queryClient}>
+            <NetworkStatusBar />
             <RootNavigator />
             <StatusBar style="auto" />
           </QueryClientProvider>

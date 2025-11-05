@@ -6,14 +6,14 @@
 
 /**
  * 상대적 시간 표시 (X분 전, X시간 전 등)
- * @param dateString - ISO 8601 날짜 문자열
+ * @param date - ISO 8601 날짜 문자열 또는 timestamp (number)
  * @returns 상대적 시간 문자열
  */
-export const getTimeAgo = (dateString: string | null): string => {
-  if (!dateString) return '';
+export const getTimeAgo = (date: string | number | null): string => {
+  if (!date) return '';
 
   const now = new Date();
-  const past = new Date(dateString);
+  const past = typeof date === 'number' ? new Date(date) : new Date(date);
   const diffMs = now.getTime() - past.getTime();
   const diffSeconds = Math.floor(diffMs / 1000);
   const diffMinutes = Math.floor(diffSeconds / 60);

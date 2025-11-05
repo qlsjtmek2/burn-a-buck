@@ -12,10 +12,12 @@ import { colors, typography } from '../../../theme';
 import { formatAmount } from '../../../utils/timeFormat';
 import type { LeaderboardEntry } from '../../../types/database.types';
 import { AnimatedNumber } from './AnimatedNumber';
+import { LastUpdateIndicator } from '../../../components/leaderboard/LastUpdateIndicator';
+import { EmptyState } from '../../../components/common/EmptyState';
 
 export const TopRankersSection: React.FC = () => {
   const { t } = useTranslation();
-  const { data: topRankers, isLoading, isError } = useTopRankers(3);
+  const { data: topRankers, isLoading, isError, dataUpdatedAt } = useTopRankers(3);
 
   /**
    * 순위별 테두리 색상
@@ -136,17 +138,24 @@ export const TopRankersSection: React.FC = () => {
   if (isError || !topRankers || topRankers.length === 0) {
     return (
       <View style={styles.container}>
-        <Text style={styles.sectionTitle}>{t('main.leaderboard.topRanker')}</Text>
-        <View style={styles.emptyContainer}>
-          <Text style={styles.emptyText}>{t('main.leaderboard.noData')}</Text>
+        <View style={styles.titleContainer}>
+          <Text style={styles.sectionTitle}>{t('main.leaderboard.topRanker')}</Text>
         </View>
+        <EmptyState
+          icon="🗑️"
+          title={t('main.leaderboard.emptyState.topRanker.title')}
+          message={t('main.leaderboard.emptyState.topRanker.message')}
+        />
       </View>
     );
   }
 
   return (
     <View style={styles.container}>
-      <Text style={styles.sectionTitle}>{t('main.leaderboard.topRanker')}</Text>
+      <View style={styles.titleContainer}>
+        <Text style={styles.sectionTitle}>{t('main.leaderboard.topRanker')}</Text>
+        <LastUpdateIndicator timestamp={dataUpdatedAt} />
+      </View>
       <View style={styles.listContainer}>
         <FlatList
           data={topRankers}
@@ -165,23 +174,17 @@ const styles = StyleSheet.create({
   container: {
     marginBottom: 24,
   },
+  titleContainer: {
+    paddingHorizontal: 24,
+    marginBottom: 12,
+  },
   sectionTitle: {
     ...typography.sectionTitle,
     color: colors.text,
-    marginBottom: 12,
-    paddingHorizontal: 24,
   },
   loadingContainer: {
     paddingVertical: 40,
     alignItems: 'center',
-  },
-  emptyContainer: {
-    paddingVertical: 40,
-    alignItems: 'center',
-  },
-  emptyText: {
-    ...typography.bodyMedium,
-    color: colors.textSecondary,
   },
   listContainer: {
     backgroundColor: colors.surface,

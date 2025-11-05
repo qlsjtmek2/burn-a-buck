@@ -22,6 +22,9 @@
       "message": "An error occurred. Please try again."
     }
   },
+  "network": {
+    "offline": "No Network Connection"
+  },
   "onboarding": {
     "title": "Burn a Buck",
     "subtitle": "Donate ₩1,000 and\nreceive a thank you message",
@@ -66,7 +69,18 @@
       "donationCount": "{{count}} donations",
       "noData": "No donations yet",
       "placeholder": "Leaderboard Area",
-      "placeholderSubtitle": "Coming in Phase 7"
+      "placeholderSubtitle": "Coming in Phase 7",
+      "lastUpdated": "Last updated: {{time}}",
+      "emptyState": {
+        "topRanker": {
+          "title": "No Rankers Yet",
+          "message": "Be the first to donate and\njoin the Hall of Fame!"
+        },
+        "recentDonations": {
+          "title": "No Donations Yet",
+          "message": "Be the first donor!"
+        }
+      }
     },
     "button": {
       "donate": "Donate ₩1,000 Here"

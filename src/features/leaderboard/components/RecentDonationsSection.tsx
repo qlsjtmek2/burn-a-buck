@@ -12,6 +12,8 @@ import { useRecentDonations } from '../hooks/useLeaderboard';
 import { colors, typography } from '../../../theme';
 import { formatAmount, getTimeAgo } from '../../../utils/timeFormat';
 import { usePrevious } from '../../../utils/hooks/usePrevious';
+import { LastUpdateIndicator } from '../../../components/leaderboard/LastUpdateIndicator';
+import { EmptyState } from '../../../components/common/EmptyState';
 
 interface RecentDonation {
   id: string;
@@ -22,7 +24,7 @@ interface RecentDonation {
 
 export const RecentDonationsSection: React.FC = () => {
   const { t } = useTranslation();
-  const { data: recentDonations, isLoading, isError } = useRecentDonations(10);
+  const { data: recentDonations, isLoading, isError, dataUpdatedAt } = useRecentDonations(10);
 
   // 새로 추가된 항목 추적
   const previousData = usePrevious(recentDonations);
@@ -110,17 +112,24 @@ export const RecentDonationsSection: React.FC = () => {
   if (isError || !recentDonations || recentDonations.length === 0) {
     return (
       <View style={styles.container}>
-        <Text style={styles.sectionTitle}>{t('main.leaderboard.recentDonations')}</Text>
-        <View style={styles.emptyContainer}>
-          <Text style={styles.emptyText}>{t('main.leaderboard.noData')}</Text>
+        <View style={styles.titleContainer}>
+          <Text style={styles.sectionTitle}>{t('main.leaderboard.recentDonations')}</Text>
         </View>
+        <EmptyState
+          icon="💸"
+          title={t('main.leaderboard.emptyState.recentDonations.title')}
+          message={t('main.leaderboard.emptyState.recentDonations.message')}
+        />
       </View>
     );
   }
 
   return (
     <View style={styles.container}>
-      <Text style={styles.sectionTitle}>{t('main.leaderboard.recentDonations')}</Text>
+      <View style={styles.titleContainer}>
+        <Text style={styles.sectionTitle}>{t('main.leaderboard.recentDonations')}</Text>
+        <LastUpdateIndicator timestamp={dataUpdatedAt} />
+      </View>
       <View style={styles.listContainer}>
         <FlatList
           data={recentDonations}
@@ -139,23 +148,17 @@ const styles = StyleSheet.create({
   container: {
     marginBottom: 24,
   },
+  titleContainer: {
+    paddingHorizontal: 24,
+    marginBottom: 16,
+  },
   sectionTitle: {
     ...typography.sectionTitle,
     color: colors.text,
-    marginBottom: 16,
-    paddingHorizontal: 24,
   },
   loadingContainer: {
     paddingVertical: 40,
     alignItems: 'center',
-  },
-  emptyContainer: {
-    paddingVertical: 40,
-    alignItems: 'center',
-  },
-  emptyText: {
-    ...typography.bodyMedium,
-    color: colors.textSecondary,
   },
   listContainer: {
     backgroundColor: colors.surface,

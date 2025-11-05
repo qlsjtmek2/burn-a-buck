@@ -22,6 +22,9 @@
       "message": "오류가 발생했습니다. 다시 시도해주세요."
     }
   },
+  "network": {
+    "offline": "네트워크 연결 없음"
+  },
   "onboarding": {
     "title": "천원 쓰레기통",
     "subtitle": "천원을 기부하고\n감사 메시지를 받아보세요",
@@ -66,7 +69,18 @@
       "donationCount": "{{count}}회 기부",
       "noData": "아직 기부 내역이 없습니다",
       "placeholder": "리더보드 영역",
-      "placeholderSubtitle": "Phase 7에서 구현 예정"
+      "placeholderSubtitle": "Phase 7에서 구현 예정",
+      "lastUpdated": "마지막 업데이트: {{time}}",
+      "emptyState": {
+        "topRanker": {
+          "title": "아직 랭커가 없어요",
+          "message": "첫 번째로 기부하고\n명예의 전당에 등록하세요!"
+        },
+        "recentDonations": {
+          "title": "아직 기부 내역이 없어요",
+          "message": "첫 번째 기부자가 되어보세요!"
+        }
+      }
     },
     "button": {
       "donate": "여기에 천원 버리기"
