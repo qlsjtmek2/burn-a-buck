@@ -14,8 +14,9 @@ export const IS_DEV = __DEV__;
  * - false: 실제 IAP 사용
  *
  * 개발 중에는 true로 설정하여 Google Play Console 등록 없이 테스트 가능
+ * Development Build에서 실제 IAP 테스트: USE_REAL_IAP=true 설정
  */
-export const IAP_TEST_MODE = IS_DEV;
+export const IAP_TEST_MODE = IS_DEV && !process.env.USE_REAL_IAP;
 
 /**
  * Share 테스트 모드
