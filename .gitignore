@@ -45,3 +45,4 @@ docs/
 
 # Claude Code settings (local development environment)
 .claude/*.zip
+.claude/tsc-cache/
