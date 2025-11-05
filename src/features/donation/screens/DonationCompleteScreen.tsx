@@ -17,7 +17,7 @@ import { colors, typography } from '../../../theme';
 import ThankYouMessage from '../components/ThankYouMessage';
 import FirstDonorBadge from '../components/FirstDonorBadge';
 import CelebrationAnimation from '../components/CelebrationAnimation';
-import { ShareBottomSheet, useShare } from '../../share';
+import { shareGeneral } from '../../../services/shareService';
 import type { ShareData } from '../../../types/share';
 
 const DonationCompleteScreen: React.FC<DonationCompleteScreenProps> = ({
@@ -27,9 +27,6 @@ const DonationCompleteScreen: React.FC<DonationCompleteScreenProps> = ({
   const { t } = useTranslation();
   const queryClient = useQueryClient();
   const { donation, isFirstDonation, rank, totalDonated } = route.params;
-
-  // Share hook
-  const { isBottomSheetVisible, showBottomSheet, hideBottomSheet, handleShare: shareToplatform } = useShare();
 
   // Prepare share data
   const shareData: ShareData = useMemo(
@@ -56,10 +53,10 @@ const DonationCompleteScreen: React.FC<DonationCompleteScreenProps> = ({
   };
 
   /**
-   * 공유 버튼 클릭 - Bottom Sheet 표시
+   * 공유 버튼 클릭 - 시스템 공유 시트 표시
    */
-  const handleShareButtonPress = () => {
-    showBottomSheet();
+  const handleShareButtonPress = async () => {
+    await shareGeneral(shareData);
   };
 
   return (
@@ -124,13 +121,6 @@ const DonationCompleteScreen: React.FC<DonationCompleteScreenProps> = ({
           <Text style={styles.backButtonText}>{t('donationComplete.button.backToMain')}</Text>
         </TouchableOpacity>
       </View>
-
-      {/* Share Bottom Sheet */}
-      <ShareBottomSheet
-        visible={isBottomSheetVisible}
-        onDismiss={hideBottomSheet}
-        onSelectPlatform={(platform) => shareToplatform(platform, shareData)}
-      />
     </View>
   );
 };
@@ -195,6 +185,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     alignItems: 'center',
     marginBottom: 20,
+    width: '100%',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 6 },
     shadowOpacity: 0.3,

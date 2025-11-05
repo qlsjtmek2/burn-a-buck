@@ -1,49 +1,67 @@
 /**
- * Share Service (Platform Router)
+ * Share Service (Native Version)
  *
- * 플랫폼과 환경에 따라 적절한 공유 서비스 구현을 선택합니다.
- *
- * - Expo Go (SHARE_TEST_MODE=true): shareService.expogo.ts (Mock)
- * - Development Build (SHARE_TEST_MODE=false): shareService.native.ts (Real)
- * - Web: shareService.web.ts (Web Share API)
- *
- * React Native의 Platform-specific extensions를 사용하여
- * 빌드 시점에 적절한 파일이 자동으로 선택됩니다.
+ * 시스템 공유 시트를 사용한 일반 공유 서비스
+ * - react-native-share가 있으면 사용
+ * - 없으면 React Native 내장 Share API 사용 (Expo Go)
  */
 
-import { SHARE_TEST_MODE } from '../config/env';
+import { ShareData } from '../types/share';
+import { createShareMessage } from '../utils/shareTemplates';
 
 /**
- * 플랫폼별 구현 선택
+ * Optional react-native-share import with fallback
  *
- * React Native는 다음 순서로 파일을 찾습니다:
- * 1. .native.ts (Android/iOS)
- * 2. .ios.ts / .android.ts (플랫폼별)
- * 3. .web.ts (Web)
- * 4. .ts (기본)
- *
- * 하지만 Expo Go 환경에서는 네이티브 모듈이 없으므로
- * SHARE_TEST_MODE로 런타임에 선택합니다.
+ * react-native-share를 optional로 로드하여, Expo Go 환경에서
+ * 네이티브 모듈이 없어도 오류가 발생하지 않도록 합니다.
  */
+let Share: any = null;
+let shareAvailable = false;
 
-let shareServiceImpl: any;
-
-if (SHARE_TEST_MODE) {
-  // Expo Go 환경: Mock 버전 사용
-  console.log('[ShareService] Using Expo Go Mock implementation');
-  shareServiceImpl = require('./shareService.expogo');
-} else {
-  // Development Build / Production: Real 버전 사용
-  console.log('[ShareService] Using Native implementation');
-  shareServiceImpl = require('./shareService.native');
+try {
+  Share = require('react-native-share').default;
+  shareAvailable = true;
+  console.log('[ShareService] react-native-share loaded');
+} catch (error) {
+  console.log('[ShareService] Using fallback Share API');
+  shareAvailable = false;
 }
 
-// Export all functions from selected implementation
-export const {
-  shareToSocial,
-  shareGeneral,
-  shareToSMS,
-  copyLink,
-  shareToKakao,
-  shareToPlatform,
-} = shareServiceImpl;
+/**
+ * 시스템 공유 시트 표시
+ *
+ * react-native-share가 있으면 사용하고, 없으면 React Native 내장 Share API로 폴백
+ */
+export const shareGeneral = async (data: ShareData): Promise<void> => {
+  const { title, message, url } = createShareMessage(data);
+  const fullMessage = `${message}\n\n${url}`;
+
+  try {
+    if (shareAvailable && Share) {
+      // react-native-share 사용
+      await Share.open({
+        title,
+        message: fullMessage,
+        url,
+      });
+    } else {
+      // 폴백: React Native 내장 Share API 사용
+      const { Share: RNShare } = require('react-native');
+      await RNShare.share(
+        {
+          title,
+          message: fullMessage,
+        },
+        {
+          dialogTitle: title,
+        }
+      );
+    }
+  } catch (error: any) {
+    // 사용자가 취소한 경우는 조용히 무시
+    if (error.message !== 'User did not share') {
+      console.error('[shareGeneral] error:', error);
+      throw error;
+    }
+  }
+};

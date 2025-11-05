@@ -189,49 +189,11 @@
     }
   },
   "share": {
-    "title": "Share",
-    "platform": {
-      "kakao": "KakaoTalk",
-      "instagram": "Instagram",
-      "facebook": "Facebook",
-      "twitter": "Twitter",
-      "sms": "SMS",
-      "copyLink": "Copy Link",
-      "more": "More"
-    },
     "template": {
       "title": "Burn a Buck",
-      "message": "I just burned a buck! 💸\n{{rankText}}{{countText}}\nTotal burned: ₩{{amount}}\n\n{{link}}",
+      "message": "I just burned a buck! 💸\n{{rankText}}{{countText}}\nTotal burned: ₩{{amount}}",
       "withRank": "Currently ranked #{{rank}}!\n",
-      "withCount": "{{count}} times burned so far\n",
-      "sms": "I just burned a buck! 💸 Total ₩{{amount}} burned 👉 {{link}}",
-      "kakao": {
-        "title": "{{nickname}} just burned a buck! 💸",
-        "button": "Burn mine too"
-      }
-    },
-    "copyLink": {
-      "success": {
-        "title": "Link Copied",
-        "message": "The link has been copied to clipboard."
-      }
-    },
-    "expoGoMode": {
-      "title": "Share Feature Limited",
-      "message": "Only general sharing is supported in Expo Go.\nDirect sharing to {{platform}} is available in the production build.",
-      "useGeneral": "Use General Share"
-    },
-    "kakao": {
-      "notAvailable": {
-        "title": "KakaoTalk Share",
-        "message": "KakaoTalk sharing is only available in the app build version.\nWould you like to use general sharing?",
-        "useGeneral": "Use General Share"
-      }
-    },
-    "error": {
-      "title": "Share Failed",
-      "message": "Failed to share to {{platform}}.",
-      "unknown": "An error occurred while sharing."
+      "withCount": "{{count}} times burned so far\n"
     }
   }
 }

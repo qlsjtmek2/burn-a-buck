@@ -1,7 +1,7 @@
 /**
  * Share Templates
  *
- * 공유 메시지 템플릿 생성 함수
+ * 시스템 공유 메시지 템플릿 생성 함수
  */
 
 import { ShareData, ShareMessage } from '../types/share';
@@ -38,52 +38,5 @@ export const createShareMessage = (data: ShareData): ShareMessage => {
     title: i18n.t('share.template.title'),
     message,
     url: APP_LINK,
-  };
-};
-
-/**
- * SMS용 짧은 메시지 생성
- */
-export const createSMSMessage = (data: ShareData): string => {
-  const { nickname, totalAmount } = data;
-
-  return i18n.t('share.template.sms', {
-    nickname,
-    amount: totalAmount.toLocaleString('ko-KR'),
-    link: APP_LINK,
-  });
-};
-
-/**
- * 카카오톡용 메시지 생성 (구조화된 데이터)
- */
-export const createKakaoMessage = (data: ShareData) => {
-  const { nickname, rank, totalAmount } = data;
-
-  const rankText = rank ? `${rank}위` : '';
-  const description = rank
-    ? `현재 ${rankText}로 등극! 총 ${totalAmount.toLocaleString('ko-KR')}원`
-    : `총 ${totalAmount.toLocaleString('ko-KR')}원 버림`;
-
-  return {
-    objectType: 'feed' as const,
-    content: {
-      title: i18n.t('share.template.kakao.title', { nickname }),
-      description,
-      imageUrl: 'https://burn-a-buck.app/images/share-image.png', // TODO: Replace with actual image
-      link: {
-        mobileWebUrl: APP_LINK,
-        webUrl: APP_LINK,
-      },
-    },
-    buttons: [
-      {
-        title: i18n.t('share.template.kakao.button'),
-        link: {
-          mobileWebUrl: APP_LINK,
-          webUrl: APP_LINK,
-        },
-      },
-    ],
   };
 };

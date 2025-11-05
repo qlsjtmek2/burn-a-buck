@@ -189,49 +189,11 @@
     }
   },
   "share": {
-    "title": "공유하기",
-    "platform": {
-      "kakao": "카카오톡",
-      "instagram": "인스타그램",
-      "facebook": "페이스북",
-      "twitter": "트위터",
-      "sms": "문자 메시지",
-      "copyLink": "링크 복사",
-      "more": "더 보기"
-    },
     "template": {
       "title": "천원 쓰레기통",
-      "message": "나도 천원 쓰레기통에 천원을 버렸어요! 💸\n{{rankText}}{{countText}}\n총 버린 금액: {{amount}}원\n\n{{link}}",
+      "message": "나도 천원 쓰레기통에 천원을 버렸어요! 💸\n{{rankText}}{{countText}}\n총 버린 금액: {{amount}}원",
       "withRank": "현재 {{rank}}위로 등극!\n",
-      "withCount": "지금까지 {{count}}회 버림\n",
-      "sms": "나도 천원 쓰레기통에 천원을 버렸어요! 💸 총 {{amount}}원 버림 👉 {{link}}",
-      "kakao": {
-        "title": "{{nickname}}님이 천원을 버렸어요! 💸",
-        "button": "나도 버리러 가기"
-      }
-    },
-    "copyLink": {
-      "success": {
-        "title": "링크 복사 완료",
-        "message": "링크가 클립보드에 복사되었습니다."
-      }
-    },
-    "expoGoMode": {
-      "title": "공유 기능 제한",
-      "message": "Expo Go에서는 일반 공유만 지원됩니다.\n{{platform}}(으)로 직접 공유는 정식 빌드에서 가능합니다.",
-      "useGeneral": "일반 공유 사용"
-    },
-    "kakao": {
-      "notAvailable": {
-        "title": "카카오톡 공유",
-        "message": "카카오톡 공유는 앱 빌드 버전에서만 사용 가능합니다.\n일반 공유를 사용하시겠습니까?",
-        "useGeneral": "일반 공유 사용"
-      }
-    },
-    "error": {
-      "title": "공유 실패",
-      "message": "{{platform}} 공유에 실패했습니다.",
-      "unknown": "공유 중 오류가 발생했습니다."
+      "withCount": "지금까지 {{count}}회 버림\n"
     }
   }
 }
