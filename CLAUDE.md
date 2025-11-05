@@ -205,11 +205,9 @@ src/
 │   ├── nickname/          # Nickname input feature module
 │   │   └── screens/NicknameScreen.tsx
 ├── components/            # ✨ NEW: Common reusable components
-│   ├── common/
-│   │   ├── NetworkStatusBar.tsx  # Offline banner (Phase 14)
-│   │   └── EmptyState.tsx        # Empty state UI (Phase 14)
-│   └── leaderboard/
-│       └── LastUpdateIndicator.tsx  # Last update time (Phase 14)
+│   └── common/
+│       ├── NetworkStatusBar.tsx  # Offline banner (Phase 14)
+│       └── EmptyState.tsx        # Empty state UI (Phase 14)
 ├── hooks/                 # ✨ NEW: Global custom hooks
 │   └── useNetworkStatus.ts       # Network state detection (Phase 14)
 ├── services/              # API clients (platform-specific when needed)
@@ -255,7 +253,7 @@ src/
 
 ### Phase 14: 에러 처리 및 엣지 케이스 (2025-11-05)
 
-**구현 내용**: 네트워크 오프라인 모드, 마지막 업데이트 시간 표시, 빈 상태 UI 개선
+**구현 내용**: 네트워크 오프라인 모드, 빈 상태 UI 개선
 
 1. **Phase 14.1: 네트워크 상태 감지**:
    - ✅ @react-native-community/netinfo 패키지 추가 (Expo Go 호환 확인)
@@ -263,37 +261,33 @@ src/
    - ✅ `NetworkStatusBar` 컴포넌트 (오프라인 시 상단 배너 표시)
    - ✅ App.tsx에 통합
 
-2. **Phase 14.2: 마지막 업데이트 시간**:
-   - ✅ `LastUpdateIndicator` 컴포넌트 구현
-   - ✅ TopRankersSection, RecentDonationsSection에 적용
-   - ✅ React Query의 `dataUpdatedAt` 활용
-   - ✅ i18n 키 추가: `main.leaderboard.lastUpdated`
-
-3. **Phase 14.3: 빈 상태 UI 개선**:
+2. **Phase 14.2: 빈 상태 UI 개선**:
    - ✅ `EmptyState` 재사용 가능 컴포넌트 (이모지 + 제목 + 메시지)
    - ✅ TopRankersSection, RecentDonationsSection 빈 상태 개선
    - ✅ i18n 키 추가: `emptyState.topRanker`, `emptyState.recentDonations`
    - ❌ 인라인 빈 상태 코드 제거 (~20줄)
 
-4. **타입 수정**:
+3. **타입 수정**:
    - ✅ `timeFormat.ts` getTimeAgo 시그니처 변경 (number 지원)
 
 **결과**:
-- **새 파일**: 4개 (3 컴포넌트 + 1 훅)
-- **수정 파일**: 8개
-- **추가 코드**: ~180줄
+- **새 파일**: 3개 (2 컴포넌트 + 1 훅)
+- **수정 파일**: 6개
+- **추가 코드**: ~120줄
 - **제거 코드**: ~20줄 (인라인 빈 상태)
-- **순증가**: +160줄
+- **순증가**: +100줄
 
 **✅ 이미 구현된 기능** (추가 작업 불필요):
 - **자동 재시도 로직**: React Query 설정 완료 (retry: 3)
 - **결제 실패 다이얼로그**: PaymentErrorDialog 구현 완료
+- **마지막 업데이트 시간**: 30초 자동 refetch로 불필요 (제거됨)
 
 **핵심 설계 원칙**:
 1. **기존 인프라 활용**: React Query의 retry, cache, staleTime 사용
 2. **최소한의 코드**: Phase 12 교훈 적용 (단순함의 가치)
-3. **재사용성**: EmptyState, LastUpdateIndicator는 다른 화면에서도 사용 가능
+3. **재사용성**: EmptyState는 다른 화면에서도 사용 가능
 4. **성능**: 추가 네트워크 요청 없음, React Query 캐시 활용
+5. **불필요한 정보 제거**: 자동 업데이트 환경에서 "N초 전" 표시는 무의미
 
 ### Phase 12: 공유 기능 단순화 (2025-11-05)
 
