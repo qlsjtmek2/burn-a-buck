@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "temp-expo",
-    "slug": "temp-expo",
+    "name": "천원 쓰레기통",
+    "slug": "burn-a-buck",
     "version": "1.0.0",
     "orientation": "portrait",
     "updates": {
@@ -17,7 +17,8 @@
       "backgroundColor": "#F59E0B"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.qlsjtmek2.burnaabuck"
     },
     "android": {
       "adaptiveIcon": {
@@ -25,7 +26,8 @@
         "backgroundColor": "#F59E0B"
       },
       "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "package": "com.qlsjtmek2.burnaabuck"
     },
     "web": {
       "favicon": "./assets/favicon.png"
