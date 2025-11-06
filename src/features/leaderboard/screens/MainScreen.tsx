@@ -118,7 +118,7 @@ const MainScreen: React.FC<MainScreenProps> = ({ navigation }) => {
     <View style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
-        <Text style={styles.headerEmoji}>🗑️</Text>
+        {/* <Text style={styles.headerEmoji}>🗑️</Text> */}
 
         {nickname && (
           <Text style={styles.headerGreeting}>
@@ -127,7 +127,7 @@ const MainScreen: React.FC<MainScreenProps> = ({ navigation }) => {
         )}
 
         {/* 개발용 디버그 버튼 - 프로덕션 빌드에서 자동 제거 */}
-        {__DEV__ && (
+        {/* {__DEV__ && (
           <TouchableOpacity
             style={styles.devButton}
             onPress={handleDebugMenu}
@@ -135,7 +135,7 @@ const MainScreen: React.FC<MainScreenProps> = ({ navigation }) => {
           >
             <Text style={styles.devButtonText}>🔧</Text>
           </TouchableOpacity>
-        )}
+        )} */}
       </View>
 
       {/* Content - 스크롤 가능한 리더보드 섹션들 */}

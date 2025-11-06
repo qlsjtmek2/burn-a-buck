@@ -77,7 +77,6 @@ export const NicknameInputSlide: React.FC<NicknameInputSlideProps> = ({
             maxLength={maxChars}
             autoCapitalize="none"
             autoCorrect={false}
-            autoFocus
           />
 
           {/* 에러 메시지 영역 (TextField 바로 아래 왼쪽) */}

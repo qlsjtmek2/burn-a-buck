@@ -4,7 +4,7 @@
  * 온보딩 스크롤 로직 관리
  */
 
-import { useRef, useState, useCallback } from 'react';
+import React, { useRef, useState, useCallback } from 'react';
 import { ScrollView, Dimensions, NativeSyntheticEvent, NativeScrollEvent } from 'react-native';
 import type { OnboardingSlideData } from '../components/OnboardingSlide';
 
@@ -33,6 +33,18 @@ export const useOnboarding = ({
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const isLastSlide = currentIndex === totalSlides - 1;
+
+  /**
+   * ScrollView 마운트 시 초기 위치를 명시적으로 0으로 설정
+   */
+  React.useEffect(() => {
+    // 다음 프레임에서 실행하여 레이아웃 완료 후 스크롤 위치 설정
+    const timer = setTimeout(() => {
+      scrollViewRef.current?.scrollTo({ x: 0, y: 0, animated: false });
+    }, 0);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   /**
    * 다음 슬라이드로 이동
