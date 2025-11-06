@@ -14,7 +14,7 @@ import {
   PRODUCT_IDS,
 } from './payment/index';
 import { createDonation, getDonationByReceipt } from './donationService';
-import { getUserByNickname, createUser } from './userService';
+import { getUserByNickname, createUser, getUserRank } from './userService';
 import type { Purchase, PurchaseResult, CreateDonationInput } from '../types/payment';
 import type { User } from '../types/database.types';
 
@@ -172,7 +172,6 @@ export const getPostDonationData = async (
     }
 
     // 순위 조회 (간단하게 leaderboard 뷰에서 조회)
-    const { getUserRank } = await import('./userService');
     const rankData = await getUserRank(nickname);
 
     return {
