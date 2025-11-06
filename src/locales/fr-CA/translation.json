@@ -1,0 +1,212 @@
+{
+  "common": {
+    "appName": "Gaspille-moi Mille",
+    "appSubtitle": "Burn a Buck",
+    "loading": "Chargement en cours...",
+    "error": "Erreur",
+    "success": "Succès",
+    "ok": "OK",
+    "confirm": "Confirmer",
+    "cancel": "Annuler",
+    "close": "Fermer",
+    "retry": "Réessayer",
+    "back": "Retour",
+    "next": "Suivant",
+    "done": "Terminé",
+    "save": "Enregistrer",
+    "delete": "Supprimer"
+  },
+  "error": {
+    "general": {
+      "title": "Erreur",
+      "message": "Une erreur est survenue. Veuillez réessayer."
+    }
+  },
+  "network": {
+    "offline": "Pas de connexion réseau"
+  },
+  "onboarding": {
+    "title": "Gaspille-moi Mille",
+    "subtitle": "Gaspillez mille dollars et\nrecevez un message de remerciement",
+    "description": "Faites un petit don et\nvérifiez votre classement sur le tableau",
+    "slides": {
+      "welcome": {
+        "title": "Gaspille-moi Mille",
+        "subtitle": "Cette appli ne sert à rien!",
+        "description": "Gaspillez simplement votre argent.\nPour de vrai."
+      },
+      "motivation": {
+        "title": "Pourquoi gaspiller?",
+        "subtitle": "Autonomie • Compétence • Connexion",
+        "description": "Par votre choix,\naidez quelqu'un\net expérimentez la valeur créée ensemble"
+      },
+      "support": {
+        "title": "Le pouvoir du don",
+        "subtitle": "Un petit don fait une grande différence",
+        "description": "Offrez au développeur la joie d'une tasse de café\net je vous en serai reconnaissant ☕"
+      }
+    },
+    "button": {
+      "start": "Commencer",
+      "skip": "Ignorer",
+      "next": "Suivant"
+    },
+    "nickname": {
+      "hint": "Ce nom s'affichera sur le tableau"
+    }
+  },
+  "main": {
+    "header": {
+      "title": "Gaspille-moi Mille",
+      "greeting": "Bienvenue, {{nickname}}"
+    },
+    "leaderboard": {
+      "title": "Tableau",
+      "topRanker": "Galerie des honores",
+      "recentDonations": "Dons récents",
+      "rank": "#{{rank}}",
+      "amount": "${{amount}}",
+      "donationCount": "{{count}} dons",
+      "noData": "Pas de dons pour l'instant",
+      "placeholder": "Zone du tableau",
+      "placeholderSubtitle": "À venir dans la phase 7",
+      "emptyState": {
+        "topRanker": {
+          "title": "Pas encore de champions",
+          "message": "Soyez le premier à gaspiller\net inscrivez-vous à la galerie!"
+        },
+        "recentDonations": {
+          "title": "Pas encore de dons",
+          "message": "Soyez le premier gaspilleur!"
+        }
+      }
+    },
+    "button": {
+      "donate": "Gaspillez mille ici"
+    }
+  },
+  "nickname": {
+    "title": "Entrez un surnom",
+    "subtitle": "Utilisez 2-12 caractères\nqui s'afficheront sur le tableau",
+    "placeholder": "Entrez un surnom",
+    "charCount": "{{current}}/{{max}}",
+    "button": {
+      "submit": "Terminé"
+    },
+    "validation": {
+      "tooShort": "Le surnom doit avoir au moins 2 caractères",
+      "tooLong": "Le surnom ne peut pas dépasser 12 caractères",
+      "invalid": "Entrez un surnom valide",
+      "duplicate": "Ce surnom est déjà utilisé",
+      "checking": "Vérification en cours...",
+      "checkFailed": "La vérification a échoué"
+    },
+    "duplicate": {
+      "title": "Surnom déjà utilisé",
+      "message": "Ce surnom est déjà utilisé.\nVoulez-vous continuer?",
+      "confirm": "Continuer",
+      "cancel": "Essayer un autre surnom"
+    }
+  },
+  "donationComplete": {
+    "title": {
+      "first": "🎉 Premier don complété!",
+      "normal": "Merci!"
+    },
+    "message": "Les mille dollars de {{nickname}}\nont été utilisés avec soin",
+    "rank": {
+      "label": "Classement actuel",
+      "value": "#{{rank}}"
+    },
+    "totalDonated": {
+      "label": "Total gaspillé",
+      "amount": "${{amount}}"
+    },
+    "donation": {
+      "label": "Montant gaspillé cette fois",
+      "amount": "${{amount}}"
+    },
+    "badge": {
+      "earned": "Insigne obtenu!"
+    },
+    "button": {
+      "share": "Partager",
+      "backToMain": "Retour à l'accueil"
+    }
+  },
+  "payment": {
+    "processing": "Traitement du paiement...",
+    "validating": "Vérification du reçu...",
+    "saving": "Enregistrement en cours...",
+    "loading": {
+      "initializing": "Préparation du paiement...",
+      "loadingProducts": "Chargement des produits...",
+      "purchasing": "Traitement du paiement...",
+      "validating": "Vérification du reçu...",
+      "saving": "Enregistrement du don...",
+      "processing": "Traitement en cours...",
+      "hint": "Veuillez patienter un instant"
+    },
+    "error": {
+      "title": "Erreur de paiement",
+      "retry": "Réessayer",
+      "cancel": "Annuler",
+      "close": "Fermer",
+      "userCancelled": "Le paiement a été annulé.",
+      "initFailed": "L'initialisation du système de paiement a échoué.",
+      "productNotFound": "Le produit de paiement est introuvable.",
+      "purchaseFailed": "Une erreur s'est produite lors du paiement.",
+      "receiptValidationFailed": "La vérification du reçu a échoué.",
+      "networkError": "Une erreur réseau s'est produite. Veuillez réessayer.",
+      "duplicatePayment": "Ce paiement a déjà été traité.",
+      "unknownError": "Une erreur inconnue s'est produite.",
+      "cancelled": {
+        "title": "Paiement annulé",
+        "message": "Le paiement a été annulé."
+      },
+      "network": {
+        "title": "Erreur réseau",
+        "message": "Vérifiez votre connexion réseau et réessayez."
+      },
+      "alreadyOwned": {
+        "title": "Achat en double",
+        "message": "Vous avez déjà acheté ce produit."
+      },
+      "validation": {
+        "title": "Vérification échouée",
+        "message": "La vérification du reçu a échoué. Veuillez contacter le support."
+      },
+      "unknown": {
+        "title": "Erreur",
+        "message": "Une erreur inconnue s'est produite. Veuillez réessayer."
+      }
+    }
+  },
+  "settings": {
+    "title": "Paramètres",
+    "language": {
+      "title": "Langue",
+      "korean": "Coréen",
+      "english": "English"
+    }
+  },
+  "dialog": {
+    "error": {
+      "title": "Erreur",
+      "button": "OK"
+    },
+    "confirm": {
+      "title": "Confirmer",
+      "yes": "Oui",
+      "no": "Non"
+    }
+  },
+  "share": {
+    "template": {
+      "title": "Gaspille-moi Mille",
+      "message": "Je viens de gaspiller mille dollars sur Gaspille-moi Mille! 💸\n{{rankText}}{{countText}}\nTotal gaspillé: {{amount}}$",
+      "withRank": "Classement actuel: #{{rank}}\n",
+      "withCount": "Gaspillages jusqu'à présent: {{count}}\n"
+    }
+  }
+}

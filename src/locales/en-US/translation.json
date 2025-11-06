@@ -1,0 +1,212 @@
+{
+  "common": {
+    "appName": "Burn a Buck",
+    "appSubtitle": "Burn a Buck",
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "ok": "OK",
+    "confirm": "Confirm",
+    "cancel": "Cancel",
+    "close": "Close",
+    "retry": "Try Again",
+    "back": "Back",
+    "next": "Next",
+    "done": "Done",
+    "save": "Save",
+    "delete": "Delete"
+  },
+  "error": {
+    "general": {
+      "title": "Error",
+      "message": "An error occurred. Please try again."
+    }
+  },
+  "network": {
+    "offline": "No Network Connection"
+  },
+  "onboarding": {
+    "title": "Burn a Buck",
+    "subtitle": "Donate a dollar\nand get a thank you message",
+    "description": "Share kindness with small donations\nand check your rank on the leaderboard",
+    "slides": {
+      "welcome": {
+        "title": "Burn a Buck",
+        "subtitle": "This app is nothing special!",
+        "description": "Just support us.\nSeriously."
+      },
+      "motivation": {
+        "title": "Why donate?",
+        "subtitle": "Autonomy • Competence • Relatedness",
+        "description": "Through your choice,\nhelp someone\nand experience creating value together"
+      },
+      "support": {
+        "title": "The Power of Support",
+        "subtitle": "Small donations make a big difference",
+        "description": "We'd be grateful for a cup of coffee\nto support the developer ☕"
+      }
+    },
+    "button": {
+      "start": "Get Started",
+      "skip": "Skip",
+      "next": "Next"
+    },
+    "nickname": {
+      "hint": "This name will appear on the leaderboard"
+    }
+  },
+  "main": {
+    "header": {
+      "title": "Burn a Buck",
+      "greeting": "Welcome, {{nickname}}"
+    },
+    "leaderboard": {
+      "title": "Leaderboard",
+      "topRanker": "Hall of Fame",
+      "recentDonations": "Recent Donations",
+      "rank": "#{{rank}}",
+      "amount": "₩{{amount}}",
+      "donationCount": "{{count}} donations",
+      "noData": "No donation history yet",
+      "placeholder": "Leaderboard Area",
+      "placeholderSubtitle": "Coming in Phase 7",
+      "emptyState": {
+        "topRanker": {
+          "title": "No top donors yet",
+          "message": "Be the first to donate\nand join the Hall of Fame!"
+        },
+        "recentDonations": {
+          "title": "No donations yet",
+          "message": "Be the first donor!"
+        }
+      }
+    },
+    "button": {
+      "donate": "Donate a Buck"
+    }
+  },
+  "nickname": {
+    "title": "Enter your nickname",
+    "subtitle": "Use 2-12 characters\nto appear on the leaderboard",
+    "placeholder": "Enter nickname",
+    "charCount": "{{current}}/{{max}}",
+    "button": {
+      "submit": "Done"
+    },
+    "validation": {
+      "tooShort": "Nickname must be at least 2 characters",
+      "tooLong": "Nickname can be up to 12 characters",
+      "invalid": "Please enter a valid nickname",
+      "duplicate": "This nickname is already in use",
+      "checking": "Checking nickname...",
+      "checkFailed": "Failed to check nickname"
+    },
+    "duplicate": {
+      "title": "Nickname in Use",
+      "message": "This nickname is already in use.\nContinue anyway?",
+      "confirm": "Continue",
+      "cancel": "Try Different Name"
+    }
+  },
+  "donationComplete": {
+    "title": {
+      "first": "🎉 First Donation Complete!",
+      "normal": "Thank you!"
+    },
+    "message": "{{nickname}}'s dollar has been\nused with care",
+    "rank": {
+      "label": "Current Rank",
+      "value": "#{{rank}}"
+    },
+    "totalDonated": {
+      "label": "Total Donated",
+      "amount": "₩{{amount}}"
+    },
+    "donation": {
+      "label": "This Donation",
+      "amount": "₩{{amount}}"
+    },
+    "badge": {
+      "earned": "Badge Earned!"
+    },
+    "button": {
+      "share": "Share",
+      "backToMain": "Back to Home"
+    }
+  },
+  "payment": {
+    "processing": "Processing payment...",
+    "validating": "Validating receipt...",
+    "saving": "Saving...",
+    "loading": {
+      "initializing": "Preparing payment...",
+      "loadingProducts": "Loading product information...",
+      "purchasing": "Processing payment...",
+      "validating": "Validating receipt...",
+      "saving": "Saving donation...",
+      "processing": "Processing...",
+      "hint": "Please wait a moment"
+    },
+    "error": {
+      "title": "Payment Error",
+      "retry": "Try Again",
+      "cancel": "Cancel",
+      "close": "Close",
+      "userCancelled": "Payment was cancelled.",
+      "initFailed": "Failed to initialize payment system.",
+      "productNotFound": "Payment product not found.",
+      "purchaseFailed": "An error occurred during payment.",
+      "receiptValidationFailed": "Receipt validation failed.",
+      "networkError": "A network error occurred. Please try again.",
+      "duplicatePayment": "This payment has already been processed.",
+      "unknownError": "An unknown error occurred.",
+      "cancelled": {
+        "title": "Payment Cancelled",
+        "message": "Payment was cancelled."
+      },
+      "network": {
+        "title": "Network Error",
+        "message": "Check your network connection and try again."
+      },
+      "alreadyOwned": {
+        "title": "Already Purchased",
+        "message": "You've already purchased this item."
+      },
+      "validation": {
+        "title": "Validation Failed",
+        "message": "Receipt validation failed. Please contact support."
+      },
+      "unknown": {
+        "title": "Error Occurred",
+        "message": "An unknown error occurred. Please try again."
+      }
+    }
+  },
+  "settings": {
+    "title": "Settings",
+    "language": {
+      "title": "Language",
+      "korean": "한국어",
+      "english": "English"
+    }
+  },
+  "dialog": {
+    "error": {
+      "title": "Error",
+      "button": "OK"
+    },
+    "confirm": {
+      "title": "Confirm",
+      "yes": "Yes",
+      "no": "No"
+    }
+  },
+  "share": {
+    "template": {
+      "title": "Burn a Buck",
+      "message": "I just burned a buck with Burn a Buck! 💸\n{{rankText}}{{countText}}\nTotal donated: ₩{{amount}}",
+      "withRank": "Currently ranked #{{rank}}!\n",
+      "withCount": "Total donations: {{count}}\n"
+    }
+  }
+}

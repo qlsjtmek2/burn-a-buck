@@ -1,0 +1,212 @@
+{
+  "common": {
+    "appName": "Queimar um Real",
+    "appSubtitle": "Burn a Buck",
+    "loading": "Carregando...",
+    "error": "Erro",
+    "success": "Sucesso",
+    "ok": "OK",
+    "confirm": "Confirmar",
+    "cancel": "Cancelar",
+    "close": "Fechar",
+    "retry": "Tentar novamente",
+    "back": "Voltar",
+    "next": "Próximo",
+    "done": "Concluído",
+    "save": "Salvar",
+    "delete": "Deletar"
+  },
+  "error": {
+    "general": {
+      "title": "Erro",
+      "message": "Ocorreu um erro. Por favor, tente novamente."
+    }
+  },
+  "network": {
+    "offline": "Sem conexão de rede"
+  },
+  "onboarding": {
+    "title": "Queimar um Real",
+    "subtitle": "Doe um real\ne receba uma mensagem de agradecimento",
+    "description": "Compartilhe amor através de pequenas doações\ne acompanhe seu ranking no placar",
+    "slides": {
+      "welcome": {
+        "title": "Queimar um Real",
+        "subtitle": "Este app não é nada especial!",
+        "description": "Apenas doe.\nDe verdade."
+      },
+      "motivation": {
+        "title": "Por que doar?",
+        "subtitle": "Autonomia • Competência • Conexão",
+        "description": "Faça uma escolha\npara ajudar alguém\ne experiencie o valor de criar junto"
+      },
+      "support": {
+        "title": "O Poder da Doação",
+        "subtitle": "Pequenas doações fazem uma grande diferença",
+        "description": "Presenteie o desenvolvedor com uma xícara de café\nSeu apoio é muito apreciado ☕"
+      }
+    },
+    "button": {
+      "start": "Começar",
+      "skip": "Pular",
+      "next": "Próximo"
+    },
+    "nickname": {
+      "hint": "Este é o nome que aparecerá no placar"
+    }
+  },
+  "main": {
+    "header": {
+      "title": "Queimar um Real",
+      "greeting": "Bem-vindo, {{nickname}}"
+    },
+    "leaderboard": {
+      "title": "Placar",
+      "topRanker": "Hall da Fama",
+      "recentDonations": "Doações Recentes",
+      "rank": "{{rank}}º lugar",
+      "amount": "R${{amount}}",
+      "donationCount": "{{count}} doações",
+      "noData": "Ainda não há histórico de doações",
+      "placeholder": "Área do Placar",
+      "placeholderSubtitle": "Será implementado na Fase 7",
+      "emptyState": {
+        "topRanker": {
+          "title": "Ainda não há top doadores",
+          "message": "Seja o primeiro a doar\ne entre para o Hall da Fama!"
+        },
+        "recentDonations": {
+          "title": "Ainda não há doações",
+          "message": "Seja o primeiro doador!"
+        }
+      }
+    },
+    "button": {
+      "donate": "Queimar um Real Aqui"
+    }
+  },
+  "nickname": {
+    "title": "Digite seu apelido",
+    "subtitle": "Use um apelido de 2-12 caracteres\nque aparecerá no placar",
+    "placeholder": "Digite seu apelido",
+    "charCount": "{{current}}/{{max}}",
+    "button": {
+      "submit": "Concluído"
+    },
+    "validation": {
+      "tooShort": "O apelido precisa ter no mínimo 2 caracteres",
+      "tooLong": "O apelido pode ter no máximo 12 caracteres",
+      "invalid": "Por favor, digite um apelido válido",
+      "duplicate": "Este apelido já está em uso",
+      "checking": "Verificando apelido...",
+      "checkFailed": "Falha ao verificar apelido"
+    },
+    "duplicate": {
+      "title": "Apelido Duplicado",
+      "message": "Este apelido já está em uso.\nDeseja continuar?",
+      "confirm": "Continuar",
+      "cancel": "Digitar Outro Apelido"
+    }
+  },
+  "donationComplete": {
+    "title": {
+      "first": "🎉 Primeira Doação Concluída!",
+      "normal": "Obrigado!"
+    },
+    "message": "O real de {{nickname}}\nfoi usado com cuidado",
+    "rank": {
+      "label": "Seu Ranking",
+      "value": "{{rank}}º lugar"
+    },
+    "totalDonated": {
+      "label": "Total Queimado",
+      "amount": "R${{amount}}"
+    },
+    "donation": {
+      "label": "Doação Desta Vez",
+      "amount": "R${{amount}}"
+    },
+    "badge": {
+      "earned": "Conquista Desbloqueada!"
+    },
+    "button": {
+      "share": "Compartilhar",
+      "backToMain": "Voltar para o Início"
+    }
+  },
+  "payment": {
+    "processing": "Processando pagamento...",
+    "validating": "Validando recibo...",
+    "saving": "Salvando...",
+    "loading": {
+      "initializing": "Preparando pagamento...",
+      "loadingProducts": "Carregando informações do produto...",
+      "purchasing": "Processando pagamento...",
+      "validating": "Validando recibo...",
+      "saving": "Salvando doação...",
+      "processing": "Processando...",
+      "hint": "Por favor, aguarde"
+    },
+    "error": {
+      "title": "Erro no Pagamento",
+      "retry": "Tentar Novamente",
+      "cancel": "Cancelar",
+      "close": "Fechar",
+      "userCancelled": "Pagamento cancelado.",
+      "initFailed": "Falha ao inicializar o sistema de pagamento.",
+      "productNotFound": "Não foi possível encontrar o produto de pagamento.",
+      "purchaseFailed": "Ocorreu um erro ao processar o pagamento.",
+      "receiptValidationFailed": "Falha ao validar o recibo.",
+      "networkError": "Ocorreu um erro de rede. Por favor, tente novamente.",
+      "duplicatePayment": "Este pagamento já foi processado.",
+      "unknownError": "Ocorreu um erro desconhecido.",
+      "cancelled": {
+        "title": "Pagamento Cancelado",
+        "message": "O pagamento foi cancelado."
+      },
+      "network": {
+        "title": "Erro de Rede",
+        "message": "Verifique sua conexão de rede e tente novamente."
+      },
+      "alreadyOwned": {
+        "title": "Compra Duplicada",
+        "message": "Você já comprou este produto."
+      },
+      "validation": {
+        "title": "Falha na Validação",
+        "message": "Falha ao validar o recibo. Entre em contato com o suporte."
+      },
+      "unknown": {
+        "title": "Erro Ocorreu",
+        "message": "Ocorreu um erro desconhecido. Por favor, tente novamente."
+      }
+    }
+  },
+  "settings": {
+    "title": "Configurações",
+    "language": {
+      "title": "Idioma",
+      "korean": "한국어",
+      "english": "English"
+    }
+  },
+  "dialog": {
+    "error": {
+      "title": "Erro",
+      "button": "OK"
+    },
+    "confirm": {
+      "title": "Confirmar",
+      "yes": "Sim",
+      "no": "Não"
+    }
+  },
+  "share": {
+    "template": {
+      "title": "Queimar um Real",
+      "message": "Eu também queimei um real no app Queimar um Real! 💸\n{{rankText}}{{countText}}\nTotal queimado: R${{amount}}",
+      "withRank": "Agora estou em {{rank}}º lugar!\n",
+      "withCount": "Já queimei {{count}} vezes\n"
+    }
+  }
+}

@@ -1,0 +1,212 @@
+{
+  "common": {
+    "appName": "Jeter mille won",
+    "appSubtitle": "Burn a Buck",
+    "loading": "Chargement...",
+    "error": "Erreur",
+    "success": "Succès",
+    "ok": "OK",
+    "confirm": "Confirmer",
+    "cancel": "Annuler",
+    "close": "Fermer",
+    "retry": "Réessayer",
+    "back": "Retour",
+    "next": "Suivant",
+    "done": "Terminé",
+    "save": "Enregistrer",
+    "delete": "Supprimer"
+  },
+  "error": {
+    "general": {
+      "title": "Erreur",
+      "message": "Une erreur s'est produite. Veuillez réessayer."
+    }
+  },
+  "network": {
+    "offline": "Pas de connexion réseau"
+  },
+  "onboarding": {
+    "title": "Jeter mille won",
+    "subtitle": "Faites un don de mille won\net recevez un message de remerciement",
+    "description": "Partagez vos sentiments par des dons modestes\net vérifiez votre classement sur le classement",
+    "slides": {
+      "welcome": {
+        "title": "Jeter mille won",
+        "subtitle": "Cette application n'est rien!",
+        "description": "Veuillez simplement faire un don.\nSérieusement."
+      },
+      "motivation": {
+        "title": "Pourquoi faire un don?",
+        "subtitle": "Autonomie • Compétence • Connexion",
+        "description": "Par votre choix,\naider quelqu'un\net expérimenter la valeur que nous créons ensemble"
+      },
+      "support": {
+        "title": "La force du soutien",
+        "subtitle": "Les petits dons sont d'une grande aide",
+        "description": "Je vous serais très reconnaissant si vous\noffrez au développeur la joie d'une tasse de café ☕"
+      }
+    },
+    "button": {
+      "start": "Commencer",
+      "skip": "Sauter",
+      "next": "Suivant"
+    },
+    "nickname": {
+      "hint": "C'est le nom qui s'affichera sur le classement"
+    }
+  },
+  "main": {
+    "header": {
+      "title": "Jeter mille won",
+      "greeting": "Bienvenue, {{nickname}}"
+    },
+    "leaderboard": {
+      "title": "Classement",
+      "topRanker": "Hall of Fame",
+      "recentDonations": "Dons récents",
+      "rank": "{{rank}}e place",
+      "amount": "₩{{amount}}",
+      "donationCount": "{{count}} don(s)",
+      "noData": "Aucun historique de don pour le moment",
+      "placeholder": "Zone de classement",
+      "placeholderSubtitle": "À implémenter dans la phase 7",
+      "emptyState": {
+        "topRanker": {
+          "title": "Pas encore de classé",
+          "message": "Soyez le premier à faire un don\net inscrivez-vous au Hall of Fame!"
+        },
+        "recentDonations": {
+          "title": "Aucun historique de don pour le moment",
+          "message": "Soyez le premier donateur!"
+        }
+      }
+    },
+    "button": {
+      "donate": "Jeter mille won ici"
+    }
+  },
+  "nickname": {
+    "title": "Entrez votre surnom",
+    "subtitle": "Un surnom de 2-12 caractères\ns'affichera sur le classement",
+    "placeholder": "Entrez le surnom",
+    "charCount": "{{current}}/{{max}}",
+    "button": {
+      "submit": "Terminé"
+    },
+    "validation": {
+      "tooShort": "Le surnom doit contenir au moins 2 caractères",
+      "tooLong": "Le surnom ne peut contenir que 12 caractères au maximum",
+      "invalid": "Entrez un surnom valide",
+      "duplicate": "Ce surnom est déjà utilisé",
+      "checking": "Vérification des doublons...",
+      "checkFailed": "La vérification des doublons a échoué"
+    },
+    "duplicate": {
+      "title": "Surnom en doublon",
+      "message": "Ce surnom est déjà utilisé.\nVoulez-vous continuer?",
+      "confirm": "Continuer",
+      "cancel": "Entrez un autre surnom"
+    }
+  },
+  "donationComplete": {
+    "title": {
+      "first": "🎉 Premier don complété!",
+      "normal": "Merci!"
+    },
+    "message": "Les mille won de {{nickname}}\nont été utilisés avec soin",
+    "rank": {
+      "label": "Classement actuel",
+      "value": "{{rank}}e place"
+    },
+    "totalDonated": {
+      "label": "Montant total jeté",
+      "amount": "₩{{amount}}"
+    },
+    "donation": {
+      "label": "Montant jeté cette fois",
+      "amount": "₩{{amount}}"
+    },
+    "badge": {
+      "earned": "Badge obtenu!"
+    },
+    "button": {
+      "share": "Partager",
+      "backToMain": "Retour à l'accueil"
+    }
+  },
+  "payment": {
+    "processing": "Traitement du paiement...",
+    "validating": "Validation de la facture...",
+    "saving": "Enregistrement...",
+    "loading": {
+      "initializing": "Préparation du paiement...",
+      "loadingProducts": "Chargement des informations sur les produits...",
+      "purchasing": "Traitement du paiement...",
+      "validating": "Validation de la facture...",
+      "saving": "Enregistrement de l'historique des dons...",
+      "processing": "Traitement en cours...",
+      "hint": "Veuillez patienter"
+    },
+    "error": {
+      "title": "Erreur de paiement",
+      "retry": "Réessayer",
+      "cancel": "Annuler",
+      "close": "Fermer",
+      "userCancelled": "Le paiement a été annulé.",
+      "initFailed": "Impossible d'initialiser le système de paiement.",
+      "productNotFound": "Le produit de paiement est introuvable.",
+      "purchaseFailed": "Une erreur s'est produite lors du traitement du paiement.",
+      "receiptValidationFailed": "La validation de la facture a échoué.",
+      "networkError": "Une erreur réseau s'est produite. Veuillez réessayer.",
+      "duplicatePayment": "Ce paiement a déjà été traité.",
+      "unknownError": "Une erreur inconnue s'est produite.",
+      "cancelled": {
+        "title": "Paiement annulé",
+        "message": "Le paiement a été annulé."
+      },
+      "network": {
+        "title": "Erreur réseau",
+        "message": "Vérifiez votre connexion réseau et réessayez."
+      },
+      "alreadyOwned": {
+        "title": "Achat en doublon",
+        "message": "Vous avez déjà acheté ce produit."
+      },
+      "validation": {
+        "title": "Échec de la validation",
+        "message": "La validation de la facture a échoué. Veuillez contacter le service clientèle."
+      },
+      "unknown": {
+        "title": "Erreur",
+        "message": "Une erreur inconnue s'est produite. Veuillez réessayer."
+      }
+    }
+  },
+  "settings": {
+    "title": "Paramètres",
+    "language": {
+      "title": "Langue",
+      "korean": "한국어",
+      "english": "English"
+    }
+  },
+  "dialog": {
+    "error": {
+      "title": "Erreur",
+      "button": "OK"
+    },
+    "confirm": {
+      "title": "Confirmer",
+      "yes": "Oui",
+      "no": "Non"
+    }
+  },
+  "share": {
+    "template": {
+      "title": "Jeter mille won",
+      "message": "J'ai aussi jeté mille won dans Jeter mille won! 💸\n{{rankText}}{{countText}}\nMontant total jeté: {{amount}}₩",
+      "withRank": "Classé à la {{rank}}e place maintenant!\n",
+      "withCount": "Jeté {{count}} fois jusqu'à présent\n"
+    }
+  }
+}

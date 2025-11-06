@@ -1,0 +1,212 @@
+{
+  "common": {
+    "appName": "Burn a Buck",
+    "appSubtitle": "Burn a Buck",
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "ok": "OK",
+    "confirm": "Confirm",
+    "cancel": "Cancel",
+    "close": "Close",
+    "retry": "Try Again",
+    "back": "Back",
+    "next": "Next",
+    "done": "Done",
+    "save": "Save",
+    "delete": "Delete"
+  },
+  "error": {
+    "general": {
+      "title": "Error",
+      "message": "An error occurred. Please try again."
+    }
+  },
+  "network": {
+    "offline": "No Internet Connection"
+  },
+  "onboarding": {
+    "title": "Burn a Buck",
+    "subtitle": "Donate £1\nand receive a thank you message",
+    "description": "Share your generosity through\nsmall donations and check your\nranking on the leaderboard",
+    "slides": {
+      "welcome": {
+        "title": "Burn a Buck",
+        "subtitle": "This app is nothing special!",
+        "description": "Just donate.\nSeriously."
+      },
+      "motivation": {
+        "title": "Why donate?",
+        "subtitle": "Autonomy • Competence • Relatedness",
+        "description": "By making your choice,\nyou help someone\nand experience the value\nof creating together"
+      },
+      "support": {
+        "title": "The Power of Donation",
+        "subtitle": "Every small donation makes a big difference",
+        "description": "If you could share the joy of\na cup of coffee with the developer,\nI'd be grateful ☕"
+      }
+    },
+    "button": {
+      "start": "Get Started",
+      "skip": "Skip",
+      "next": "Next"
+    },
+    "nickname": {
+      "hint": "This name will appear on the leaderboard"
+    }
+  },
+  "main": {
+    "header": {
+      "title": "Burn a Buck",
+      "greeting": "Welcome, {{nickname}}"
+    },
+    "leaderboard": {
+      "title": "Leaderboard",
+      "topRanker": "Hall of Fame",
+      "recentDonations": "Recent Donations",
+      "rank": "#{{rank}}",
+      "amount": "£{{amount}}",
+      "donationCount": "{{count}} donations",
+      "noData": "No donation history yet",
+      "placeholder": "Leaderboard Area",
+      "placeholderSubtitle": "Coming in Phase 7",
+      "emptyState": {
+        "topRanker": {
+          "title": "No top donors yet",
+          "message": "Be the first to donate\nand join the Hall of Fame!"
+        },
+        "recentDonations": {
+          "title": "No donations yet",
+          "message": "Be the first donor!"
+        }
+      }
+    },
+    "button": {
+      "donate": "Burn £1 Here"
+    }
+  },
+  "nickname": {
+    "title": "Enter Your Nickname",
+    "subtitle": "Choose a 2-12 character nickname\nthat will appear on the leaderboard",
+    "placeholder": "Enter nickname",
+    "charCount": "{{current}}/{{max}}",
+    "button": {
+      "submit": "Done"
+    },
+    "validation": {
+      "tooShort": "Nickname must be at least 2 characters",
+      "tooLong": "Nickname can be up to 12 characters",
+      "invalid": "Please enter a valid nickname",
+      "duplicate": "This nickname is already in use",
+      "checking": "Checking availability...",
+      "checkFailed": "Failed to check availability"
+    },
+    "duplicate": {
+      "title": "Nickname in Use",
+      "message": "This nickname is already in use.\nWould you like to continue?",
+      "confirm": "Continue",
+      "cancel": "Choose Different Nickname"
+    }
+  },
+  "donationComplete": {
+    "title": {
+      "first": "🎉 First Donation Complete!",
+      "normal": "Thank You!"
+    },
+    "message": "Your £1 from {{nickname}}\nhas been put to good use",
+    "rank": {
+      "label": "Current Rank",
+      "value": "#{{rank}}"
+    },
+    "totalDonated": {
+      "label": "Total Amount Burnt",
+      "amount": "£{{amount}}"
+    },
+    "donation": {
+      "label": "Amount Burnt This Time",
+      "amount": "£{{amount}}"
+    },
+    "badge": {
+      "earned": "Badge Earned!"
+    },
+    "button": {
+      "share": "Share",
+      "backToMain": "Back to Main"
+    }
+  },
+  "payment": {
+    "processing": "Processing payment...",
+    "validating": "Validating receipt...",
+    "saving": "Saving...",
+    "loading": {
+      "initializing": "Preparing payment...",
+      "loadingProducts": "Loading product information...",
+      "purchasing": "Processing payment...",
+      "validating": "Validating receipt...",
+      "saving": "Saving donation history...",
+      "processing": "Processing...",
+      "hint": "Please wait a moment"
+    },
+    "error": {
+      "title": "Payment Error",
+      "retry": "Try Again",
+      "cancel": "Cancel",
+      "close": "Close",
+      "userCancelled": "Payment cancelled.",
+      "initFailed": "Failed to initialise payment system.",
+      "productNotFound": "Payment product not found.",
+      "purchaseFailed": "An error occurred whilst processing payment.",
+      "receiptValidationFailed": "Failed to validate receipt.",
+      "networkError": "A network error occurred. Please try again.",
+      "duplicatePayment": "This payment has already been processed.",
+      "unknownError": "An unknown error occurred.",
+      "cancelled": {
+        "title": "Payment Cancelled",
+        "message": "Payment has been cancelled."
+      },
+      "network": {
+        "title": "Network Error",
+        "message": "Please check your internet connection and try again."
+      },
+      "alreadyOwned": {
+        "title": "Duplicate Purchase",
+        "message": "You have already purchased this item."
+      },
+      "validation": {
+        "title": "Validation Failed",
+        "message": "Failed to validate receipt. Please contact customer support."
+      },
+      "unknown": {
+        "title": "Error Occurred",
+        "message": "An unknown error occurred. Please try again."
+      }
+    }
+  },
+  "settings": {
+    "title": "Settings",
+    "language": {
+      "title": "Language",
+      "korean": "한국어",
+      "english": "English"
+    }
+  },
+  "dialog": {
+    "error": {
+      "title": "Error",
+      "button": "OK"
+    },
+    "confirm": {
+      "title": "Confirm",
+      "yes": "Yes",
+      "no": "No"
+    }
+  },
+  "share": {
+    "template": {
+      "title": "Burn a Buck",
+      "message": "I just burnt £1 on Burn a Buck! 💸\n{{rankText}}{{countText}}\nTotal burnt: £{{amount}}",
+      "withRank": "Currently ranked #{{rank}}!\n",
+      "withCount": "{{count}} donations so far\n"
+    }
+  }
+}

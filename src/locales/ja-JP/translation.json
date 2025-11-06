@@ -1,0 +1,212 @@
+{
+  "common": {
+    "appName": "千円ゴミ箱",
+    "appSubtitle": "Burn a Buck",
+    "loading": "読み込み中...",
+    "error": "エラー",
+    "success": "成功",
+    "ok": "OK",
+    "confirm": "確認",
+    "cancel": "キャンセル",
+    "close": "閉じる",
+    "retry": "再試行",
+    "back": "戻る",
+    "next": "次へ",
+    "done": "完了",
+    "save": "保存",
+    "delete": "削除"
+  },
+  "error": {
+    "general": {
+      "title": "エラー",
+      "message": "エラーが発生しました。もう一度お試しください。"
+    }
+  },
+  "network": {
+    "offline": "ネットワークに接続していません"
+  },
+  "onboarding": {
+    "title": "千円ゴミ箱",
+    "subtitle": "千円を寄付して\nお礼のメッセージをもらいましょう",
+    "description": "少額寄付で心を分かち合い、\nリーダーボードであなたの順位を確認してください",
+    "slides": {
+      "welcome": {
+        "title": "千円ゴミ箱",
+        "subtitle": "このアプリは何もありません!",
+        "description": "ただ寄付してください。\n本当ですよ。"
+      },
+      "motivation": {
+        "title": "なぜ寄付するのですか?",
+        "subtitle": "自律性 • 有能性 • 関係性",
+        "description": "あなたの選択で\n誰かを助け、\n一緒に作る価値を体験してください"
+      },
+      "support": {
+        "title": "寄付の力",
+        "subtitle": "小さな寄付が大きな力になります",
+        "description": "開発者にコーヒー一杯の喜びを\nプレゼントしていただければ幸いです ☕"
+      }
+    },
+    "button": {
+      "start": "開始",
+      "skip": "スキップ",
+      "next": "次へ"
+    },
+    "nickname": {
+      "hint": "リーダーボードに表示されるお名前です"
+    }
+  },
+  "main": {
+    "header": {
+      "title": "千円ゴミ箱",
+      "greeting": "{{nickname}}さん、ようこそ"
+    },
+    "leaderboard": {
+      "title": "リーダーボード",
+      "topRanker": "栄光の殿堂",
+      "recentDonations": "最近の寄付",
+      "rank": "第{{rank}}位",
+      "amount": "¥{{amount}}",
+      "donationCount": "{{count}}回寄付",
+      "noData": "まだ寄付履歴がありません",
+      "placeholder": "リーダーボード領域",
+      "placeholderSubtitle": "Phase 7で実装予定",
+      "emptyState": {
+        "topRanker": {
+          "title": "まだランカーがいません",
+          "message": "最初に寄付して\n栄光の殿堂に登録しましょう!"
+        },
+        "recentDonations": {
+          "title": "まだ寄付履歴がありません",
+          "message": "最初の寄付者になってみましょう!"
+        }
+      }
+    },
+    "button": {
+      "donate": "ここで千円を寄付する"
+    }
+  },
+  "nickname": {
+    "title": "ニックネームを入力してください",
+    "subtitle": "2～12文字のニックネームで\nリーダーボードに表示されます",
+    "placeholder": "ニックネームを入力",
+    "charCount": "{{current}}/{{max}}",
+    "button": {
+      "submit": "完了"
+    },
+    "validation": {
+      "tooShort": "ニックネームは2文字以上である必要があります",
+      "tooLong": "ニックネームは12文字までです",
+      "invalid": "有効なニックネームを入力してください",
+      "duplicate": "このニックネームは既に使用されています",
+      "checking": "重複確認中...",
+      "checkFailed": "重複確認に失敗しました"
+    },
+    "duplicate": {
+      "title": "ニックネームが重複しています",
+      "message": "このニックネームは既に使用されています。\n続行しますか?",
+      "confirm": "続行",
+      "cancel": "別のニックネームを入力"
+    }
+  },
+  "donationComplete": {
+    "title": {
+      "first": "🎉 初寄付完了!",
+      "normal": "ありがとうございます!"
+    },
+    "message": "{{nickname}}さんの千円は\n大切に使用されました",
+    "rank": {
+      "label": "現在の順位",
+      "value": "第{{rank}}位"
+    },
+    "totalDonated": {
+      "label": "総寄付額",
+      "amount": "¥{{amount}}"
+    },
+    "donation": {
+      "label": "今回の寄付額",
+      "amount": "¥{{amount}}"
+    },
+    "badge": {
+      "earned": "バッジを獲得!"
+    },
+    "button": {
+      "share": "共有",
+      "backToMain": "メインに戻る"
+    }
+  },
+  "payment": {
+    "processing": "お支払い処理中...",
+    "validating": "領収書を確認中...",
+    "saving": "保存中...",
+    "loading": {
+      "initializing": "お支払いの準備中...",
+      "loadingProducts": "商品情報を読み込み中...",
+      "purchasing": "お支払い処理中...",
+      "validating": "領収書を確認中...",
+      "saving": "寄付履歴を保存中...",
+      "processing": "処理中...",
+      "hint": "お待ちください"
+    },
+    "error": {
+      "title": "お支払いエラー",
+      "retry": "再試行",
+      "cancel": "キャンセル",
+      "close": "閉じる",
+      "userCancelled": "お支払いがキャンセルされました。",
+      "initFailed": "お支払いシステムの初期化に失敗しました。",
+      "productNotFound": "お支払い商品が見つかりません。",
+      "purchaseFailed": "お支払い処理中にエラーが発生しました。",
+      "receiptValidationFailed": "領収書の検証に失敗しました。",
+      "networkError": "ネットワークエラーが発生しました。もう一度お試しください。",
+      "duplicatePayment": "既に処理されたお支払いです。",
+      "unknownError": "不明なエラーが発生しました。",
+      "cancelled": {
+        "title": "お支払いがキャンセルされました",
+        "message": "お支払いがキャンセルされました。"
+      },
+      "network": {
+        "title": "ネットワークエラー",
+        "message": "ネットワーク接続を確認して、もう一度お試しください。"
+      },
+      "alreadyOwned": {
+        "title": "重複購入",
+        "message": "この商品は既に購入されています。"
+      },
+      "validation": {
+        "title": "検証失敗",
+        "message": "領収書の検証に失敗しました。カスタマーサポートにお問い合わせください。"
+      },
+      "unknown": {
+        "title": "エラーが発生しました",
+        "message": "不明なエラーが発生しました。もう一度お試しください。"
+      }
+    }
+  },
+  "settings": {
+    "title": "設定",
+    "language": {
+      "title": "言語",
+      "korean": "한국어",
+      "english": "English"
+    }
+  },
+  "dialog": {
+    "error": {
+      "title": "エラー",
+      "button": "OK"
+    },
+    "confirm": {
+      "title": "確認",
+      "yes": "はい",
+      "no": "いいえ"
+    }
+  },
+  "share": {
+    "template": {
+      "title": "千円ゴミ箱",
+      "message": "僕も千円ゴミ箱に千円を寄付しました! 💸\n{{rankText}}{{countText}}\n総寄付額: {{amount}}円",
+      "withRank": "現在第{{rank}}位です!\n",
+      "withCount": "これまで{{count}}回寄付しました\n"
+    }
+  }
+}

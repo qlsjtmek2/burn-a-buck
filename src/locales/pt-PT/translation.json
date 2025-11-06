@@ -1,0 +1,212 @@
+{
+  "common": {
+    "appName": "Queimar um Euro",
+    "appSubtitle": "Burn a Buck",
+    "loading": "A carregar...",
+    "error": "Erro",
+    "success": "Sucesso",
+    "ok": "OK",
+    "confirm": "Confirmar",
+    "cancel": "Cancelar",
+    "close": "Fechar",
+    "retry": "Tentar novamente",
+    "back": "Voltar",
+    "next": "Seguinte",
+    "done": "Concluído",
+    "save": "Guardar",
+    "delete": "Apagar"
+  },
+  "error": {
+    "general": {
+      "title": "Erro",
+      "message": "Ocorreu um erro. Por favor, tenta novamente."
+    }
+  },
+  "network": {
+    "offline": "Sem ligação à rede"
+  },
+  "onboarding": {
+    "title": "Queimar um Euro",
+    "subtitle": "Doa um euro e\nrecebe uma mensagem de agradecimento",
+    "description": "Partilha o teu coração com pequenas doações\ne verifica a tua posição no ranking",
+    "slides": {
+      "welcome": {
+        "title": "Queimar um Euro",
+        "subtitle": "Esta aplicação é completamente inútil!",
+        "description": "Simplesmente faz uma doação.\nA sério mesmo."
+      },
+      "motivation": {
+        "title": "Porque devo fazer uma doação?",
+        "subtitle": "Autonomia • Competência • Conexão",
+        "description": "Com a tua escolha\najadar alguém\ne experimentar o valor de criar em conjunto"
+      },
+      "support": {
+        "title": "O Poder das Doações",
+        "subtitle": "As pequenas doações fazem uma grande diferença",
+        "description": "Se quiseres oferecer ao programador\na alegria de um café ☕\nfico imensamente grato"
+      }
+    },
+    "button": {
+      "start": "Começar",
+      "skip": "Saltar",
+      "next": "Seguinte"
+    },
+    "nickname": {
+      "hint": "Este é o nome que aparecerá no ranking"
+    }
+  },
+  "main": {
+    "header": {
+      "title": "Queimar um Euro",
+      "greeting": "Bem-vindo, {{nickname}}"
+    },
+    "leaderboard": {
+      "title": "Ranking",
+      "topRanker": "Galeria de Honra",
+      "recentDonations": "Doações Recentes",
+      "rank": "{{rank}}º lugar",
+      "amount": "€{{amount}}",
+      "donationCount": "{{count}} doações",
+      "noData": "Ainda não há histórico de doações",
+      "placeholder": "Área de Ranking",
+      "placeholderSubtitle": "Será implementada na Fase 7",
+      "emptyState": {
+        "topRanker": {
+          "title": "Ainda não há ranking",
+          "message": "Sê o primeiro a fazer uma doação\ne entra para a Galeria de Honra!"
+        },
+        "recentDonations": {
+          "title": "Ainda não há doações",
+          "message": "Sê o primeiro doador!"
+        }
+      }
+    },
+    "button": {
+      "donate": "Queimar um Euro Aqui"
+    }
+  },
+  "nickname": {
+    "title": "Introduz o teu nome",
+    "subtitle": "Usa um nome com 2-12 caracteres\nque aparecerá no ranking",
+    "placeholder": "Introduzir nome",
+    "charCount": "{{current}}/{{max}}",
+    "button": {
+      "submit": "Concluído"
+    },
+    "validation": {
+      "tooShort": "O nome deve ter pelo menos 2 caracteres",
+      "tooLong": "O nome pode ter no máximo 12 caracteres",
+      "invalid": "Por favor, introduz um nome válido",
+      "duplicate": "Este nome já está em uso",
+      "checking": "A verificar duplicatas...",
+      "checkFailed": "Falha ao verificar duplicatas"
+    },
+    "duplicate": {
+      "title": "Nome Duplicado",
+      "message": "Este nome já está em uso.\nDeseja continuar?",
+      "confirm": "Continuar",
+      "cancel": "Usar outro nome"
+    }
+  },
+  "donationComplete": {
+    "title": {
+      "first": "🎉 Primeira Doação Concluída!",
+      "normal": "Muito Obrigado!"
+    },
+    "message": "O euro do {{nickname}}\nfoi usado com muito cuidado",
+    "rank": {
+      "label": "Posição Atual",
+      "value": "{{rank}}º lugar"
+    },
+    "totalDonated": {
+      "label": "Total Queimado",
+      "amount": "€{{amount}}"
+    },
+    "donation": {
+      "label": "Quantia desta Doação",
+      "amount": "€{{amount}}"
+    },
+    "badge": {
+      "earned": "Insígnia Conquistada!"
+    },
+    "button": {
+      "share": "Partilhar",
+      "backToMain": "Voltar para o Principal"
+    }
+  },
+  "payment": {
+    "processing": "A processar pagamento...",
+    "validating": "A validar recibo...",
+    "saving": "A guardar...",
+    "loading": {
+      "initializing": "A preparar pagamento...",
+      "loadingProducts": "A carregar informações do produto...",
+      "purchasing": "A processar pagamento...",
+      "validating": "A validar recibo...",
+      "saving": "A guardar histórico de doação...",
+      "processing": "A processar...",
+      "hint": "Por favor, aguarda"
+    },
+    "error": {
+      "title": "Erro de Pagamento",
+      "retry": "Tentar Novamente",
+      "cancel": "Cancelar",
+      "close": "Fechar",
+      "userCancelled": "O pagamento foi cancelado.",
+      "initFailed": "Falha ao inicializar o sistema de pagamento.",
+      "productNotFound": "Não foi possível encontrar o produto de pagamento.",
+      "purchaseFailed": "Ocorreu um erro ao processar o pagamento.",
+      "receiptValidationFailed": "Falha ao validar o recibo.",
+      "networkError": "Ocorreu um erro de rede. Por favor, tenta novamente.",
+      "duplicatePayment": "Este pagamento já foi processado.",
+      "unknownError": "Ocorreu um erro desconhecido.",
+      "cancelled": {
+        "title": "Pagamento Cancelado",
+        "message": "O pagamento foi cancelado."
+      },
+      "network": {
+        "title": "Erro de Rede",
+        "message": "Verifica a tua ligação à rede e tenta novamente."
+      },
+      "alreadyOwned": {
+        "title": "Compra Duplicada",
+        "message": "Já compraste este produto."
+      },
+      "validation": {
+        "title": "Falha na Validação",
+        "message": "Falha ao validar o recibo. Por favor, contacta o suporte."
+      },
+      "unknown": {
+        "title": "Erro Ocorrido",
+        "message": "Ocorreu um erro desconhecido. Por favor, tenta novamente."
+      }
+    }
+  },
+  "settings": {
+    "title": "Definições",
+    "language": {
+      "title": "Idioma",
+      "korean": "한국어",
+      "english": "English"
+    }
+  },
+  "dialog": {
+    "error": {
+      "title": "Erro",
+      "button": "OK"
+    },
+    "confirm": {
+      "title": "Confirmação",
+      "yes": "Sim",
+      "no": "Não"
+    }
+  },
+  "share": {
+    "template": {
+      "title": "Queimar um Euro",
+      "message": "Também queimei um euro em Queimar um Euro! 💸\n{{rankText}}{{countText}}\nTotal queimado: €{{amount}}",
+      "withRank": "Agora no {{rank}}º lugar!\n",
+      "withCount": "Já queimei {{count}} euros\n"
+    }
+  }
+}

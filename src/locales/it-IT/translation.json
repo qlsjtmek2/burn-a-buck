@@ -1,0 +1,212 @@
+{
+  "common": {
+    "appName": "Butta un Euro",
+    "appSubtitle": "Burn a Buck",
+    "loading": "Caricamento in corso...",
+    "error": "Errore",
+    "success": "Successo",
+    "ok": "OK",
+    "confirm": "Conferma",
+    "cancel": "Annulla",
+    "close": "Chiudi",
+    "retry": "Riprova",
+    "back": "Indietro",
+    "next": "Avanti",
+    "done": "Fatto",
+    "save": "Salva",
+    "delete": "Elimina"
+  },
+  "error": {
+    "general": {
+      "title": "Errore",
+      "message": "Si è verificato un errore. Prova di nuovo."
+    }
+  },
+  "network": {
+    "offline": "Nessuna connessione di rete"
+  },
+  "onboarding": {
+    "title": "Butta un Euro",
+    "subtitle": "Dona un euro e\nricevi un messaggio di ringraziamento",
+    "description": "Condividi il tuo cuore con piccole donazioni e\ncontrolla il tuo ranking nella classifica",
+    "slides": {
+      "welcome": {
+        "title": "Butta un Euro",
+        "subtitle": "Questa app non è nulla di speciale!",
+        "description": "Semplicemente dona.\nDavvero."
+      },
+      "motivation": {
+        "title": "Perché dovresti donare?",
+        "subtitle": "Autonomia • Competenza • Relazione",
+        "description": "Con la tua scelta\naiuti qualcuno e\nsperimenti il valore di creare insieme"
+      },
+      "support": {
+        "title": "Il potere della donazione",
+        "subtitle": "Ogni piccola donazione fa la differenza",
+        "description": "Regalami una tazza di caffè\ncon la tua donazione ☕"
+      }
+    },
+    "button": {
+      "start": "Inizia",
+      "skip": "Salta",
+      "next": "Avanti"
+    },
+    "nickname": {
+      "hint": "Questo nome apparirà nella classifica"
+    }
+  },
+  "main": {
+    "header": {
+      "title": "Butta un Euro",
+      "greeting": "Benvenuto {{nickname}}"
+    },
+    "leaderboard": {
+      "title": "Classifica",
+      "topRanker": "Hall of Fame",
+      "recentDonations": "Donazioni Recenti",
+      "rank": "#{{rank}}",
+      "amount": "€{{amount}}",
+      "donationCount": "{{count}} donazioni",
+      "noData": "Nessuna donazione ancora",
+      "placeholder": "Area della classifica",
+      "placeholderSubtitle": "Da implementare nella Fase 7",
+      "emptyState": {
+        "topRanker": {
+          "title": "Nessun top donatore ancora",
+          "message": "Sii il primo a donare e\naccedi alla Hall of Fame!"
+        },
+        "recentDonations": {
+          "title": "Nessuna donazione ancora",
+          "message": "Diventa il primo donatore!"
+        }
+      }
+    },
+    "button": {
+      "donate": "Butta un euro qui"
+    }
+  },
+  "nickname": {
+    "title": "Inserisci il tuo nickname",
+    "subtitle": "Scegli un nome di 2-12 caratteri che\napparirà nella classifica",
+    "placeholder": "Inserisci nickname",
+    "charCount": "{{current}}/{{max}}",
+    "button": {
+      "submit": "Fatto"
+    },
+    "validation": {
+      "tooShort": "Il nickname deve avere almeno 2 caratteri",
+      "tooLong": "Il nickname può contenere massimo 12 caratteri",
+      "invalid": "Inserisci un nickname valido",
+      "duplicate": "Questo nickname è già in uso",
+      "checking": "Verifica in corso...",
+      "checkFailed": "La verifica è fallita"
+    },
+    "duplicate": {
+      "title": "Nickname duplicato",
+      "message": "Questo nickname è già in uso.\nVuoi continuare comunque?",
+      "confirm": "Continua",
+      "cancel": "Scegli un altro nickname"
+    }
+  },
+  "donationComplete": {
+    "title": {
+      "first": "🎉 Prima donazione completa!",
+      "normal": "Grazie!"
+    },
+    "message": "L'euro di {{nickname}}\nè stato utilizzato con cura",
+    "rank": {
+      "label": "Ranking attuale",
+      "value": "#{{rank}}"
+    },
+    "totalDonated": {
+      "label": "Totale buttato",
+      "amount": "€{{amount}}"
+    },
+    "donation": {
+      "label": "Importo di questa donazione",
+      "amount": "€{{amount}}"
+    },
+    "badge": {
+      "earned": "Badge ottenuto!"
+    },
+    "button": {
+      "share": "Condividi",
+      "backToMain": "Torna alla home"
+    }
+  },
+  "payment": {
+    "processing": "Pagamento in corso...",
+    "validating": "Verifica della ricevuta...",
+    "saving": "Salvataggio in corso...",
+    "loading": {
+      "initializing": "Preparazione del pagamento...",
+      "loadingProducts": "Caricamento prodotti...",
+      "purchasing": "Pagamento in corso...",
+      "validating": "Verifica della ricevuta...",
+      "saving": "Salvataggio della donazione...",
+      "processing": "Elaborazione in corso...",
+      "hint": "Un momento per favore"
+    },
+    "error": {
+      "title": "Errore di pagamento",
+      "retry": "Riprova",
+      "cancel": "Annulla",
+      "close": "Chiudi",
+      "userCancelled": "Il pagamento è stato annullato.",
+      "initFailed": "Inizializzazione del sistema di pagamento fallita.",
+      "productNotFound": "Prodotto di pagamento non trovato.",
+      "purchaseFailed": "Errore durante l'elaborazione del pagamento.",
+      "receiptValidationFailed": "Verifica della ricevuta fallita.",
+      "networkError": "Errore di rete. Riprova.",
+      "duplicatePayment": "Questo pagamento è già stato elaborato.",
+      "unknownError": "Si è verificato un errore sconosciuto.",
+      "cancelled": {
+        "title": "Pagamento annullato",
+        "message": "Il pagamento è stato annullato."
+      },
+      "network": {
+        "title": "Errore di rete",
+        "message": "Controlla la connessione di rete e riprova."
+      },
+      "alreadyOwned": {
+        "title": "Acquisto duplicato",
+        "message": "Hai già acquistato questo prodotto."
+      },
+      "validation": {
+        "title": "Verifica fallita",
+        "message": "La verifica della ricevuta è fallita. Contatta il supporto."
+      },
+      "unknown": {
+        "title": "Si è verificato un errore",
+        "message": "Si è verificato un errore sconosciuto. Riprova."
+      }
+    }
+  },
+  "settings": {
+    "title": "Impostazioni",
+    "language": {
+      "title": "Lingua",
+      "korean": "한국어",
+      "english": "English"
+    }
+  },
+  "dialog": {
+    "error": {
+      "title": "Errore",
+      "button": "OK"
+    },
+    "confirm": {
+      "title": "Conferma",
+      "yes": "Sì",
+      "no": "No"
+    }
+  },
+  "share": {
+    "template": {
+      "title": "Butta un Euro",
+      "message": "Anch'io ho buttato un euro su Butta un Euro! 💸\n{{rankText}}{{countText}}\nTotale buttato: €{{amount}}",
+      "withRank": "Ora sono al #{{rank}}!\n",
+      "withCount": "Finora ho buttato {{count}} volte\n"
+    }
+  }
+}

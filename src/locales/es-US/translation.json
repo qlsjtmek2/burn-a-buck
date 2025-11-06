@@ -1,0 +1,212 @@
+{
+  "common": {
+    "appName": "Quema un Dólar",
+    "appSubtitle": "Burn a Buck",
+    "loading": "Cargando...",
+    "error": "Error",
+    "success": "Éxito",
+    "ok": "Aceptar",
+    "confirm": "Confirmar",
+    "cancel": "Cancelar",
+    "close": "Cerrar",
+    "retry": "Reintentar",
+    "back": "Atrás",
+    "next": "Siguiente",
+    "done": "Listo",
+    "save": "Guardar",
+    "delete": "Eliminar"
+  },
+  "error": {
+    "general": {
+      "title": "Error",
+      "message": "Ocurrió un error. Por favor, intenta de nuevo."
+    }
+  },
+  "network": {
+    "offline": "Sin conexión de red"
+  },
+  "onboarding": {
+    "title": "Quema un Dólar",
+    "subtitle": "Dona un dólar y\nrecibe un mensaje de agradecimiento",
+    "description": "Comparte generosidad con pequeñas donaciones\ny verifica tu posición en la tabla de clasificación",
+    "slides": {
+      "welcome": {
+        "title": "Quema un Dólar",
+        "subtitle": "¡Esta aplicación no es nada especial!",
+        "description": "Solo dona.\nEn serio."
+      },
+      "motivation": {
+        "title": "¿Por qué donar?",
+        "subtitle": "Autonomía • Competencia • Conexión",
+        "description": "Con tu elección,\nayudas a alguien\ny experimentas el valor de crear juntos"
+      },
+      "support": {
+        "title": "El poder de las donaciones",
+        "subtitle": "Las pequeñas donaciones marcan una gran diferencia",
+        "description": "Me encantaría regalarte al desarrollador\nla alegría de una taza de café ☕"
+      }
+    },
+    "button": {
+      "start": "Comenzar",
+      "skip": "Saltar",
+      "next": "Siguiente"
+    },
+    "nickname": {
+      "hint": "Este es el nombre que aparecerá en la tabla de clasificación"
+    }
+  },
+  "main": {
+    "header": {
+      "title": "Quema un Dólar",
+      "greeting": "Bienvenido, {{nickname}}"
+    },
+    "leaderboard": {
+      "title": "Tabla de Clasificación",
+      "topRanker": "Salón de la Fama",
+      "recentDonations": "Donaciones Recientes",
+      "rank": "#{{rank}}",
+      "amount": "${{amount}}",
+      "donationCount": "{{count}} donación(es)",
+      "noData": "Aún no hay historial de donaciones",
+      "placeholder": "Área de tabla de clasificación",
+      "placeholderSubtitle": "Se implementará en la Fase 7",
+      "emptyState": {
+        "topRanker": {
+          "title": "Aún no hay clasificados",
+          "message": "¡Sé el primero en donar y\nregistrate en el Salón de la Fama!"
+        },
+        "recentDonations": {
+          "title": "Aún no hay donaciones",
+          "message": "¡Sé el primer donante!"
+        }
+      }
+    },
+    "button": {
+      "donate": "Quemar un dólar aquí"
+    }
+  },
+  "nickname": {
+    "title": "Ingresa tu apodo",
+    "subtitle": "Un apodo de 2-12 caracteres\nque aparecerá en la tabla de clasificación",
+    "placeholder": "Ingresa apodo",
+    "charCount": "{{current}}/{{max}}",
+    "button": {
+      "submit": "Listo"
+    },
+    "validation": {
+      "tooShort": "El apodo debe tener al menos 2 caracteres",
+      "tooLong": "El apodo puede tener un máximo de 12 caracteres",
+      "invalid": "Por favor, ingresa un apodo válido",
+      "duplicate": "Este apodo ya está en uso",
+      "checking": "Verificando disponibilidad...",
+      "checkFailed": "No se pudo verificar la disponibilidad"
+    },
+    "duplicate": {
+      "title": "Apodo duplicado",
+      "message": "Este apodo ya está en uso.\n¿Deseas continuar de todas formas?",
+      "confirm": "Continuar",
+      "cancel": "Ingresar otro apodo"
+    }
+  },
+  "donationComplete": {
+    "title": {
+      "first": "🎉 ¡Primera donación completada!",
+      "normal": "¡Gracias!"
+    },
+    "message": "El dólar de {{nickname}}\nse utilizará de manera valiosa",
+    "rank": {
+      "label": "Posición actual",
+      "value": "#{{rank}}"
+    },
+    "totalDonated": {
+      "label": "Total quemado",
+      "amount": "${{amount}}"
+    },
+    "donation": {
+      "label": "Cantidad quemada esta vez",
+      "amount": "${{amount}}"
+    },
+    "badge": {
+      "earned": "¡Badge obtenido!"
+    },
+    "button": {
+      "share": "Compartir",
+      "backToMain": "Volver al inicio"
+    }
+  },
+  "payment": {
+    "processing": "Procesando pago...",
+    "validating": "Validando recibo...",
+    "saving": "Guardando...",
+    "loading": {
+      "initializing": "Preparando pago...",
+      "loadingProducts": "Cargando información del producto...",
+      "purchasing": "Procesando pago...",
+      "validating": "Validando recibo...",
+      "saving": "Guardando historial de donación...",
+      "processing": "Procesando...",
+      "hint": "Por favor, espera un momento"
+    },
+    "error": {
+      "title": "Error de pago",
+      "retry": "Reintentar",
+      "cancel": "Cancelar",
+      "close": "Cerrar",
+      "userCancelled": "El pago ha sido cancelado.",
+      "initFailed": "No se pudo inicializar el sistema de pago.",
+      "productNotFound": "No se encontró el producto de pago.",
+      "purchaseFailed": "Ocurrió un error al procesar el pago.",
+      "receiptValidationFailed": "No se pudo validar el recibo.",
+      "networkError": "Ocurrió un error de red. Por favor, intenta de nuevo.",
+      "duplicatePayment": "Este pago ya ha sido procesado.",
+      "unknownError": "Ocurrió un error desconocido.",
+      "cancelled": {
+        "title": "Pago cancelado",
+        "message": "El pago ha sido cancelado."
+      },
+      "network": {
+        "title": "Error de red",
+        "message": "Verifica tu conexión de red e intenta de nuevo."
+      },
+      "alreadyOwned": {
+        "title": "Compra duplicada",
+        "message": "Ya has comprado este producto."
+      },
+      "validation": {
+        "title": "Validación fallida",
+        "message": "No se pudo validar el recibo. Por favor, contacta al servicio al cliente."
+      },
+      "unknown": {
+        "title": "Error",
+        "message": "Ocurrió un error desconocido. Por favor, intenta de nuevo."
+      }
+    }
+  },
+  "settings": {
+    "title": "Configuración",
+    "language": {
+      "title": "Idioma",
+      "korean": "한국어",
+      "english": "English"
+    }
+  },
+  "dialog": {
+    "error": {
+      "title": "Error",
+      "button": "Aceptar"
+    },
+    "confirm": {
+      "title": "Confirmar",
+      "yes": "Sí",
+      "no": "No"
+    }
+  },
+  "share": {
+    "template": {
+      "title": "Quema un Dólar",
+      "message": "¡También quemé un dólar en Quema un Dólar! 💸\n{{rankText}}{{countText}}\nTotal quemado: {{amount}} pesos",
+      "withRank": "¡Ahora en el puesto {{rank}}!\n",
+      "withCount": "He quemado {{count}} veces hasta ahora\n"
+    }
+  }
+}

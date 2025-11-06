@@ -1,0 +1,212 @@
+{
+  "common": {
+    "appName": "Tausend Euro Wegwerfen",
+    "appSubtitle": "Burn a Buck",
+    "loading": "Wird geladen...",
+    "error": "Fehler",
+    "success": "Erfolg",
+    "ok": "OK",
+    "confirm": "Bestätigen",
+    "cancel": "Abbrechen",
+    "close": "Schließen",
+    "retry": "Erneut versuchen",
+    "back": "Zurück",
+    "next": "Weiter",
+    "done": "Fertig",
+    "save": "Speichern",
+    "delete": "Löschen"
+  },
+  "error": {
+    "general": {
+      "title": "Fehler",
+      "message": "Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut."
+    }
+  },
+  "network": {
+    "offline": "Keine Netzwerkverbindung"
+  },
+  "onboarding": {
+    "title": "Tausend Euro Wegwerfen",
+    "subtitle": "Spenden Sie einen Euro und\nerhalten Sie eine Dankesnachricht",
+    "description": "Geben Sie kleine Spenden ab und\nverfolgen Sie Ihren Rang in der Rangliste",
+    "slides": {
+      "welcome": {
+        "title": "Tausend Euro Wegwerfen",
+        "subtitle": "Diese App ist bedeutungslos!",
+        "description": "Spenden Sie einfach.\nWirklich."
+      },
+      "motivation": {
+        "title": "Warum spenden?",
+        "subtitle": "Autonomie • Kompetenz • Verbundenheit",
+        "description": "Wählen Sie, um\nandere zu unterstützen\nund gemeinsamen Wert zu schaffen"
+      },
+      "support": {
+        "title": "Die Kraft der Unterstützung",
+        "subtitle": "Kleine Spenden helfen sehr",
+        "description": "Wenn Sie dem Entwickler gerne\neine Tasse Kaffee schenken möchten ☕"
+      }
+    },
+    "button": {
+      "start": "Anfangen",
+      "skip": "Überspringen",
+      "next": "Weiter"
+    },
+    "nickname": {
+      "hint": "Dies ist der Name, der auf der Rangliste angezeigt wird"
+    }
+  },
+  "main": {
+    "header": {
+      "title": "Tausend Euro Wegwerfen",
+      "greeting": "Willkommen, {{nickname}}"
+    },
+    "leaderboard": {
+      "title": "Rangliste",
+      "topRanker": "Ruhmeshalle",
+      "recentDonations": "Aktuelle Spenden",
+      "rank": "Platz {{rank}}",
+      "amount": "€{{amount}}",
+      "donationCount": "{{count}} Spenden",
+      "noData": "Noch keine Spendenvorgänge",
+      "placeholder": "Rangliste",
+      "placeholderSubtitle": "Wird in Phase 7 implementiert",
+      "emptyState": {
+        "topRanker": {
+          "title": "Noch keine Top-Spender",
+          "message": "Werden Sie der erste Spender und\ntreten Sie der Ruhmeshalle bei!"
+        },
+        "recentDonations": {
+          "title": "Noch keine Spendenvorgänge",
+          "message": "Werden Sie der erste Spender!"
+        }
+      }
+    },
+    "button": {
+      "donate": "Einen Euro spenden"
+    }
+  },
+  "nickname": {
+    "title": "Geben Sie einen Spitznamen ein",
+    "subtitle": "Verwenden Sie 2-12 Zeichen\nfür Ihre Rangliste",
+    "placeholder": "Spitzname eingeben",
+    "charCount": "{{current}}/{{max}}",
+    "button": {
+      "submit": "Fertig"
+    },
+    "validation": {
+      "tooShort": "Der Spitzname muss mindestens 2 Zeichen lang sein",
+      "tooLong": "Der Spitzname kann höchstens 12 Zeichen lang sein",
+      "invalid": "Bitte geben Sie einen gültigen Spitznamen ein",
+      "duplicate": "Dieser Spitzname wird bereits verwendet",
+      "checking": "Überprüfe Spitzname...",
+      "checkFailed": "Überprüfung fehlgeschlagen"
+    },
+    "duplicate": {
+      "title": "Spitzname bereits vergeben",
+      "message": "Dieser Spitzname wird bereits verwendet.\nMöchten Sie fortfahren?",
+      "confirm": "Fortfahren",
+      "cancel": "Anderen Spitznamen eingeben"
+    }
+  },
+  "donationComplete": {
+    "title": {
+      "first": "🎉 Erste Spende abgeschlossen!",
+      "normal": "Vielen Dank!"
+    },
+    "message": "Der Euro von {{nickname}}\nwird sinnvoll verwendet",
+    "rank": {
+      "label": "Aktueller Rang",
+      "value": "Platz {{rank}}"
+    },
+    "totalDonated": {
+      "label": "Insgesamt gespendet",
+      "amount": "€{{amount}}"
+    },
+    "donation": {
+      "label": "Diese Spende",
+      "amount": "€{{amount}}"
+    },
+    "badge": {
+      "earned": "Abzeichen erworben!"
+    },
+    "button": {
+      "share": "Teilen",
+      "backToMain": "Zur Startseite zurück"
+    }
+  },
+  "payment": {
+    "processing": "Zahlung wird verarbeitet...",
+    "validating": "Quittung wird überprüft...",
+    "saving": "Wird gespeichert...",
+    "loading": {
+      "initializing": "Zahlung vorbereiten...",
+      "loadingProducts": "Produktinformationen werden geladen...",
+      "purchasing": "Zahlung wird verarbeitet...",
+      "validating": "Quittung wird überprüft...",
+      "saving": "Spendendetails werden gespeichert...",
+      "processing": "Wird verarbeitet...",
+      "hint": "Bitte warten Sie einen Moment"
+    },
+    "error": {
+      "title": "Zahlungsfehler",
+      "retry": "Erneut versuchen",
+      "cancel": "Abbrechen",
+      "close": "Schließen",
+      "userCancelled": "Zahlung wurde storniert.",
+      "initFailed": "Zahlungssystem konnte nicht initialisiert werden.",
+      "productNotFound": "Zahlungsprodukt nicht gefunden.",
+      "purchaseFailed": "Fehler bei der Zahlungsverarbeitung.",
+      "receiptValidationFailed": "Quittungsvalidierung fehlgeschlagen.",
+      "networkError": "Netzwerkfehler aufgetreten. Bitte versuchen Sie es erneut.",
+      "duplicatePayment": "Diese Zahlung wurde bereits verarbeitet.",
+      "unknownError": "Ein unbekannter Fehler ist aufgetreten.",
+      "cancelled": {
+        "title": "Zahlung storniert",
+        "message": "Die Zahlung wurde storniert."
+      },
+      "network": {
+        "title": "Netzwerkfehler",
+        "message": "Überprüfen Sie Ihre Netzwerkverbindung und versuchen Sie es erneut."
+      },
+      "alreadyOwned": {
+        "title": "Doppelkauf",
+        "message": "Sie haben dieses Produkt bereits gekauft."
+      },
+      "validation": {
+        "title": "Validierung fehlgeschlagen",
+        "message": "Quittungsvalidierung fehlgeschlagen. Bitte kontaktieren Sie den Kundendienst."
+      },
+      "unknown": {
+        "title": "Fehler aufgetreten",
+        "message": "Ein unbekannter Fehler ist aufgetreten. Bitte versuchen Sie es erneut."
+      }
+    }
+  },
+  "settings": {
+    "title": "Einstellungen",
+    "language": {
+      "title": "Sprache",
+      "korean": "한국어",
+      "english": "English"
+    }
+  },
+  "dialog": {
+    "error": {
+      "title": "Fehler",
+      "button": "OK"
+    },
+    "confirm": {
+      "title": "Bestätigung",
+      "yes": "Ja",
+      "no": "Nein"
+    }
+  },
+  "share": {
+    "template": {
+      "title": "Tausend Euro Wegwerfen",
+      "message": "Ich habe auch einen Euro zu Tausend Euro Wegwerfen beigetragen! 💸\n{{rankText}}{{countText}}\nInsgesamt gespendet: €{{amount}}",
+      "withRank": "Jetzt Platz {{rank}}!\n",
+      "withCount": "Insgesamt {{count}} Spenden\n"
+    }
+  }
+}
